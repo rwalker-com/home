@@ -1,0 +1,2 @@
+(setq ps-printer-name "\\\\rejectamenta\\ax110amfd")
+(setq printer-name "\\\\rejectamenta\\ax110amfd")

@@ -1,0 +1,178 @@
+# I hate system aliases...
+unalias -a 
+
+alias "f"="finger"
+alias "x"="xinit -- -ar1 200 -ar2 10 >& ~/.xinitout"
+alias "vt100"="set term = vt100; tset"
+alias "termx"="set term = xterm; tset"
+alias "rm"="rm -i"
+alias "rmf"="/bin/rm -f"
+alias "cleanup"="/bin/rm -rf *~ 2>&1 > /dev/null;/bin/rm -rf  .*~ 2>&1 > /dev/null;/bin/rm -rf   *.BAK 2>&1 > /dev/null ;/bin/rm -rf .*.BAK 2>&1 > /dev/null ;/bin/rm -rf *.CKP 2>&1 > /dev/null ;/bin/rm -rf .*.CKP 2>&1 > /dev/null;/bin/rm -rf  \#*\# 2>&1 > /dev/null ;/bin/rm -rf core 2>&1 > /dev/null ;/bin/rm -rf dead.letter 2>&1 > /dev/null"
+alias "eprint"="enscript -r2 -f Times-Roman10 -F Times-Bold14"
+alias "sl"="ls"
+alias "l"="ls"
+alias "s"="ls"
+alias "moe"="more"
+alias "mroe"="more"
+alias "xlock"="xlock -nolock -mode swarm"
+alias "cd"="pushd > /dev/null"
+alias "back"="popd "
+alias "quakenews"="finger quake@scec.gps.caltech.edu"
+alias "gamke"="gmake"
+alias "gmkae"="gmake"
+alias "gkae"="gmake"
+alias "gake"="gmake"
+alias "lelm"="elm -f ~/Mail/spool"
+alias "more"="less"
+alias "mkae"="make"
+alias "xpine"="xterm -T Pine -n Pine -e pine"
+alias "xcons"="xterm -T Console -n Console -geometry =80x12+0+0 -C -ls"
+alias "rootx"="xterm -T root@$(hostname) -n root@$(hostname) -bg grey20 -cr white -e su -"
+alias "xterm"="xterm -T $(id -un)@$(hostname) -n $(id -un)@$(hostname)"
+
+function xto()
+{
+    if [ -z "$1" ]
+    then
+    	    cat<<EOF
+usage: xto <WHERE>
+   sets DISPLAY to WHERE, where WHERE is:
+      "back" for REMOTEHOST, if set
+      "here" for current box
+      "off"  for no X
+      a hostname or IP for arbitrary location
+EOF
+    return 1;
+    fi
+    
+    if [ -z "$2" ]
+    then
+	SCREEN="0.0"
+    else
+	SCREEN=$2
+    fi
+
+    HOST=$1
+
+    case $HOST in
+       "back")
+	    if [ -z $REMOTEHOST ]
+            then
+		echo REMOTEHOST not set...
+		return 1
+            fi
+    	    export DISPLAY=$REMOTEHOST:0.0
+    	    ;;
+       "here")
+    	    export DISPLAY=:0.0
+    	    ;;
+       "off")
+    	    export DISPLAY=
+    	    ;;
+       *)
+    	    export DISPLAY=$HOST\:$SCREEN
+    	    ;;
+    esac
+
+    return 0;
+}
+
+function xrsh()
+{
+   xhost $1 > /dev/null
+   xterm -T rsh.$1 -n rsh.$1 -e rsh $* > /dev/null
+}
+
+function xssh()
+{
+   xhost $1 > /dev/null
+   xterm -T ssh.$1 -n ssh.$1 -e ssh -X $* > /dev/null
+}
+
+function xssh2()
+{
+   xhost $1 > /dev/null
+   xterm -T ssh2.$1 -n ssh2.$1 -e ssh2 -X $* > /dev/null
+}
+
+function xtn()
+{
+   xhost $1 > /dev/null
+   xterm -T telnet.$1 -n telnet.$1 -e telnet $* > /dev/null
+}
+
+
+function xtitle()
+{
+    case $TERM in
+        [xk]term*|cygwin)
+           echo -ne "\033]0;${1}\007"
+           ;;
+	*)
+	   echo "sorry, don't know how to set the title for $TERM..."
+           ;;
+    esac
+}
+
+# cds: cd to saved directory by selecting from a list.  Directories
+#    are preserved across shell sessions.
+#
+function cds() {
+  touch ~/.cds
+  if [ -z "$1" ] ; then
+    # no arg: list
+    n=0
+    while read a && (( n < 9 )) ; do
+      echo "$((++n)) $a"
+    done < ~/.cds
+    IFS='	'
+    if [ -r ~/.cdvars ] ; then
+       while read b a ; do
+         echo "$b = $a"
+       done < ~/.cdvars
+    fi
+  elif [ -z "${1/[0-9]*/}" ] ; then
+    # numeric arg: retrieve & cd
+    n="$1"
+    while (( n > 0 )) ; do (( --n )) ; read a ; done < ~/.cds
+    'cd' "$a"
+  elif [ -d "${1}" ] ; then
+    # directory arg: cd & save / move to top
+    'cd' "$1"
+    d=`pwd`
+    echo "$d" > ~/.cds.new
+    while read a ; do
+      if [ "$a" != "$d" ] ; then echo "$a" ; fi
+    done < ~/.cds >> ~/.cds.new
+    mv ~/.cds.new ~/.cds
+  elif [ "$1" == "-e" ] ; then
+    $EDITOR ~/.cds
+  elif [ "$1" == "-h" ] ; then
+    echo 'Usage:'
+    echo '  cds        List saved directories'
+    echo '  cds <n>    cd to saved dir #n'
+    echo '  cds <dir>  cd to dir and add to list'
+  else
+    # else: look for match
+    IFS='	'
+    if [ -r ~/.cdvars ] ; then
+       while read b a ; do
+         if [ "$b" = "$1" ] ; then break ; fi
+       done < ~/.cdvars
+    fi
+    if [ -z "$a" ] ; then
+      while read a ; do
+        if [ -z "${a/*$1*/}" ] ; then break ; fi
+      done < ~/.cds
+    fi
+    if [ -z "$a" ] ; then
+       echo "cds: not a directory: $1;  try 'cds -h' for help, or one of these:"
+       cds
+    else
+       dir=${a%$1*}/$1
+       cd "$dir"
+    fi
+  fi
+}
+
+

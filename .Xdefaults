@@ -1,0 +1,35 @@
+
+Scrollbar.JumpCursor:   True 
+
+xterm*scrollBar:    True
+xterm*scrollLines:  9999
+xterm*saveLines:    9999
+xterm*foreground:   white
+xterm*background:   black
+xterm*toolBar:      False
+
+xbiff*foreground:   white
+xbiff*background:   black
+xbiff*geometry:     -0+0
+
+xload*geometry:     +0-0
+xload*foreground:   white
+xload*background:   black
+
+emacs*menuBar:             off
+emacs*verticalScrollBars:   off
+emacs*toolBar:     0
+
+*font:	6x13
+#*foreground:   white
+#*background:   black
+
+*basicLocale:   C
+*displayLang:   C
+*inputLang:    	C
+*numeric:      	C
+*timeFormat:   	C
+
+purify*geometry:         +0+0
+
+

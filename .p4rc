@@ -1,0 +1,9 @@
+export P4EDITOR=emacs
+export P4CONFIG=.p4config
+
+h=$(hostname)
+
+if [ -f ~/.p4rc-${h%%.*} ]
+then
+    . ~/.p4rc-${h%%.*}
+fi
