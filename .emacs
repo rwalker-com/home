@@ -635,7 +635,7 @@ extern \"C\" {
   "compiles all .el files in a directory (or tries)"
   (interactive "DByte compile directory: ")
   (if (file-directory-p dir)
-      (let ((destdir (concat dir "/" emacs-version)))
+      (let ((destdir (concat dir "/" emacs-version ".elc.d")))
         (make-directory destdir t)
         (mapcar (lambda (file)
                   (let ((src  (concat dir "/" file))
