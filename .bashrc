@@ -47,8 +47,18 @@ esac
 
 export EDITOR=emacs
 export VISUAL=${EDITOR}
-export STAY_OFF_MY_LAWN=1
 export PS1='[\u@\h \W]\\$ '
+
+case "$TERM" in
+xterm*|rxvt*)
+    PS1='\[\e]0;\u@\h: \W\a\]\n'${PS1}
+    ;;
+*)
+    ;;
+esac
+
+# defeat stupid Andriod prompt crap
+export STAY_OFF_MY_LAWN=1
 
 
 if [ -f ~/.bash_alias ]
