@@ -51,7 +51,7 @@ export PS1='[\u@\h \W]\\$ '
 
 case "$TERM" in
 xterm*|rxvt*)
-    PS1='\[\e]0;\u@\h: \W\a\]\n'${PS1}
+    PS1='\[\e]0;\u@\h: \W\a\]'${PS1}
     ;;
 *)
     ;;
