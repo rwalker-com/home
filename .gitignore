@@ -44,7 +44,11 @@ ntuser.dat.*
 # Ubuntu shit
 Ubuntu One
 
+# MacOS shit
+.DS_Store
+
 # application shit
+.cvspass
 .ICEauthority
 .VirtualBox/
 .Xauthority
@@ -96,8 +100,12 @@ p4tickets.txt
 .macromedia
 .thunderbird
 .thumbnails
-.hplip
+.hplip*
+.kderc
+.gtk*
+.mcoprc
 
-# machine-specific
+
+# machine-specific, stuff I make
 .forward
-
+*public_html/
