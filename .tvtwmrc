@@ -1,0 +1,203 @@
+#
+# $XConsortium: system.twmrc,v 1.7 89/12/01 11:23:47 jim Exp $
+# 
+# Default twm configuration file; needs to be kept small to conserve string
+# space in systems whose compilers don't handle medium-sized strings.
+#
+# Sites should tailor this file, providing any extra title buttons, menus, etc.
+# that may be appropriate for their environment.  For example, if most of the
+# users were accustomed to uwm, the defaults could be set up not to decorate
+# any windows and to use meta-keys.
+#
+
+
+NoGrabServer
+#OpaqueMove
+DecorateTransients
+XorValue 3
+VirtualDesktop "19x2"
+PannerGeometry "+0-0"
+ShowVirtualNames
+TitleFont "-adobe-times-medium-r-normal--*-180-*-*-*-*-*-*"
+ResizeFont "-adobe-times-medium-r-normal--*-120-*-*-*-*-*-*"
+MenuFont "-adobe-times-medium-r-normal--*-120-*-*-*-*-*-*"
+IconFont "-adobe-times-medium-r-normal--*-80-*-*-*-*-*-*"
+IconManagerFont "-adobe-times-medium-r-normal--*-80-*-*-*"
+WarpCursor
+#ClientBorderWidth
+InterpolateMenuColors
+#WrapVirtual
+
+
+Pixmaps
+{
+
+}
+NoTitle
+{
+	"Virtual Desktop"
+	"xload"
+	"xbiff"
+	"xclock"
+}
+
+Sticky
+{
+  "xbiff"
+  "xclock"
+}
+
+WindowRing
+{
+	"xterm"
+	"Mosaic"
+	"emacs"
+	"mxrn"
+}
+BorderWidth 2
+
+Color
+{
+	BorderColor "gray85"
+	BorderTileForeground "gray85"
+	BorderTileBackground "black"
+	DefaultBackground "Black"
+	DefaultForeground "white"
+	TitleBackground "DarkGreen"
+	TitleForeground "gray85"
+	MenuBackground "Black"
+	MenuForeground "white"
+	MenuShadowColor	"white"
+	MenuTitleBackground "black"
+	MenuTitleForeground "white"
+	IconBackground "Black"
+	IconForeground "white"
+	IconBorderColor "Black"
+	IconManagerBackground "Black"
+	IconManagerForeground "white"
+	PannerForeground "white"
+	PannerBackground "Black"
+	VirtualDesktopBackground "Black"	
+}
+
+
+#
+# Define some useful functions for motion-based actions.
+#
+MoveDelta 3
+Function "move-or-lower" { f.move f.deltastop f.lower }
+Function "move-or-raise" { f.move f.deltastop f.raise }
+Function "move-or-iconify" { f.move f.deltastop f.iconify }
+
+#
+# Set some useful bindings.  Sort of uwm-ish, sort of simple-button-ish
+#
+Button1 = : root : f.menu "general"
+Button2 = : root : f.menu "applications"
+Button3 = : root : f.menu "telnet"
+
+
+Button1 = m : window|icon : f.function "move-or-raise" 
+Button2 = m : window|icon : f.iconify
+Button3 = m : window|icon : f.function "move-or-lower"
+
+Button1 = : title : f.function "move-or-raise"
+Button2 = : title : f.raiselower
+Button3 = : title : f.fullzoom
+
+
+
+Button1 = : icon : f.function "move-or-iconify"
+Button2 = : icon : f.iconify
+
+Button1 = : iconmgr : f.iconify
+Button2 = : iconmgr : f.iconify
+
+"Up"    = m : all :  f.scrollup
+"Down"  = m : all :  f.scrolldown
+"Left"  = m : all :  f.scrollleft
+"Right" = m : all :  f.scrollright
+
+"Up"    = : root :  f.scrollup
+"Down"  = : root :  f.scrolldown
+"Left"  = : root :  f.scrollleft
+"Right" = : root :  f.scrollright
+
+"Up"    = s | m : all :  f.warpring "prev"
+"Down"  = s | m : all :  f.warpring "next"
+"Left"  = s | m : all :  f.warpring "prev"
+"Right" = s | m : all :  f.warpring "next"
+
+"x"     = s | m : all : f.exec "xterm -ls &"
+"o"     = s | m : all : f.exec "xterm -n Oregon -T Oregon -e rlogin pdx343 -l jsicolo &"
+"e"     = s | m : all : f.exec "xterm -geometry 80x72 -T xelm -n xelm -e elm &" 
+"g"     = s | m : all : f.exec "emacs19 &"
+"d"     = s | m : all : f.exec "xload &"
+"k"     = s | m : all : f.exec "xclock &"
+"c"     = s | m : all : f.exec "xcalc &"
+"m"     = s | m : all : f.exec "Mosaic &"
+"u"     = s | m : all : f.warpring "next"
+"d"     = s | m : all : f.warpring "prev"
+
+
+
+#
+# And a menus with the usual things
+#
+menu "general"
+{
+"Twm"		f.title
+"Applications"	f.menu "applications"
+"Telnet"	f.menu "telnet"
+"Iconify"	f.iconify
+"Resize"	f.resize
+"Refresh"	f.refresh
+"Move"		f.move
+"Raise"		f.raise
+"Lower"		f.lower
+"Focus"		f.focus
+"Unfocus"	f.unfocus
+"Show Iconmgr"	f.showiconmgr
+"Hide Iconmgr"	f.hideiconmgr
+"Kill"		f.destroy
+"Delete"	f.delete
+"Restart"	f.restart
+"Logout"        f.exec "deathto aixterm & "
+}
+menu "applications"
+{
+"Applications"		f.title
+"Elm"			f.exec "xterm -geometry 80x72 -T xelm -n xelm -e elm &" 
+"Gnu-emacs" 		f.exec "emacs19 &"
+"Xterm"			f.exec "xterm -ls &"
+"Calculator"    	f.exec "xcalc &"
+"Clock"			f.exec "xclock &"
+"Mosaic"                f.exec "mosaic &"
+}
+
+menu "telnet"
+{
+"Telnet/Rlog"		f.title
+"Hobbes"		f.exec "xterm -n hobbes -T hobbes -e rlogin hobbes &"
+"Oregon343"		f.exec "xterm -n pdx343 -T pdx343 -e rlogin pdx343 -l jsicolo &"
+"Oregon344"		f.exec "xterm -n pdx344 -T pdx344 -e rlogin pdx344 -l jsicolo &"
+"Oregon345"		f.exec "xterm -n pdx345 -T pdx345 -e rlogin pdx345 -l jsicolo &"
+
+"Other"			f.exec "xterm -T telnet -e telnet &"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

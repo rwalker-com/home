@@ -1,0 +1,114 @@
+#
+# $XConsortium: system.twmrc,v 1.7 89/12/01 11:23:47 jim Exp $
+# 
+# Default twm configuration file; needs to be kept small to conserve string
+# space in systems whose compilers don't handle medium-sized strings.
+#
+# Sites should tailor this file, providing any extra title buttons, menus, etc.
+# that may be appropriate for their environment.  For example, if most of the
+# users were accustomed to uwm, the defaults could be set up not to decorate
+# any windows and to use meta-keys.
+#
+
+ShowIconManager
+NoGrabServer
+OpaqueMove
+XorValue 15
+DecorateTransients
+TitleFont "-adobe-helvetica-bold-r-normal--*-120-*-*-*-*-*-*"
+ResizeFont "-adobe-helvetica-bold-r-normal--*-120-*-*-*-*-*-*"
+MenuFont "-adobe-helvetica-bold-r-normal--*-120-*-*-*-*-*-*"
+IconFont "-adobe-helvetica-bold-r-normal--*-100-*-*-*-*-*-*"
+IconManagerFont "-adobe-helvetica-bold-r-normal--*-100-*-*-*"
+IconifyByUnmapping
+
+Color
+{
+    DefaultBackground "gray25"
+    DefaultForeground "gray85"
+    MenuBackground "black"
+    MenuForeground "white"
+    MenuTitleBackground   "black"
+    MenuTitleForeground   "white"
+    MenuShadowColor       "black"
+    BorderColor           "gray85"
+    IconManagerHighlight  "white"
+    BorderTileBackground  "black"
+    BorderTileForeground  "white"
+    TitleBackground "black"
+    TitleForeground "white"
+    IconBackground "black"
+    IconForeground "white"
+    IconBorderColor "gray85"
+    IconManagerBackground "black"
+    IconManagerForeground "white"
+}
+
+NoTitle { "xload" }
+
+#
+# Define some useful functions for motion-based actions.
+#
+MoveDelta 3
+Function "move-or-lower" { f.move f.deltastop f.lower }
+Function "move-or-raise" { f.move f.deltastop f.raise }
+Function "move-or-iconify" { f.move f.deltastop f.iconify }
+
+
+#
+# Set some useful bindings.  Sort of uwm-ish, sort of simple-button-ish
+#
+"Tab" 		= m|s		: all		: f.upiconmgr
+"Tab"		= m		: all		: f.downiconmgr
+
+
+"Return"        = m|s           : all           : f.raise
+"Return"        = m|c|s         : all           : f.iconify
+
+Button1 = : root : f.menu "defops"
+Button3 = : root : f.menu "apps"
+
+Button1 = : title|icon : f.function "move-or-raise"
+
+Button1 = : icon : f.function "move-or-iconify"
+Button2 = : icon : f.iconify
+
+Button1 = : iconmgr : f.raise
+Button2 = : iconmgr : f.iconify
+
+
+#
+# And a menus with the usual things
+#
+menu "defops"
+{
+	"Twm"		f.title
+	"Iconify"	f.iconify
+	"Resize"	f.resize
+	"Move"		f.move
+	"Raise"		f.raise
+	"Lower"		f.lower
+	""		f.nop
+	"Focus"		f.focus
+	"Unfocus"	f.unfocus
+	"Show Iconmgr"	f.showiconmgr
+	"Hide Iconmgr"	f.hideiconmgr
+	""		f.nop
+	"Kill"		f.destroy
+	"Delete"	f.delete
+	""		f.nop
+	"Restart"	f.restart
+	"Exit"		f.quit
+}
+
+menu "apps"
+{
+	"Apps"		f.title
+	"Xterm" 	f.exec "xterm -ls &"
+	"Emacs" 	f.exec "emacs &"
+	"Netscape (rwalker)"	f.exec "(export HOME=$HOME/rwalker.com; netscape) &"
+	"Messenger (rwalker)"	f.exec "(export HOME=$HOME/rwalker.com; netscape -mail) &"
+	"Netscape (mcom)"	f.exec "(export HOME=$HOME/mcom.com; netscape) &"
+	"Messenger (mcom)"	f.exec "(export HOME=$HOME/mcom.com; netscape -mail) &"
+}
+
