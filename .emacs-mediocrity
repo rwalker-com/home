@@ -1,0 +1,66 @@
+(set-screen-height 85)
+
+(setq default-directory "c:/dev/qisp4/brew/main/brewery/")
+
+(proj-add "brew" "c:/dev/qisp4/brew/main/brewery"
+	  "c:/dev/qisp4/brew/main/brewery/TAGS"
+	'(
+	  "c:/dev/qisp4/brew/main/brewery"
+	  ))
+
+(proj-add "brew_dev31" "c:/dev/qisp4/brew/dev31/brewery"
+	  "c:/dev/qisp4/brew/dev31/brewery/TAGS"
+	'(
+	  "c:/dev/qisp4/brew/dev31/brewery"
+	  ))
+
+
+(proj-add "dev21_6100" "c:/dev/qisp4/brew/dev21/microbrew/qct/6100/3006"
+	  "c:/dev/qisp4/brew/dev21/microbrew/qct/6100/3006/TAGS"
+	'(
+	  "c:/dev/qisp4/brew/dev21/microbrew/qct/6100/3006"
+	  ))
+
+(proj-add "6100" "c:/dev/qisp4/brew/main/microbrew/qct/6100/30505"
+	  "c:/dev/qisp4/brew/main/microbrew/qct/6100/30505/TAGS"
+	'(
+	  "c:/dev/qisp4/brew/main/microbrew/qct/6100/30505"
+	  ))
+
+(proj-add "6050" "c:/dev/qisp4/brew/main/microbrew/qct/6050/DP3110"
+	  "c:/dev/qisp4/brew/main/microbrew/qct/6050/DP3110/TAGS"
+	'(
+	  "c:/dev/qisp4/brew/main/microbrew/qct/6050/DP3110"
+	  ))
+
+(proj-add "DD500" "c:/dev/qisp4/brew/main/microbrew/curitel/DD500"
+	  "c:/dev/qisp4/brew/main/microbrew/curitel/DD500/TAGS"
+	'(
+	  "c:/dev/qisp4/brew/main/microbrew/curitel/DD500"
+	  ))
+
+;(proj-add "microbrew" "c:/dev/qisp4/brew/main/microbrew"
+;	  "c:/dev/qisp4/brew/main/microbrew/TAGS"
+;	  '(
+;	    "c:/dev/qisp4/brew/main/microbrew"
+;	    ))
+
+(proj-add "brew20" "c:/dev/qisp4/brew/dev20/brewery"
+	  "c:/dev/qisp4/brew/dev20/brewery/TAGS"
+	  '(
+	    "c:/dev/qisp4/brew/dev20/brewery"
+;	    "c:/dev/qisp4/brew/dev20/microbrew"
+	    ))
+
+(proj-add "brew21" "c:/dev/qisp4/brew/dev21/brewery"
+	  "c:/dev/qisp4/brew/dev21/brewery/TAGS"
+	  '(
+	    "c:/dev/qisp4/brew/dev21/brewery"
+;	    "c:/dev/qisp4/brew/dev21/microbrew"
+	    ))
+
+(proj-add "brewsandbox" "c:/dev/qisp4/users/rwalker/brew/main/brewery/"
+	  "c:/dev/qisp4/users/rwalker/brew/main/brewery/TAGS"
+	  '(
+	    "c:/dev/qisp4/users/rwalker/brew/main/brewery"
+	    ))

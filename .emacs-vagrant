@@ -1,0 +1,105 @@
+(setq printer-name "\\\\vagrant\\r342e-printer")
+(setq ps-printer-name "\\\\vagrant\\r342e-printer")
+
+(setq default-directory "/dev/qctp406/apiOne/main")
+
+(proj-add "apiOne" "/dev/qctp406/apiOne/main"
+	  "/dev/qctp406/apiOne/main/TAGS"
+	'(
+	  "/dev/qctp406/apiOne/main/inc"
+	  "/dev/qctp406/apiOne/main/src"
+	  "/dev/qctp406/apiOne/main/devices/minimal/"
+	  ))
+
+(proj-add "apiOne_rel" "/dev/qctp406/apiOne/rel101"
+	  "/dev/qctp406/apiOne/rel101/TAGS"
+	'(
+	  "/dev/qctp406/apiOne/rel101/inc"
+	  "/dev/qctp406/apiOne/rel101/src"
+	  "/dev/qctp406/apiOne/rel101/devices/minimal/"
+	  ))
+
+
+(proj-add "apiOne_CRM" "/dev/qctp406/apiOne/main/devices/MSM6500/5330"
+	  "/dev/qctp406/apiOne/main/devices/MSM6500/5330/TAGS"
+	'(
+	  "/dev/qctp406/apiOne/main/devices/MSM6500/5330"
+	  ))
+
+(proj-add "brew" "/dev/qctp406/brew/main"
+	  "/dev/qctp406/brew/main/TAGS"
+	  '(
+	    "/dev/qctp406/brew/main/src"
+	    "/dev/qctp406/brew/main/extdev"
+	    "/dev/qctp406/brew/main/extensions"
+	    "/dev/qctp406/brew/main/inc"
+	    "/dev/qctp406/brew/main/isdev"
+	    "/dev/qctp406/brew/main/libdev"
+	    "/dev/qctp406/brew/main/pek"
+	    "/dev/qctp406/brew/main/pekdev"
+	    "/dev/qctp406/brew/main/pk"
+	    "/dev/qctp406/brew/main/pkdev"
+	    "/dev/qctp406/brew/main/pkdocdev"
+	    "/dev/qctp406/brew/main/sdk"
+	    "/dev/qctp406/brew/main/sdkdev"
+	    "/dev/qctp406/brew/main/sdkdocdev"
+	    "/dev/qctp406/brew/main/src"
+	  ))
+
+(proj-add "brew40" "/dev/qctp406/brew/dev40"
+	  "/dev/qctp406/brew/dev40/TAGS"
+	  '(
+	    "/dev/qctp406/brew/dev40/src"
+	    "/dev/qctp406/brew/dev40/extdev"
+	    "/dev/qctp406/brew/dev40/extensions"
+	    "/dev/qctp406/brew/dev40/inc"
+	    "/dev/qctp406/brew/dev40/isdev"
+	    "/dev/qctp406/brew/dev40/libdev"
+	    "/dev/qctp406/brew/dev40/pek"
+	    "/dev/qctp406/brew/dev40/pekdev"
+	    "/dev/qctp406/brew/dev40/pk"
+	    "/dev/qctp406/brew/dev40/pkdev"
+	    "/dev/qctp406/brew/dev40/pkdocdev"
+	    "/dev/qctp406/brew/dev40/sdk"
+	    "/dev/qctp406/brew/dev40/sdkdev"
+	    "/dev/qctp406/brew/dev40/sdkdocdev"
+	    "/dev/qctp406/brew/dev40/src"
+	  ))
+
+(proj-add "brew_6500" "/dev/qctp406/brew/main/devices/6500/5330"
+	  "/dev/qctp406/brew/main/devices/6500/5330/TAGS"
+	'(
+	  "/dev/qctp406/brew/main/devices/6500/5330"
+	  ))
+
+(proj-add "brew_7500" "/dev/qctp406/brew/main/devices/7500/4102"
+	  "/dev/qctp406/brew/main/devices/7500/4102/TAGS"
+	'(
+	  "/dev/qctp406/brew/main/devices/7500/4102"
+	  ))
+
+(proj-add "cygwin" "/dev/cygwin.com/"
+	  "/dev/cygwin.com/TAGS"
+	'(
+	  "/dev/cygwin.com/"
+	  ))
+
+(proj-add "apiOne_sandbox" "/dev/qctp406/users/rwalker/apiOne/main"
+	  "/dev/qctp406/users/rwalker/apiOne/main/TAGS"
+	'(
+	  "/dev/qctp406/users/rwalker/apiOne/main/src"
+	  "/dev/qctp406/users/rwalker/apiOne/main/inc"
+	  ))
+
+(proj-add "brew_dev31" "/dev/qctp406/brew/dev31/brewery"
+	  "/dev/qctp406/brew/dev31/brewery/TAGS"
+	'(
+	  "/dev/qctp406/brew/dev31/brewery"
+	  ))
+
+(proj-add "brew_dev21" "/dev/qctp406/brew/dev21/brewery"
+	  "/dev/qctp406/brew/dev21/brewery/TAGS"
+	'(
+	  "/dev/qctp406/brew/dev21/brewery"
+	  ))
+

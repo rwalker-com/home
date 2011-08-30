@@ -1,0 +1,47 @@
+alias "f" "finger"
+alias "x" "xinit -- -ar1 200 -ar2 10 >& ~/.xinitout.`hostname`"
+alias "x16" "xinit -- -bpp 16 -ar1 200 -ar2 10 >& ~/.xinitout.`hostname`"
+alias "vt100" "set term = vt100; tset"
+alias "termx" "set term = xterm; tset"
+alias "rsize" 'set noglob ; eval `resize` '
+alias "fr" "finger \!*@cmu.edu"
+alias "printer" "setenv PRINTER \!*"
+alias "xtn" "xhost \!:1 >& /dev/null; xterm -T telnet.\!:1 -n telnet.\!:1 -e telnet \!* >& /dev/null &"
+alias "xrsh" "xhost \!:1 >& /dev/null; xterm -T rsh.\!:1 -n rsh.\!:1 -e rsh \!* >& /dev/null &"
+alias "xssh" 'xterm -T ssh.\!:1 -n ssh.\!:1 -e ssh \!* >& /dev/null &'
+alias "xremsh" "xhost \!:1 >& /dev/null; xterm -T rsh.\!:1 -n rsh.\!:1 -e remsh \!* >& /dev/null &"
+alias "rm" "rm -i \!*"
+alias "rmf" "/bin/rm -f \!*"
+alias "cleanup" "/bin/rm -rf *~ >& /dev/null;/bin/rm -rf  .*~ >& /dev/null;/bin/rm -rf   *.BAK >& /dev/null ;/bin/rm -rf .*.BAK >& /dev/null ;/bin/rm -rf *.CKP >& /dev/null ;/bin/rm -rf .*.CKP >& /dev/null;/bin/rm -rf  #*#>& /dev/null ;/bin/rm -rf core>& /dev/null ;/bin/rm -rf dead.letter >& /dev/null"
+alias "eprint" "enscript -r2 -f Times-Roman10 -F Times-Bold14  \!*"
+alias "xterm" "xterm -T `whoami`@`hostname` -n `whoami`@`hostname` \!*"
+alias "sl" "ls \!*"
+alias "l" "ls \!*"
+alias "s" "ls \!*"
+alias "moe" "more \!*"
+alias "mroe" "more \!*"
+alias "accounts" "echo 'checking=0512-793068';echo 'savings=????'"
+alias "xlock" "xlock -nolock -mode swarm"
+alias "cd" "pushd \!* > /dev/null"
+alias "back" "popd "
+alias "quakenews" "finger quake@scec.gps.caltech.edu"
+alias "gamke" "gmake"
+alias "gmkae" "gmake"
+alias "gkae" "gmake"
+alias "gake" "gmake"
+alias "font" "echo 'xterm*font: \!*'  | xrdb -merge; echo 'emacs*Font: \!*' | xrdb -merge"
+alias "lelm" "elm -f ~/Mail/spool"
+alias "more" "less"
+alias "mkae" "make"
+alias "xpine" "xterm -T Pine -n Pine -e pine &"
+alias "xcons" "xterm -T Console -n Console -geometry =80x12+0+0 -C -ls &"
+alias "rootx" "xterm -T root@`hostname` -n root@`hostname` -bg grey20 -cr white -e su - &"
+alias "xback" 'setenv DISPLAY $REMOTEHOST\:0.0'
+alias "xhere" 'setenv DISPLAY :0.0'
+alias "xto"   'setenv DISPLAY \!:1\:0.0' 
+alias "nox"   'unsetenv DISPLAY'
+alias "findmans" 'foreach i (`find \!* -name man -type d`) \
+setenv MANPATH $i\:$MANPATH \
+end'
+
+

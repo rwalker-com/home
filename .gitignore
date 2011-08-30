@@ -1,0 +1,103 @@
+# git ls-files --others --exclude-from=.git/info/exclude
+# Lines that start with '#' are comments.
+# For a project mostly in C, the following would be a good set of
+# exclude patterns (uncomment them if you want to use them):
+# *.[oa]
+*~
+.bash_history
+*stackdump
+core
+.regtrans-ms
+tmp
+dev
+.emacs.d/*.elc.d
+.xinitout
+
+# NT shit
+ntuser.ini
+AppData
+Application Data
+Contacts
+Cookies
+Desktop
+Documents
+Downloads
+Favorites
+Links
+Local Settings
+Music
+My Documents
+NTUSER.DAT*
+NetHood
+Pictures
+PrintHood
+Recent
+Saved Games
+Searches
+SendTo
+Start Menu
+Templates
+Tracing
+Videos
+ntuser.dat.*
+
+# Ubuntu shit
+Ubuntu One
+
+# application shit
+.ICEauthority
+.VirtualBox/
+.Xauthority
+.Xresources
+.adobe/
+.android/
+.cache/
+.compiz/
+.config/
+.davmail.properties
+.dbus/
+.ddd/
+.dmrc
+.esd_auth
+.fontconfig/
+.gconf/
+.gconfd/
+.gitconfig
+.gksu.lock
+.gnome2/
+.gnupg/
+.gstreamer-0.10/
+.gtk-bookmarks
+.icedtea/
+.libreoffice/
+.mission-control/
+.nvidia-settings-rc
+.repopickle_.gitconfig
+.sudo_as_admin_successful
+.emacs.d/session*
+.tsclient
+.thunderbird
+.thunderbird*
+.vnc
+.local
+.p4merge
+.xsession-errors*
+p4tickets.txt
+.p4tickets
+.pulse
+.repoconfig
+.pki
+.pulse-cookie
+.ssh
+.p4ob
+.p4qt
+.lesshst
+.mozilla
+.macromedia
+.thunderbird
+.thumbnails
+.hplip
+
+# machine-specific
+.forward
+

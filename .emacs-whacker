@@ -1,0 +1,41 @@
+(setq default-directory "c:/dev/qisp4/")
+(setq proj-alist nil)
+;(proj-add "sdk" "c:/dev/qisp4/brewery/"
+;	   "c:/dev/qisp4/brewery/sdk/TAGS" 
+;	   '("c:/dev/qisp4/brewery/AEE"
+;	     "c:/dev/qisp4/brewery/sig" 
+;	     "c:/dev/qisp4/brewery/sdk")
+;	   )
+;
+(proj-add "rwalkerbrew" "c:/dev/qisp4/users/rwalker/brewery/"
+	  "c:/dev/qisp4/users/rwalker/brewery/TAGS" 
+	  '(
+	    "c:/dev/qisp4/users/rwalker/brewery/core" 
+	    "c:/dev/qisp4/users/rwalker/brewery/handset/7GP"
+	    "c:/dev/qisp4/users/rwalker/brewery/handset/KWC"
+	    "c:/dev/qisp4/users/rwalker/brewery/sdk")
+	   )
+
+(proj-add "brew" "c:/dev/qisp4/brewery/"
+	  "c:/dev/qisp4/brewery/TAGS" 
+	  '(
+	    "c:/dev/qisp4/brewery/core" 
+	    "c:/dev/qisp4/brewery/handset/7GP"
+	    "c:/dev/qisp4/brewery/handset/KWC"
+	    "c:/dev/qisp4/brewery/sdk")
+	   )
+;
+;(proj-add "rwalkersdk" "c:/dev/depot/users/rwalker/brewery/"
+;	   "c:/dev/depot/users/rwalker/brewery/sdk/TAGS" 
+;	   '("c:/dev/depot/users/rwalker/brewery/aee" 
+;	     "c:/dev/depot/users/rwalker/brewery/sdk")
+;	   )
+
+
+;(proj-add "sim7gp" "c:/dev/rwalkersandbox/brewery/"
+;	   "c:/dev/rwalkersandbox/brewery/sim7gp/TAGS" 
+;	   '("c:/dev/rwalkersandbox/brewery/aee" 
+;	     "c:/dev/rwalkersandbox/brewery/sdk" 
+;	     "c:/dev/rwalkersandbox/brewery/sim7gp"
+;	     "c:/dev/rwalkersandbox/brewery/KWC")
+;	   )
