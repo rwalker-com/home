@@ -43,11 +43,13 @@ ntuser.dat.*
 
 # Ubuntu shit
 Ubuntu One
+.gvfs/
 
 # MacOS shit
 .DS_Store
 
 # application shit
+.wireshark
 .cvspass
 .ICEauthority
 .VirtualBox/
