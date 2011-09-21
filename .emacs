@@ -656,11 +656,11 @@ extern \"C\" {
 ;(require 'json)
 (require 'tree)
 (require 'p4)
-(require 'fontsize)
-
-(global-set-key [?\C-+] 'fontsize-up)
-(global-set-key [?\C--] 'fontsize-down)
-(global-set-key [?\C-=] 'fontsize-toggle)
+;;(require 'fontsize)
+;;
+;;(global-set-key [?\C-+] 'fontsize-up)
+;;(global-set-key [?\C--] 'fontsize-down)
+;;(global-set-key [?\C-=] 'fontsize-toggle)
 
 (mapcar (lambda (file)
           (and (file-exists-p (expand-file-name file))
