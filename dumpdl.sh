@@ -400,6 +400,7 @@ hostname=$(uname -n)
 
 out=${out:-${me}_${hostname}_${host}${port:+_${port}}_${path//\//}_s_${sleep}${pipeline:+_p}_k_${keepalive}}
 
+rm -rf ${out}
 mkdir -p ${out}
 echo Info: ${me}: outputting to ${out} 1>&2
 
@@ -478,7 +479,7 @@ then
                    fi
                done <&${conn})
     # close connection
-    exec {conn}<>&-
+    exec {conn}>&-
     
     respoverhead=$(echo ${resphdrs} | (
             start=( $(</proc/uptime) )
@@ -553,7 +554,7 @@ then
 
             if ! [[ ${response[connection],,} =~ "keep-alive" ]]
             then
-                exec {conn}<>&-
+                exec {conn}>&-
                 break
             fi
         done
