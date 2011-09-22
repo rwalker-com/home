@@ -59,6 +59,7 @@ Sites/
 Applications/
 
 # application shit
+.gnuplot*
 .cups
 .wireshark*
 .cvspass
