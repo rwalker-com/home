@@ -1,6 +1,0 @@
-
-(proj-add "flux" "/home/rwalker/dev/L4/Flux/oskit-20020317"
-	  "/home/rwalker/dev/L4/Flux/oskit-20020317/TAGS"
-	'(
-	  "/home/rwalker/dev/L4/Flux/oskit-20020317"
-	  ))

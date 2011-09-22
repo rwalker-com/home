@@ -46,11 +46,23 @@ Ubuntu One
 .gvfs/
 
 # MacOS shit
+.Trash
 .DS_Store
+.MacOS/
+.MacOSX/
+.CF*
+Library/
+Public/
+Movies/
+Pictures/
+Sites/
+Applications/
 
 # application shit
-.wireshark
+.cups
+.wireshark*
 .cvspass
+.subversion
 .ICEauthority
 .VirtualBox/
 .Xauthority
@@ -105,9 +117,14 @@ p4tickets.txt
 .hplip*
 .kderc
 .gtk*
+.gdb*
 .mcoprc
-
+.serverauth*
+.gpg*
 
 # machine-specific, stuff I make
 .forward
 *public_html/
+.cds
+*rev.asc
+.pakmake

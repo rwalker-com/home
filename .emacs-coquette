@@ -1,0 +1,2 @@
+(setenv "P4CONFIG" ".p4config")
+
