@@ -1,0 +1,12 @@
+# keep repository-specific stuff out of here (e.g. email addresses)
+[user]
+        name  = Rob Walker
+
+[color]
+	ui = auto
+
+[alias]
+        lol = log --oneline --decorate --graph
+        lolm = log --oneline --decorate --graph --no-merges
+        lola = log --oneline --decorate --graph --all
+        lolam = log --oneline --decorate --graph --all --no-merges
