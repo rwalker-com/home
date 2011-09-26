@@ -9,9 +9,11 @@
 core
 .regtrans-ms
 tmp
+bin
 dev
 .emacs.d/*.elc.d
 .xinitout
+.snapshot
 
 # NT shit
 ntuser.ini
@@ -59,6 +61,7 @@ Sites/
 Applications/
 
 # application shit
+.nautilus
 .gnuplot*
 .cups
 .wireshark*
