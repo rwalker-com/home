@@ -84,7 +84,6 @@ Applications/
 .fontconfig/
 .gconf/
 .gconfd/
-.gitconfig
 .gksu.lock
 .gnome2/
 .gnupg/
