@@ -1,7 +1,0 @@
-
-if [ -f ~/.cvsrc-`hostname` ]
-then
-    . ~/.cvsrc-`hostname`
-fi
-
-

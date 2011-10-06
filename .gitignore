@@ -3,131 +3,27 @@
 # For a project mostly in C, the following would be a good set of
 # exclude patterns (uncomment them if you want to use them):
 # *.[oa]
-*~
-.bash_history
-*stackdump
-core
-.regtrans-ms
-tmp
-bin
-dev
-.emacs.d/*.elc.d
-.xinitout
-.snapshot
-
-# NT shit
-ntuser.ini
-AppData
-Application Data
-Contacts
-Cookies
-Desktop
-Documents
-Downloads
-Favorites
-Links
-Local Settings
-Music
-My Documents
-NTUSER.DAT*
-NetHood
-Pictures
-PrintHood
-Recent
-Saved Games
-Searches
-SendTo
-Start Menu
-Templates
-Tracing
-Videos
-ntuser.dat.*
-
-# Ubuntu shit
-Ubuntu One
-.gvfs/
-
-# MacOS shit
-.Trash
-.DS_Store
-.MacOS/
-.MacOSX/
-.CF*
-Library/
-Public/
-Movies/
-Pictures/
-Sites/
-Applications/
-
-# application shit
-.nautilus
-.gnuplot*
-.cups
-.wireshark*
-.cvspass
-.subversion
-.ICEauthority
-.VirtualBox/
-.Xauthority
-.Xresources
-.adobe/
-.android/
-.cache/
-.compiz/
-.config/
-.davmail.properties
-.dbus/
-.ddd/
-.dmrc
-.esd_auth
-.fontconfig/
-.gconf/
-.gconfd/
-.gksu.lock
-.gnome2/
-.gnupg/
-.gstreamer-0.10/
-.gtk-bookmarks
-.icedtea/
-.libreoffice/
-.mission-control/
-.nvidia-settings-rc
-.repopickle_.gitconfig
-.sudo_as_admin_successful
-.emacs.d/session*
-.tsclient
-.thunderbird
-.thunderbird*
-.vnc
-.local
-.p4merge
-.xsession-errors*
-p4tickets.txt
-.p4tickets
-.pulse
-.repoconfig
-.pki
-.pulse-cookie
-.ssh
-.p4ob
-.p4qt
-.lesshst
-.mozilla
-.macromedia
-.thunderbird
-.thumbnails
-.hplip*
-.kderc
-.gtk*
-.gdb*
-.mcoprc
-.serverauth*
-.gpg*
-
-# machine-specific, stuff I make
-.forward
-*public_html/
-.cds
-*rev.asc
-.pakmake
+*
+!.emacs
+!.emacs-*
+!.bashrc*
+!.bash_profile
+!.bash_alias
+!.bash_logout
+!.p4rc
+!.screenrc
+!.gitconfig
+!.gitignore
+!.gitexcludes
+!.p4config
+!.Xdefaults
+!/scripts
+!/scripts/*
+!/.emacs.d
+!/.emacs.d/*
+/.emacs.d/server*
+/.emacs.d/auto-save-list/
+!/.ssh
+!/.ssh/config
+*.ok
+*.elc
