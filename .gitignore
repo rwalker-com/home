@@ -25,5 +25,5 @@
 /.emacs.d/auto-save-list/
 !/.ssh
 !/.ssh/config
-*.ok
-*.elc
+*~
+
