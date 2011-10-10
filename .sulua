@@ -14,7 +14,7 @@ local home = getenv("HOME")
 
 local pwd = getenv("PWD")
 if (pwd.."/"):find(home.."/", 1, true) ~= 1 then
-   error ("Current directory not under " .. home)
+   error("Current directory not under "..home)
 end
 
 -- Subsequent code must guard against traditional client-based attacks.
@@ -65,15 +65,20 @@ local function cleanPath(path)
 end
 
 -- Run a ".lua" based on arg[0] as long as it's under HOME
+-- TODO: verify ownership instead?
 local script = arg[0]..".lua"
-if not script:sub(1,1) == "/" then
+if script:sub(1,1) ~= "/" then
    script = pwd.."/"..script
 end
 script = cleanPath(script)
 
+if script:find(home.."/", 1, true) ~= 1 then
+   error(script.." not under "..home)
+end
+
 local handler, err = loadfile(script)
 if not handler then
-   error("Error loading " .. script .. "\n" .. err, 0)
+   error("Error loading \""..script.."\"\n"..err, 0)
 end
 
 arg[0] = script
