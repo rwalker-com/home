@@ -65,13 +65,14 @@ local function cleanPath(path)
 end
 
 -- Run a ".lua" based on arg[0] as long as it's under HOME
--- TODO: verify ownership instead?
 local script = arg[0]..".lua"
 if script:sub(1,1) ~= "/" then
    script = pwd.."/"..script
 end
+
 script = cleanPath(script)
 
+-- TODO: verify ownership instead?
 if script:find(home.."/", 1, true) ~= 1 then
    error(script.." not under "..home)
 end
