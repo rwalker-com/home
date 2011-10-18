@@ -896,3 +896,4 @@ webkit type is unset, the user will be queried for the desired webkit type."
   ;; If there is more than one, they won't work right.
  )
 
+(setenv "P4CONFIG" ".p4config")
