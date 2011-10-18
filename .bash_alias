@@ -28,11 +28,10 @@ alias "mkae"="make"
 alias "xpine"="xterm -T Pine -n Pine -e pine"
 alias "xcons"="xterm -T Console -n Console -geometry =80x12+0+0 -C -ls"
 alias "rootx"="xterm -T root@$(hostname) -n root@$(hostname) -bg grey20 -cr white -e su -"
-alias "xterm"="xterm -T $(id -un)@$(hostname) -n $(id -un)@$(hostname)"
 
 function xto()
 {
-    if [ -z "$1" ]
+    if [[ -z $1 ]]
     then
     	    cat<<EOF
 usage: xto <WHERE>
@@ -45,9 +44,9 @@ EOF
     return 1;
     fi
     
-    if [ -z "$2" ]
+    if [[ -z $2 ]]
     then
-	SCREEN="0.0"
+	SCREEN=0.0
     else
 	SCREEN=$2
     fi
@@ -85,22 +84,8 @@ function xrsh()
 
 function xssh()
 {
-   xhost $1 > /dev/null
    xterm -T ssh.$1 -n ssh.$1 -e ssh -X $* > /dev/null
 }
-
-function xssh2()
-{
-   xhost $1 > /dev/null
-   xterm -T ssh2.$1 -n ssh2.$1 -e ssh2 -X $* > /dev/null
-}
-
-function xtn()
-{
-   xhost $1 > /dev/null
-   xterm -T telnet.$1 -n telnet.$1 -e telnet $* > /dev/null
-}
-
 
 function xtitle()
 {
