@@ -3,13 +3,15 @@
 afr=13.5
 boost=10
 verbose=0
+dirs=
 
-while getopts ":a:b:v" opt
+while getopts ":a:b:d:v" opt
 do
     case "${opt}" in
-        a) afr=${OPTARG};;
-        b) boost=${OPTARG};;
+        a) afr="${OPTARG}";;
+        b) boost="${OPTARG}";;
         v) verbose=1;;
+        d) dirs=( "${dirs[@]}" "${OPTARG}");;
         [?]) error "unknown option \"-${OPTARG}\""; exit 1;;
    esac
 done
@@ -23,7 +25,12 @@ function check()
 
     if (( ${#events[*]} ))
     then
-        echo ${1}: ${#events[*]} events
+        if (( ${#events[*]} == 1 ))
+        then
+            echo ${1}: ${#events[*]} event
+        else
+            echo ${1}: ${#events[*]} events
+        fi
         if (( ${verbose} ))
         then
             for ((i=0; i < ${#events[*]}; i++))
@@ -34,28 +41,34 @@ function check()
     fi
 }
 
+#function arraymember()
+#{
+#    local find=${1}
+#    local x
+#    shift
+#    for x in "${@}"
+#    do
+#        if [[ ${x} == ${find} ]]
+#        then
+#            return 0
+#        fi
+#    done
+#    return 1
+#}
 
-function arraymember()
-{
-    find=${1}
-    shift
-    for x in "${@}"
+if (( ${#dirs[*]} ))
+then
+    for dir in "${dirs[@]}"
     do
-        if [[ ${x} == ${find} ]]
-        then
-            return 0
-        fi
+        for file in $(find "${dir}" -type f -a -name \*.csv)
+        do
+            check "${file}" "${afr}"
+        done
     done
-    return 1
-}
+fi
 
-exclude=( $@ )
-
-for i in *.csv
+for file in "$@"
 do
-    if ! arraymember "${i}" "$@"
-    then
-        check ${i} ${afr}
-    fi
+    check "${file}" "${afr}"
 done
 
