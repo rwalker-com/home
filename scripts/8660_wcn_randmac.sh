@@ -13,7 +13,9 @@ echo setting mac to ${mac}
 
 sed "s/NetworkAddress=.*/NetworkAddress=${mac}/g;s/gEnableImps=1/gEnableImps=0/g;s/gEnableBmps=1/gEnableBmps=0/g" < ${old} > ${new} || exit ${?}
 
-adb shell mount -o remount,rw /dev/block/mmcblk0p12 /system
+# remount /system rw
+adb remount
+
 adb push ${new} /etc/firmware/wlan/volans/WCN1314_qcom_cfg.ini
 
 read -p "reboot? [Y/n]: " answer

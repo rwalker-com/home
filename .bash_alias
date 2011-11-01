@@ -29,6 +29,16 @@ alias "xpine"="xterm -T Pine -n Pine -e pine"
 alias "xcons"="xterm -T Console -n Console -geometry =80x12+0+0 -C -ls"
 alias "rootx"="xterm -T root@$(hostname) -n root@$(hostname) -bg grey20 -cr white -e su -"
 
+function amake()
+{
+   if [[ -z ${ANDROID_BUILD_TOP} ]]
+   then
+       echo run envsetup.sh and choosecombo first
+       return 1
+   fi
+   make -C${ANDROID_BUILD_TOP} "${@}"
+}
+
 function xto()
 {
     if [[ -z $1 ]]

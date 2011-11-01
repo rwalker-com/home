@@ -10,5 +10,8 @@
         lolm = log --oneline --decorate --graph --no-merges
         lola = log --oneline --decorate --graph --all
         lolam = log --oneline --decorate --graph --all --no-merges
+        ls = ls-tree master --name-only
+        lsr = ls-tree -r master --name-only
+
 [core]
         excludesfile = ~/.gitexcludes
