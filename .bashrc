@@ -6,7 +6,7 @@ do
    	 ;;
 
       *)
-         if [ -d ${i} ]
+         if [[ -d ${i} ]]
          then
 #            echo adding $i
             PATH=${PATH}:${i}
@@ -47,36 +47,37 @@ esac
 
 export EDITOR=emacs
 export VISUAL=${EDITOR}
-export PS1='[\u@\h \W]\\$ '
+export PS1='[\u@\h${STY:+(${STY#*.})} \W]\\$ '
 
 case "$TERM" in
 xterm*|rxvt*)
-    PS1='\[\e]0;\u@\h: \W\a\]'${PS1}
+    PS1='\[\e]0;\u@\h \W\a\]'${PS1}
     ;;
 *)
     ;;
 esac
 
-# defeat stupid Andriod prompt crap
-export STAY_OFF_MY_LAWN=1
-
-
-if [ -f ~/.bash_alias ]
+if [[ -f ~/.bash_alias ]]
 then
    . ~/.bash_alias
 fi
 
-if [ -f ~/.bash_local ]
+if [[ -f ~/.bash_local ]]
 then
    . ~/.bash_local
 fi
 
-if [ -f ~/.cvsrc ]
+for f in ~/.bashrc.d/*.sh
+do
+    . ${f}
+done
+
+if [[ -f ~/.cvsrc ]]
 then
     . ~/.cvsrc
 fi
 
-if [ -f ~/.p4rc ]
+if [[ -f ~/.p4rc ]]
 then
     . ~/.p4rc
 fi
