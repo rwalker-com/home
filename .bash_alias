@@ -36,7 +36,32 @@ function amake()
        echo run envsetup.sh and choosecombo first
        return 1
    fi
-   make -C${ANDROID_BUILD_TOP} "${@}"
+   make -C"${ANDROID_BUILD_TOP}" "${@}"
+}
+
+function arepo()
+{
+    local out=0
+    if [[ -z ${ANDROID_BUILD_TOP} ]]
+    then
+        echo run envsetup.sh and choosecombo first
+        return 1
+    fi
+    
+    (cd ${ANDROID_BUILD_TOP}
+        if [[ -d out ]]
+        then
+            mv out .repo/out.$$
+            out=1
+        fi
+        
+        repo "$@"
+        
+        if (( ${out} ))
+        then
+            mv .repo/out.$$ out 
+        fi
+    )
 }
 
 function xto()
