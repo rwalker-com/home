@@ -12,6 +12,8 @@
         lolam = log --oneline --decorate --graph --all --no-merges
         ls = ls-tree master --name-only
         lsr = ls-tree -r master --name-only
+        gerrit-cherry = ! git fetch $(git remote) $(git ls-remote $(git remote) refs/changes/*/${1}/* | awk '/[0-9a-fA-F]+/ {ref=$2}END{print ref}') && git cherry-pick FETCH_HEAD && exit ${?}
+
 
 [core]
         excludesfile = ~/.gitexcludes
