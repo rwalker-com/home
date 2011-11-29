@@ -196,3 +196,21 @@ function cds() {
 }
 
 
+function path_gc()
+{
+    IFS=:
+    local -a paths=(${PATH})
+    unset IFS
+    
+    PATH=
+
+    for ((i = 0; i < ${#paths[*]}; i++))
+    do
+        local path=${paths[${i}]}
+        if [[ -n ${path} ]]
+        then
+            PATH="${PATH}:${path}"
+        fi
+    done
+    PATH=${PATH:1}
+}
