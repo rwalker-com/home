@@ -67,7 +67,7 @@ then
    . ~/.bash_local
 fi
 
-for f in ~/.bashrc.d/*.sh
+for f in $(ls ~/.bashrc.d/*.sh 2>/dev/null)
 do
     . ${f}
 done
