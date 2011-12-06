@@ -193,6 +193,7 @@ function cds() {
        cd "$dir"
     fi
   fi
+  unset IFS
 }
 
 
