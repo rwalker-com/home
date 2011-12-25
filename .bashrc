@@ -57,30 +57,22 @@ xterm*|rxvt*)
     ;;
 esac
 
-if [[ -f ~/.bash_alias ]]
-then
-   . ~/.bash_alias
-fi
+[[ -f ~/.bash_alias ]] && . ~/.bash_alias
 
-if [[ -f ~/.bash_local ]]
-then
-   . ~/.bash_local
-fi
 
-for f in $(ls ~/.bashrc.d/*.sh 2>/dev/null)
+[[ -f ~/.bash_local ]] && . ~/.bash_local
+
+shopt -s nullglob
+for f in ~/.bashrc.d/*.sh
 do
-    . ${f}
+  . ${f}
 done
+shopt -u nullglob
 
-if [[ -f ~/.cvsrc ]]
-then
-    . ~/.cvsrc
-fi
+[[ -f ~/.cvsrc ]] && . ~/.cvsrc
 
-if [[ -f ~/.p4rc ]]
-then
-    . ~/.p4rc
-fi
+[[ -f ~/.p4rc ]] && . ~/.p4rc
+
 
 HISTSIZE=10000
 HISTFILESIZE=1000000000
