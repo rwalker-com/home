@@ -6,7 +6,7 @@ set "oldpass=%orig%"
 
 set "newpass=%orig%%i%"
 
-ntpasswd %oldpass% %newpass%
+ntpasswd -p %oldpass% %newpass%
 
 set "oldpass=%newpass%"
 
@@ -16,10 +16,10 @@ set /a i+=1
 
 set "newpass=%orig%%i%"
 
-ntpasswd %oldpass% %newpass%
+ntpasswd -p %oldpass% %newpass%
 
 set "oldpass=%newpass%"
 
 if %i% lss 30 goto:loop
 
-ntpasswd %oldpass% %orig%
+ntpasswd -p %oldpass% %orig%
