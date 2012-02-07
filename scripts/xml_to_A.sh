@@ -1,6 +1,13 @@
 #!/bin/bash
-
-
+# bash XML parser
+# mostly a container for xml_to_dom()...
+# If the script is run standalone, the output looks like something 
+#  you could pass as associative array initialization, e.g.:
+#
+#  declare -A foo=( $(xml_to_A.sh < foo.xml) )
+# 
+# That won't work, though ;)
+#
 
 function chomp()
 {
