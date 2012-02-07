@@ -13,7 +13,7 @@
         ls = ls-tree master --name-only
         lsr = ls-tree -r master --name-only
         gerrit-refs = ! git ls-remote $(git remote) refs/changes/*/${1}/* refs/changes/*/${1} && exit ${?}
-        gerrit-ref = ! bash -c \"[[ ${1} =~ / ]]\" || echo \"warning, taking latest patchset for ${1}\" >&2 && git gerrit-refs ${1} | awk 'BEGIN{ref=\"no-such-ref\"}{}/[0-9a-fA-F]+/ {{n=split($2,elems,\"/\")}if(patchset<elems[n]){{patchset=elems[n]}{ref=$2}}}END{print ref}' && exit ${?}
+        gerrit-ref = ! bash -c \"[[ ${1} =~ / ]]\" || echo \"taking latest patchset for ${1}\" >&2 && git gerrit-refs ${1} | awk 'BEGIN{ref=\"no-such-ref\"}{}/[0-9a-fA-F]+/ {{n=split($2,elems,\"/\")}if(patchset<elems[n]){{patchset=elems[n]}{ref=$2}}}END{print ref}' && exit ${?}
         gerrit-pull = ! git pull $(git remote) $(git gerrit-ref ${1}) && exit ${?}
         gerrit-fetch = ! git fetch $(git remote) $(git gerrit-ref ${1}) && exit ${?}
         gerrit-cherry-pick = ! git gerrit-fetch ${1} && git cherry-pick FETCH_HEAD || git status | grep \"working directory clean\" && exit ${?}
