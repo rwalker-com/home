@@ -1,13 +1,16 @@
 #!/bin/bash
 
+
+
 function chomp()
 {
     local val=${1}
 
     (shopt -sq extglob
 
-    val=${val/$'\r'/ }
-    val=${val/$'\n'/ }
+    val=${val//$'\r'/ }
+    val=${val//$'\n'/ }
+    val=${val//$'\t'/ }
     val=${val/#+( )/}
     val=${val/%+( )/}
     echo "${val}")
@@ -30,10 +33,10 @@ function xml_to_dom()
         then
             continue
         fi
-        
+
         A=${T#* }
         [[ ${A} == ${T} ]] && A=
-        
+
         T=${T%% *}
         if [[ ${A} =~ .*/ ]]
         then
@@ -43,7 +46,7 @@ function xml_to_dom()
 
         T=$(chomp "${T}")
         A=$(chomp "${A}")
-        
+
         if [[ ${T} =~ \?.* ]]
         then
             continue
@@ -64,13 +67,13 @@ function xml_to_dom()
             fi
             idx=${tagidx[${tag}]}
         fi
-        
+
         if [[ -n ${A} ]]
         then
             # TODO: parse attributes
             eval ${1}[\${tag}.\${idx}.a]=\${A}
         fi
-        
+
         if [[ ${T} =~ .+/ ]]
         then
             eval ${1}[\${tag}.\${idx}]=
@@ -94,13 +97,54 @@ done
 echo ""
 
 
-#for tag in "${!doc[@]}"
-#do
-#    echo -n "${tag}"
-#    if [[ -n ${attrs[${tag}]} ]]
-#    then
-#        echo -n " (${attrs[${tag}]})"
-#    fi
-#    echo " => \"${doc[${tag}]}\""
-#    
-#done
+me=${0##*/}
+me=${me%.*}
+
+dotest=${me}_DOTEST
+intest=${me}_INTEST
+
+if [[ -n ${!dotest} && -z ${!intest} ]]
+then
+#    set -x
+    export ${intest}=1
+
+    function expect()
+    {
+        local expect=$(chomp "${1}")
+        shift
+
+        if ! got=$(chomp "$( "${@}" )")
+        then
+            return ${?}
+        fi
+
+        if [[ "${got}" != "${expect}" ]]
+        then
+            echo "${0}: error: \"${@}\" expected \"${expect}\" got \"${got}\""
+            return 1
+        fi
+        return 0
+    }
+
+    declare -A tests=(
+        [<x>x</x>]='[x.0]=x'
+        [<x>x<y>y</y>z</x>]='[x.0]=xz [x.0/y.0]=y'
+        [<x><y></y><y>y</y></x>]='[x.0]= [x.0/y.0]= [x.0/y.1]=y'
+        [<x><y><z/></y><y>y<z/></y><y>y</y></x>]='[x.0]= [x.0/y.0/z/.0]= [x.0/y.0]= [x.0/y.1]=y [x.0/y.2]=y [x.0/y.1/z/.0]='
+        [<x><b/>x</x>]='[x.0]=x [x.0/b/.0]='
+    )
+
+    ret=0
+
+    for i in "${!tests[@]}"
+    do
+        if ! echo -n "${i}" | expect "${tests[${i}]}" ${0}
+        then
+            ((ret++))
+        fi
+    done
+    exit ${ret}
+fi
+
+exit 0
+
