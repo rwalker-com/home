@@ -1,2 +1,3 @@
-(setq ps-printer-name "\\\\rejectamenta\\ax110amfd")
-(setq printer-name "\\\\rejectamenta\\ax110amfd")
+(setq ps-printer-name "\\\\rejectamenta\\ax620l-printer")
+(setq printer-name "\\\\rejectamenta\\ax620l-printer")
+
