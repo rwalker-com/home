@@ -41,6 +41,23 @@ function xml_to_dom()
             continue
         fi
 
+        # comment
+        if [[ ${T:0:3} == !-- ]]
+        then
+            # comment with a '>' in it....
+            if [[ ! ${T} =~ .*-- ]]
+            then
+                while read -r -d ">" T
+                do
+                    if [[ ${T} =~ .*-- ]]
+                    then
+                        break
+                    fi
+                done
+            fi
+            continue
+        fi
+
         A=${T#* }
         [[ ${A} == ${T} ]] && A=
 
@@ -139,6 +156,9 @@ then
         [<x><y></y><y>y</y></x>]='[x.0]= [x.0/y.0]= [x.0/y.1]=y'
         [<x><y><z/></y><y>y<z/></y><y>y</y></x>]='[x.0]= [x.0/y.0/z/.0]= [x.0/y.0]= [x.0/y.1]=y [x.0/y.2]=y [x.0/y.1/z/.0]='
         [<x><b/>x</x>]='[x.0]=x [x.0/b/.0]='
+        [<x><!----></x>]='[x.0]='
+        [<x><!-- > --></x>]='[x.0]='
+        [<x><!--$'\n'<>> $'\n'--></x>]='[x.0]='
     )
 
     ret=0
