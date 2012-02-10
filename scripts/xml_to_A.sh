@@ -1,6 +1,6 @@
 #!/bin/bash
 # bash XML parser
-# mostly a container for xml_to_dom()...
+# mostly a container for xml_to_A()...
 # If the script is run standalone, the output looks like something 
 #  you could pass as associative array initialization, e.g.:
 #
@@ -26,7 +26,7 @@ function chomp()
 }
 
 
-function xml_to_dom()
+function xml_to_A()
 {
     local T= A= C=
     local tag=
@@ -112,7 +112,7 @@ function xml_to_dom()
 }
 
 declare -A doc=()
-xml_to_dom doc
+xml_to_A doc
 
 for tag in "${!doc[@]}"
 do
