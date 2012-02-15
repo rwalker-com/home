@@ -64,7 +64,7 @@ function xml_to_A()
             continue
         fi
 
-        # CDATA, TODO: store this?
+        # CDATA, TODO: store this
         if [[ ${T:0:8} == \!\[CDATA\[ ]]
         then
             if [[ ! ${T} =~ .*\]\]$ ]]
