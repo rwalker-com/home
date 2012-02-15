@@ -1,11 +1,11 @@
 #!/bin/bash
 # bash XML parser
 # mostly a container for xml_to_A()...
-# If the script is run standalone, the output looks like something 
+# If the script is run standalone, the output looks like something
 #  you could pass as associative array initialization, e.g.:
 #
 #  declare -A foo=( $(xml_to_A.sh < foo.xml) )
-# 
+#
 # That won't work, though ;)
 #
 
@@ -45,17 +45,45 @@ function xml_to_A()
         if [[ ${T:0:3} == !-- ]]
         then
             # comment with a '>' in it....
-            if [[ ! ${T} =~ .*-- ]]
+            if [[ ! ${T} =~ .*--$ ]]
             then
                 while read -r -d ">" T
                 do
-                    if [[ ${T} =~ .*-- ]]
+                    if [[ ${T} =~ .*--$ ]]
                     then
                         break
                     fi
                 done
+                read -r -d "<" C
+            fi
+            if [[ -n ${tag} && -n ${C} ]]
+            then
+                local cur=$(eval echo \${${1}[\${tag}.\${idx}]})
+                eval ${1}[\${tag}.\${idx}]=\${cur}\${C}
             fi
             continue
+        fi
+
+        # CDATA, TODO: store this?
+        if [[ ${T:0:8} == \!\[CDATA\[ ]]
+        then
+            if [[ ! ${T} =~ .*\]\]$ ]]
+            then
+                while read -r -d ">" T
+                do
+                    if [[ ${T} =~ .*\]\]$ ]]
+                    then
+                        break
+                    fi
+                done
+                read -r -d "<" C
+            fi
+            if [[ -n ${tag} && -n ${C} ]]
+            then
+                local cur=$(eval echo \${${1}[\${tag}.\${idx}]})
+                eval ${1}[\${tag}.\${idx}]=\${cur}\${C}
+            fi
+            continue;
         fi
 
         A=${T#* }
@@ -159,13 +187,17 @@ then
         [<x><!----></x>]='[x.0]='
         [<x><!-- > --></x>]='[x.0]='
         [<x><!--$'\n'<>> $'\n'--></x>]='[x.0]='
+        [<a>X<!-- C > B < D -->Y</a>]='[a.0]=XY'
+        [<!\[CDATA\[ X </a> closebracketclosebracket>]=''
+        [<a>x<!\[CDATA\[ X </a> closebracketclosebracket>y</a>]='[a.0]=xy'
     )
 
     ret=0
 
     for i in "${!tests[@]}"
     do
-        if ! echo -n "${i}" | expect "${tests[${i}]}" ${0}
+        echo "testing \"${i//closebracket/]}\"..."
+        if ! echo -n "${i//closebracket/]}" | expect "${tests[${i}]}" ${0}
         then
             ((ret++))
         fi
