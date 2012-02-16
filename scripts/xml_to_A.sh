@@ -62,10 +62,9 @@ function xml_to_A()
                 eval ${1}[\${tag}.\${idx}]=\${cur}\${C}
             fi
             continue
-        fi
 
         # CDATA, TODO: store this
-        if [[ ${T:0:8} == \!\[CDATA\[ ]]
+        elif [[ ${T:0:8} == \!\[CDATA\[ ]]
         then
             if [[ ! ${T} =~ .*\]\]$ ]]
             then
