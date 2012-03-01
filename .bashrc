@@ -62,12 +62,10 @@ esac
 
 [[ -f ~/.bash_local ]] && . ~/.bash_local
 
-shopt -s nullglob
 for f in ~/.bashrc.d/*.sh
 do
-  . ${f}
+    [[ -f ${f} ]] && . "${f}"
 done
-shopt -u nullglob
 
 [[ -f ~/.cvsrc ]] && . ~/.cvsrc
 
