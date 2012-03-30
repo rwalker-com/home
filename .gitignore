@@ -10,6 +10,7 @@
 !.bash_profile
 !.bash_alias
 !.bash_logout
+!.ccacherc
 !.p4rc
 !.screenrc
 !.gitconfig

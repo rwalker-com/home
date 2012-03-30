@@ -13,7 +13,7 @@ function spawnj()
             h) printf %s "
 Reads and spawn commands from stdin
 
-Usage: spawnj [OPTIONS] 
+Usage: spawnj [OPTIONS]
 
 Options:
 
@@ -31,7 +31,7 @@ Examples:
    16 at a time:
 
      find tests -type f -a -executable -print0 | spawnj -n 16 -0
-    
+
 "
                 return 0
                 ;;
@@ -42,7 +42,7 @@ Examples:
     done
     ((OPTIND--))
     shift "${OPTIND}"
-    
+
     function __spawnj_one()
     {
         declare -a cmd=()
@@ -68,7 +68,7 @@ Examples:
     trap __spawnj_one CHLD || return 1
 
     # kick off num jobs
-    while ((num-- > 0)) 
+    while ((num-- > 0))
     do
         __spawnj_one
     done
@@ -106,7 +106,7 @@ function expect_elapsed_centiS()
     {
         echo \""${name}"\" exited error ${1}
     }
-    
+
     read start _ < /proc/uptime
     "${@}" || failed ${?}
     read elapsed _ < /proc/uptime
@@ -115,7 +115,7 @@ function expect_elapsed_centiS()
     elapsed=${elapsed//./}
     ((elapsed=elapsed-start))
 
-    if ((elapsed > upper || elapsed < lower)) 
+    if ((elapsed > upper || elapsed < lower))
     then
         echo "${name}" took ${elapsed}cs, expected between ${lower}cs and ${upper}cs
         return 1
@@ -130,7 +130,7 @@ declare -A tests=(
     ["sleep 1\n\nsleep 1\n\n"]="blanklines 190 210 spawnj"
     ["sleep 1\0\0sleep 1\0\0"]="blanklines_0 190 210 spawnj -0"
     ["sleep 1\nsleep 2\nsleep 3\n"]="n_1_sleep123 590 610 spawnj"
-    ["sleep 1\0sleep 2\0sleep 3\0"]="n_1_0_sleep123 590 610 spawnj -0" 
+    ["sleep 1\0sleep 2\0sleep 3\0"]="n_1_0_sleep123 590 610 spawnj -0"
     ["sleep 1\nsleep 2\nsleep 3\n"]="n_2_sleep123 390 410 spawnj -n 2"
     ["sleep 1\nsleep 2\nsleep 3\n"]="n_3_sleep123 290 310 spawnj -n 3"
     ["sleep 1\nsleep 2\nsleep 3\n"]="n_4_sleep123 290 310 spawnj -n 4"
