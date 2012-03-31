@@ -42,16 +42,16 @@ Examples:
     done
     ((OPTIND--))
     shift "${OPTIND}"
-    
+
     # subshell to keep "set -m" from screwing up local shell
     # and keep __spawnj_one out of the environment
-    
+
     declare respawns=0
     function __respawnj()
     {
         declare cmd=
         declare -a jobs=( $(jobs -pr) )
-        
+
         while ((${#jobs[*]} < num)) && read -r "${zero[@]}" cmd
         do
             #echo cmd is \""${cmd}"\" >&2
@@ -63,18 +63,18 @@ Examples:
             #echo ${#jobs[*]} jobs: ${jobs[*]}
         done
     }
-    
+
     # enable job control (to get CHLD)
     set -m
     # whenever we hear about a child exiting, respawnj
     trap "__respawnj" CHLD || return 1
-        
+
     # trigger respawnj
     ( true )
 
     wait
 
-    # clear 
+    # clear
     trap -- CHLD
 }
 
