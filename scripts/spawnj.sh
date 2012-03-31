@@ -42,38 +42,40 @@ Examples:
     done
     ((OPTIND--))
     shift "${OPTIND}"
-
-    function __spawnj_one()
+    
+    # subshell to keep "set -m" from screwing up local shell
+    # and keep __spawnj_one out of the environment
+    
+    declare respawns=0
+    function __respawnj()
     {
-        declare -a cmd=()
-
-        while read -r "${zero[@]}" -a cmd
+        declare cmd=
+        declare -a jobs=( $(jobs -pr) )
+        
+        while ((${#jobs[*]} < num)) && read -r "${zero[@]}" cmd
         do
-            # debug
-            # echo cmd is \""${cmd[*]}"\" 2>&1
-            if (( ${#cmd[*]} ))
+            #echo cmd is \""${cmd}"\" >&2
+            if [[ -n ${cmd} ]]
             then
-                # subshell required because:
-                # 1. I don't want it screwing with my variables, fds
-                # 2. I don't get CHLD for bash BUILTINS
-                ( "${cmd[@]}" ) &
-                return
+                bash -c "${cmd}" &
             fi
+            jobs=( $(jobs -pr) )
+            #echo ${#jobs[*]} jobs: ${jobs[*]}
         done
     }
-
+    
     # enable job control (to get CHLD)
     set -m
-    # whenever a child exits, start another
-    trap __spawnj_one CHLD || return 1
-
-    # kick off num jobs
-    while ((num-- > 0))
-    do
-        __spawnj_one
-    done
+    # whenever we hear about a child exiting, respawnj
+    trap "__respawnj" CHLD || return 1
+        
+    # trigger respawnj
+    ( true )
 
     wait
+
+    # clear 
+    trap -- CHLD
 }
 
 if [[ ${0} =~ .*bash$ ]]
@@ -134,13 +136,15 @@ declare -A tests=(
     ["sleep 1\nsleep 2\nsleep 3\n"]="n_2_sleep123 390 410 spawnj -n 2"
     ["sleep 1\nsleep 2\nsleep 3\n"]="n_3_sleep123 290 310 spawnj -n 3"
     ["sleep 1\nsleep 2\nsleep 3\n"]="n_4_sleep123 290 310 spawnj -n 4"
+    ["sleep 1\nsleep 1\nsleep 1\nsleep 1\nsleep 1\nsleep 1\n"]="n_3_sleep_6 190 310 spawnj -n 3"
+    ["echo hi && sleep 1\necho there && sleep 1\n"]="n_1_echo_sleep1 90 110 spawnj -n 2"
 )
 
 ret=0
 
 for i in "${!tests[@]}"
 do
-    if ! printf "${i}" | expect_elapsed_centiS ${tests[${i}]}
+    if ! printf "${i}" | expect_elapsed_centiS ${tests[${i}]} >/dev/null 2>/dev/null
     then
         ((ret++))
     fi
