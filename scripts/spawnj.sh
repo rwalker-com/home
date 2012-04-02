@@ -43,39 +43,42 @@ Examples:
     ((OPTIND--))
     shift "${OPTIND}"
 
-    # subshell to keep "set -m" from screwing up local shell
-    # and keep __spawnj_one out of the environment
-
-    declare respawns=0
-    function __respawnj()
+    declare pipe=
     {
-        declare cmd=
-        declare -a jobs=( $(jobs -pr) )
-
-        while ((${#jobs[*]} < num)) && read -r "${zero[@]}" cmd
-        do
-            #echo cmd is \""${cmd}"\" >&2
-            if [[ -n ${cmd} ]]
-            then
-                bash -c "${cmd}" &
-            fi
-            jobs=( $(jobs -pr) )
-            #echo ${#jobs[*]} jobs: ${jobs[*]}
-        done
+        declare pipename=spawnj.${RANDOM}
+        mkfifo ${pipename}
+        exec {pipe}<>${pipename}
+        rm -f ${pipename}
     }
 
-    # enable job control (to get CHLD)
-    set -m
-    # whenever we hear about a child exiting, respawnj
-    trap "__respawnj" CHLD || return 1
+    while (( num-- ))
+    do
+        echo "" >&${pipe}
+    done
 
-    # trigger respawnj
-    ( true )
+    while read -u ${pipe}
+    do
+        while (( 1 ))
+        do
+            declare cmd=
+
+            if ! read -r "${zero[@]}" cmd
+            then
+                break 2
+            fi
+
+            if [[ -n ${cmd} ]]
+            then
+                #echo cmd is \""${cmd}"\" >&2
+                ( bash -c "${cmd}" ; echo "" >&${pipe} ) &
+                break
+            fi
+        done
+    done
+
+    exec {pipe}>&-
 
     wait
-
-    # clear
-    trap -- CHLD
 }
 
 if [[ ${0} =~ .*bash$ ]]
@@ -137,14 +140,14 @@ declare -A tests=(
     ["sleep 1\nsleep 2\nsleep 3\n"]="n_3_sleep123 290 310 spawnj -n 3"
     ["sleep 1\nsleep 2\nsleep 3\n"]="n_4_sleep123 290 310 spawnj -n 4"
     ["sleep 1\nsleep 1\nsleep 1\nsleep 1\nsleep 1\nsleep 1\n"]="n_3_sleep_6 190 310 spawnj -n 3"
-    ["echo hi && sleep 1\necho there && sleep 1\n"]="n_1_echo_sleep1 90 110 spawnj -n 2"
+    ["echo hi>/dev/null && sleep 1\necho there>/dev/null && sleep 1\n"]="n_1_echo_sleep1 90 110 spawnj -n 2"
 )
 
 ret=0
 
 for i in "${!tests[@]}"
 do
-    if ! printf "${i}" | expect_elapsed_centiS ${tests[${i}]} >/dev/null 2>/dev/null
+    if ! printf "${i}" | expect_elapsed_centiS ${tests[${i}]}
     then
         ((ret++))
     fi
