@@ -1,18 +1,26 @@
-for i in  ${HOME}/bin /bin /usr/bin /sbin /usr/sbin /etc /usr/local/bin /usr/gnu/bin /usr/bin/X11 /usr/X11/bin /usr/X11R6/bin /usr/openwin/bin /usr/ucb /usr/bsd /usr/games /usr/ccs/bin /usr/local/java/bin /usr/contrib/bin /usr/contrib/bin/X11
+# bunch of random paths..
+paths="${HOME}/bin
+/usr/bin /usr/sbin
+/bin /sbin
+/etc
+/usr/bin/X11 /usr/X11/bin /usr/X11R6/bin /usr/openwin/bin
+/usr/local/bin
+/opt/local/bin /opt/local/sbin
+/usr/gnu/bin
+/usr/ucb /usr/bsd /usr/games /usr/ccs/bin /usr/local/java/bin
+/usr/contrib/bin /usr/contrib/bin/X11
+"
+for i in ${paths}
 do
-   case :${PATH}: in
-      *:${i}:*)
-#         echo $i already in PATH
-   	 ;;
-
-      *)
-         if [[ -d ${i} ]]
-         then
-#            echo adding $i
-            PATH=${PATH}:${i}
-         fi
-         ;;
-  esac
+   if [[ :${PATH}: =~ :${i}: ]]
+   then
+       # echo $i already in PATH
+       :
+   elif [[ -d ${i} ]]
+   then
+       # echo adding $i
+       PATH=${PATH}:${i}
+   fi
 done
 
 case `uname -s` in
