@@ -71,6 +71,8 @@ done
 
 [[ -f ~/.p4rc ]] && . ~/.p4rc
 
+[[ -f ~/.ccacherc ]] && . ~/.ccacherc
+
 
 HISTSIZE=10000
 HISTFILESIZE=1000000000
