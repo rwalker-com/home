@@ -119,7 +119,7 @@ function xrsh()
 
 function xssh()
 {
-   xterm -T ssh.$1 -n ssh.$1 -e ssh -X $* > /dev/null
+   xterm -T ssh.$1 -n ssh.$1 -e ssh -Y $* > /dev/null
 }
 
 function xtitle()
