@@ -33,12 +33,42 @@ function xml_to_A()
     local idx=0
     declare -A tagidx=()
 
-    local IFS=">"
-    while read -r -d "<" T C
+    function __closetag()
+    {
+        tag=${tag%/${1}}
+        idx=${tag##*.}
+        tag=${tag%.*}
+    }
+
+    function __opentag()
+    {
+        tag=${tag:+${tag}.${idx}/}${1}
+        if [[ -z ${tagidx[${tag}]} ]]
+        then
+            tagidx[${tag}]=0
+        else
+            ((tagidx[${tag}]++))
+        fi
+        idx=${tagidx[${tag}]}
+    }
+
+    # eat anything up to first open tag
+    read -r -d "<" C
+
+    read -r -d "<" C
+    if [[ -n ${tag} && -n ${C} ]]
+    then
+        local cur=$(eval echo \${${1}[\${tag}.\${idx}]})
+        eval ${1}[\${tag}.\${idx}]=\${cur}\${C}
+    fi
+
+    
+    while read -r -d ">" T
     do
         if [[ -z ${T} ]]
         then
-            continue
+            echo "malformed tag" >&2 
+            exit 1
         fi
 
         # comment
@@ -54,33 +84,39 @@ function xml_to_A()
                         break
                     fi
                 done
-                read -r -d "<" C
-            fi
-            if [[ -n ${tag} && -n ${C} ]]
-            then
-                local cur=$(eval echo \${${1}[\${tag}.\${idx}]})
-                eval ${1}[\${tag}.\${idx}]=\${cur}\${C}
             fi
             continue
 
         # CDATA, TODO: store this
         elif [[ ${T:0:8} == \!\[CDATA\[ ]]
         then
+            declare cdata=${T:8}"<"
+
             if [[ ! ${T} =~ .*\]\]$ ]]
             then
+                unset IFS
                 while read -r -d ">" T
                 do
+                    cdata=${cdata}${T}">"
+
                     if [[ ${T} =~ .*\]\]$ ]]
                     then
                         break
                     fi
                 done
+                IFS=">"
                 read -r -d "<" C
             fi
+            cdata=${cdata:0:${#cdata}-3}
+            
+            __opentag '!CDATA'
+            # store the cdata
+            eval ${1}[\${tag}.\${idx}]=\${cdata}
+            __closetag '!CDATA'
+            
             if [[ -n ${tag} && -n ${C} ]]
             then
-                local cur=$(eval echo \${${1}[\${tag}.\${idx}]})
-                eval ${1}[\${tag}.\${idx}]=\${cur}\${C}
+                eval ${1}[\${tag}.\${idx}]=\${${1}[\${tag}.\${idx}]}\${C}
             fi
             continue;
         fi
@@ -105,18 +141,9 @@ function xml_to_A()
 
         if [[ ${T:0:1} == / ]]
         then
-            tag=${tag%/${T:1}}
-            idx=${tag##*.}
-            tag=${tag%.*}
+            __closetag "${T:1}"
         else
-            tag=${tag:+${tag}.${idx}/}${T}
-            if [[ -z ${tagidx[${tag}]} ]]
-            then
-                tagidx[${tag}]=0
-            else
-                ((tagidx[${tag}]++))
-            fi
-            idx=${tagidx[${tag}]}
+            __opentag "${T}"
         fi
 
         if [[ -n ${A} ]]
@@ -128,13 +155,10 @@ function xml_to_A()
         if [[ ${T} =~ .+/ ]]
         then
             eval ${1}[\${tag}.\${idx}]=
-            tag=${tag%/${T}}
-            idx=${tag##*.}
-            tag=${tag%.*}
+            __closetag "${T}"
         fi
 
-        local cur=$(eval echo \${${1}[\${tag}.\${idx}]})
-        eval ${1}[\${tag}.\${idx}]=\${cur}\${C}
+        eval ${1}[\${tag}.\${idx}]=\${${1}[\${tag}.\${idx}]}\${C}
     done
 }
 
@@ -187,8 +211,9 @@ then
         [<x><!-- > --></x>]='[x.0]='
         [<x><!--$'\n'<>> $'\n'--></x>]='[x.0]='
         [<a>X<!-- C > B < D -->Y</a>]='[a.0]=XY'
-        [<!\[CDATA\[ X </a> closebracketclosebracket>]=''
-        [<a>x<!\[CDATA\[ X </a> closebracketclosebracket>y</a>]='[a.0]=xy'
+        [<!\[CDATA\[ X </a> closebracketclosebracket>]='[!CDATA.0]= X </a> '
+        [<!\[CDATA\[ X < < closebracketclosebracket>]='[!CDATA.0]= X < < '
+        [<a>x<!\[CDATA\[Xclosebracketclosebracket>y</a>]='[a.0]=xy [a.0/!CDATA.0]=X'
     )
 
     ret=0
