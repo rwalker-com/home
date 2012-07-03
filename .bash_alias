@@ -245,7 +245,7 @@ EOF
 
 function make_repl()
 {
-    make -s -f <(printf %s '
+    make "${@}" -s -f <(printf %s '
 _getline=$(shell printf "\# " >&0 && head -1 | sed -e "s/!/!1/g;s/$$/!n/")
 _eatline=$(if $1,$(eval $(subst !1,!,$(subst !n,,$1)))1)
 _repl=$(if $(call _eatline,$(call _getline)),$(call $0))
