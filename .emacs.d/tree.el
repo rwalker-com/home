@@ -348,7 +348,7 @@ the set of files included in the tree.
 
 Use `tree-clear-cache' to force re-enumeration of files.")
 
-(defvar default-treespec "...\n&....(c|cpp|h|s|idl|cif|rb|lua|el|bid|cif|min)"
+(defvar default-treespec "...\n&....(c|cc|cpp|h|hh|hpp|s|idl|cif|rb|lua|el|bid|cif|min|java)"
   "Default treespec to use when .treespec file is not present in `tree-top'.")
 
 (defun tree-get-top (arg &optional prompt)
