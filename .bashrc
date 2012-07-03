@@ -1,5 +1,6 @@
 # bunch of random paths..
 paths="${HOME}/bin
+${HOME}/Library/Haskell/bin
 /usr/bin /usr/sbin
 /bin /sbin
 /etc
