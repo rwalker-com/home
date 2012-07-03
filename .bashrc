@@ -1,5 +1,5 @@
 # bunch of random paths..
-paths="${HOME}/bin
+declare paths="
 /usr/bin /usr/sbin
 /bin /sbin
 /etc
@@ -22,36 +22,36 @@ do
        PATH=${PATH}:${i}
    fi
 done
+PATH=${HOME}/bin:${PATH}
 
-case `uname -s` in
-  "SunOS")
-    MANPATH=${HOME}/man:/usr/local/man:/usr/man:/usr/openwin/man:${MANPATH}
-    ;;
+declare manpaths="
+/usr/man
+/usr/local/man
+/usr/openwin/man
+/usr/contrib/man
+/usr/lib/scohelp/man
+scohelp
+/usr/share/catman
+/opt/man
+/usr/lib/SoftWindows/man
+/usr/bin/man
+/usr/dt/man
+/usr/share/man
+"
+for i in ${manpaths}
+do
+   if [[ :${MANPATH}: =~ :${i}: ]]
+   then
+       # echo $i already in MANPATH
+       :
+   elif [[ -d ${i} ]]
+   then
+       # echo adding $i
+       MANPATH=${MANPATH}:${i}
+   fi
+done
+MANPATH=${HOME}/man:${MANPATH}
 
-  "HP-UX")
-    MANPATH=${HOME}/man:/usr/local/man:/usr/man:/usr/contrib/man:${MANPATH}
-    ;;
-
-  "Linux")
-    MANPATH=${HOME}/man:/usr/local/man:/usr/man:${MANPATH}
-    ;;
-
-  "SCO_SV")
-    MANPATH=${HOME}/man:/usr/man:/usr/lib/scohelp/man:scohelp:${MANPATH}
-    ;;
-
-  "IRIX")
-    MANPATH=${HOME}/man:/usr/share/catman:/opt/man:/usr/lib/SoftWindows/man:${MANPATH}
-    ;;
-
-  "AIX")
-    MANPATH=${HOME}/man:/usr/man:/usr/bin/man:/usr/dt/man:/usr/share/man:${MANPATH}
-    ;;
-
-  "*")
-    MANPATH=${HOME}/man:/usr/man:/usr/bin/man:${MANPATH}
-    ;;
-esac
 
 export EDITOR=emacs
 export VISUAL=${EDITOR}
