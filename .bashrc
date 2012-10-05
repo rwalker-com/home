@@ -1,5 +1,6 @@
 # bunch of random paths..
 declare paths="
+$(find ~/bin -type d -a \! -path \*/\\.\* 2>/dev/null)
 /usr/bin /usr/sbin
 /bin /sbin
 /etc
