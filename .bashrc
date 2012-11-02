@@ -1,5 +1,6 @@
 # bunch of random paths..
 declare paths="
+$(find ~/bin -type d -a \! -path \*/\\.\* 2>/dev/null)
 /usr/bin /usr/sbin
 /bin /sbin
 /etc
@@ -22,9 +23,9 @@ do
        PATH=${PATH}:${i}
    fi
 done
-PATH=${HOME}/bin:${PATH}
 
 declare manpaths="
+~/man
 /usr/man
 /usr/local/man
 /usr/openwin/man
@@ -50,7 +51,6 @@ do
        MANPATH=${MANPATH}:${i}
    fi
 done
-MANPATH=${HOME}/man:${MANPATH}
 
 
 export EDITOR=emacs
