@@ -126,8 +126,10 @@
 (defun my-c-mode-hook ()
   (c-mode-hook-indent 4))
 
-(add-hook 'c++-mode-hook 'my-c-mode-hook)
-(add-hook 'c-mode-hook   'my-c-mode-hook)
+;(add-hook 'c++-mode-hook 'my-c-mode-hook)
+;(add-hook 'c-mode-hook   'my-c-mode-hook)
+
+(add-hook 'c-common-mode-hook 'google-set-c-style)
 
 (defun my-change-log-mode-hook ()
   (setq indent-tabs-mode nil))
