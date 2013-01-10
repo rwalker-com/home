@@ -1,28 +1,31 @@
 # turn on ccache for Android builds ;)
-export USE_CCACHE=1
 
-function gcc()
-{
-    ccache /usr/bin/env gcc "$@"
-}
+if ccache -h 2>/dev/null 1>/dev/null
+then
+    export USE_CCACHE=1
 
-function g++()
-{
-    ccache /usr/bin/env g++ "$@"
-}
+    function gcc()
+    {
+        ccache /usr/bin/env gcc "$@"
+    }
 
-function cc()
-{
-    ccache /usr/bin/env cc "$@"
-}
+    function g++()
+    {
+        ccache /usr/bin/env g++ "$@"
+    }
 
-function c++()
-{
-    ccache /usr/bin/env c++ "$@"
-}
+    function cc()
+    {
+        ccache /usr/bin/env cc "$@"
+    }
 
-ccacherc_h=ccacherc-$(hostname)
-ccacherc_h=${ccacherc_h%%.*}
+    function c++()
+    {
+        ccache /usr/bin/env c++ "$@"
+    }
 
-[[ -f ${ccacherc_h} ]] && . ${ccacherc_h}
+    ccacherc_h=ccacherc-$(hostname)
+    ccacherc_h=${ccacherc_h%%.*}
 
+    [[ -f ${ccacherc_h} ]] && . ${ccacherc_h}
+fi
