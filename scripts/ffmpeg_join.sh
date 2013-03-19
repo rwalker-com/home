@@ -17,5 +17,5 @@ do
         fi
         ((i++))
     done
-done | ffmpeg -vcodec mjpeg -f image2pipe -i - -qscale 0 -y ${dest}
+done | ffmpeg -vcodec mjpeg -f image2pipe -i - -qscale 0.1 -y ${dest}
 
