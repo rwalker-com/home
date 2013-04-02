@@ -85,4 +85,7 @@ done
 HISTSIZE=10000
 HISTFILESIZE=1000000000
 
-STAY_OFF_MY_LAWN=1
+# Android defense
+export STAY_OFF_MY_LAWN=1
+# depot_tools sanity
+export DEPOT_TOOLS_UPDATE=0

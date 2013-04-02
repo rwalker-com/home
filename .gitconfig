@@ -3,7 +3,7 @@
         name  = Rob Walker
 
 [color]
-	ui = auto
+        ui = auto
 
 [alias]
         lol = log --oneline --decorate --graph
