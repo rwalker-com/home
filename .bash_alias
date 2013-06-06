@@ -257,3 +257,27 @@ all: ; @#
 ')
 }
 
+function teelog()
+{
+   declare out=${*}
+   out=${out//\//%}
+
+   "$@" 2>&1 | tee -- "${out// /_}.log"
+}
+
+function find_x0_grep()
+{
+    declare findargs=( )
+
+    while [[ ${1} != "--" ]]
+    do
+        findargs=( "${findargs[@]}" "${1}" )
+        shift
+    done
+    shift
+
+    (( ${#findargs[*]} )) || findargs=( . -type f )
+
+    find "${findargs[@]}" -print0 | xargs -0 grep "${@}"
+
+}

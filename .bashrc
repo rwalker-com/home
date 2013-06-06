@@ -70,7 +70,7 @@ esac
 
 [[ -f ~/.bash_local ]] && . ~/.bash_local
 
-for f in ~/.bashrc.d/*.sh
+for f in ~/.bashrc.d/!(*~)
 do
     [[ -f ${f} ]] && . "${f}"
 done
@@ -87,5 +87,3 @@ HISTFILESIZE=1000000000
 
 # Android defense
 export STAY_OFF_MY_LAWN=1
-# depot_tools sanity
-export DEPOT_TOOLS_UPDATE=0
