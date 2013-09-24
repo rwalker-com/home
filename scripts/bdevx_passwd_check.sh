@@ -8,7 +8,7 @@ USERS=`awk -F: '{print $1}' ~/tmp/bdevx_passwd`
 for i in ${USERS}
 do
    case ${i} in
-      root|bin|daemon|adm|lp|sync|shutdown|halt|mail|news|uucp|operator|games|gopher|ftp|nobody|vcsa|mailnull|rpm|rpc|xfs|rpcuser|nfsnobody|nscd|ident|radvd|apache|squid|pcap)
+      root|bin|daemon|adm|lp|sync|shutdown|halt|mail|news|uucp|operator|games|gopher|ftp|nobody|vcsa|mailnull|rpm|rpc|xfs|rpcuser|nfsnobody|nscd|ident|radvd|apache|squid|pcap|webtech-devx)
       	  ;;
       *)
       	  if grep ^${i}\: ~/tmp/yp_passwd | awk -F: '{print $2}' | grep '*' 2>/dev/null 1>/dev/null
