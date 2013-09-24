@@ -1,5 +1,5 @@
 # I hate system aliases...
-unalias -a 
+unalias -a
 
 alias "f"="finger"
 alias "x"="xinit -- -ar1 200 -ar2 10 >& ~/.xinitout"
@@ -47,19 +47,19 @@ function arepo()
         echo run envsetup.sh and choosecombo first
         return 1
     fi
-    
+
     (cd ${ANDROID_BUILD_TOP}
         if [[ -d out ]]
         then
             mv out .repo/out.$$
             out=1
         fi
-        
+
         repo "$@"
-        
+
         if (( ${out} ))
         then
-            mv .repo/out.$$ out 
+            mv .repo/out.$$ out
         fi
     )
 }
@@ -78,7 +78,7 @@ usage: xto <WHERE>
 EOF
     return 1;
     fi
-    
+
     if [[ -z $2 ]]
     then
 	SCREEN=0.0
@@ -259,10 +259,14 @@ all: ; @#
 
 function teelog()
 {
-   declare out=${*}
-   out=${out//\//%}
+    declare out=${*}
+    out=${out//\//%}
+    if [[ ${out} == .* ]]
+    then
+        out=${out/./_}
+    fi
 
-   "$@" 2>&1 | tee -- "${out// /_}.log"
+    "$@" 2>&1 | tee -- "${out// /_}.log"
 }
 
 function find_x0_grep()

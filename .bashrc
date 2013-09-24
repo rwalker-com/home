@@ -27,7 +27,9 @@ done
 declare manpaths="
 ~/man
 /usr/man
+/usr/share/man
 /usr/local/man
+/usr/local/shareman
 /usr/openwin/man
 /usr/contrib/man
 /usr/lib/scohelp/man
@@ -70,6 +72,7 @@ esac
 
 [[ -f ~/.bash_local ]] && . ~/.bash_local
 
+shopt -s extglob
 for f in ~/.bashrc.d/!(*~)
 do
     [[ -f ${f} ]] && . "${f}"

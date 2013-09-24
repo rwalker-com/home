@@ -101,6 +101,9 @@
 (add-to-list `auto-mode-alist `("make\\.dfile\\'" . makefile-mode) t)
 (add-to-list `auto-mode-alist `("\\.bid\\'" . c++-mode) t)
 (add-to-list `auto-mode-alist `("\\.comp\\'" . compilation-mode) t)
+(add-to-list `auto-mode-alist `("\\.rbsh\\'" . shell-script-mode) t)
+(add-to-list `auto-mode-alist `("\\.sh\\'" . shell-script-mode) t)
+(add-to-list `auto-mode-alist `("\\.cgi\\'" . shell-script-mode) t)
 ;(add-to-list `auto-mode-alist `("\\.json\\'" . json-mode) t)
 ;(add-to-list `auto-mode-alist `("\\.js\\'" . js2-mode) t)
 
@@ -659,7 +662,7 @@ extern \"C\" {
 ;(require 'js2-mode)
 ;(require 'json)
 (require 'tree)
-(require 'p4)
+;(require 'p4)
 ;;(require 'fontsize)
 ;;
 ;;(global-set-key [?\C-+] 'fontsize-up)
