@@ -153,6 +153,16 @@ function cds() {
             done < ~/.cdvars
             unset IFS
         fi
+    elif [[ -d ${1} ]] ; then
+    # directory arg: cd & save / move to top
+        cd "${1}"
+        local d=$(pwd)
+        local a=
+        echo "${d}" > ~/.cds.new
+        while read a ; do
+            if [[ ${a} != ${d} ]] ; then echo "${a}" ; fi
+        done < ~/.cds >> ~/.cds.new
+        mv ~/.cds.new ~/.cds
     elif [[ -z ${1//[0-9]/} ]] ; then
     # numeric arg: retrieve & cd
         local n=${1}
@@ -164,16 +174,6 @@ function cds() {
         else
             cd "${a}"
         fi
-    elif [[ -d ${1} ]] ; then
-    # directory arg: cd & save / move to top
-        cd "${1}"
-        local d=$(pwd)
-        local a=
-        echo "${d}" > ~/.cds.new
-        while read a ; do
-            if [[ ${a} != ${d} ]] ; then echo "${a}" ; fi
-        done < ~/.cds >> ~/.cds.new
-        mv ~/.cds.new ~/.cds
     elif [[ ${1} == -e ]] ; then
         "${EDITOR}" ~/.cds
     elif [[ ${1} == -h ]] ; then
