@@ -657,12 +657,12 @@ extern \"C\" {
  load-path)
 
 (require 'lua-mode)
-(require 'package)
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+;(require 'package)
+;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 ;(require 'js2-mode)
 ;(require 'json)
 (require 'tree)
-;(require 'p4)
+(require 'p4)
 ;;(require 'fontsize)
 ;;
 ;;(global-set-key [?\C-+] 'fontsize-up)
