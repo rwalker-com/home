@@ -26,5 +26,7 @@
 
 [core]
         excludesfile = ~/.gitexcludes
+        deltaBaseCacheLimit = 1G
+
 [init]
 	templatedir = ~/.git_template
