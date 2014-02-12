@@ -92,6 +92,7 @@
 (defvar host (downcase (substring (system-name) 0 
                         (string-match "\\." (system-name)))))
 
+(add-to-list `auto-mode-alist `("\\.gyp\\'" . python-mode) t)
 (add-to-list `auto-mode-alist `("\\.log\\'" . auto-revert-tail-mode) t)
 (add-to-list `auto-mode-alist `("\\.lua\\'" . lua-mode) t)
 (add-to-list `auto-mode-alist `("\\.cif\\'" . lua-mode) t)
