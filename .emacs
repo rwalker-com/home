@@ -658,6 +658,7 @@ extern \"C\" {
  load-path)
 
 (require 'lua-mode)
+(require 'go-mode)
 ;(require 'package)
 ;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 ;(require 'js2-mode)
