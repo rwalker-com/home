@@ -170,10 +170,7 @@
 
 (add-hook 'perl-mode-hook 'my-perl-mode-hook)
 
-(defun my-sgml-mode-hook ()
-  (setq indent-tabs-mode nil)
-  )
-(add-hook 'sgml-mode-hook 'my-sgml-mode-hook)
+(add-hook 'sgml-mode-hook (lambda () (setq indent-tabs-mode nil)))
 
 
 ;;; OLD "window-system"
@@ -659,6 +656,9 @@ extern \"C\" {
 
 (require 'lua-mode)
 (require 'go-mode)
+(add-hook 'go-mode-hook (lambda () (setq indent-tabs-mode nil)))
+
+
 ;(require 'package)
 ;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 ;(require 'js2-mode)
