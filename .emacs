@@ -559,6 +559,17 @@ extern \"C\" {
 (global-set-key "\M-n" 'single-down-center)
 (global-set-key "\C-h" 'backward-delete-char)
 
+
+(or (fboundp `set-screen-width)
+    (defun set-screen-width (w)
+      (interactive "NWidth: ")
+      (set-frame-width (window-frame (get-buffer-window)) w)))
+
+(or (fboundp `set-screen-height)
+    (defun set-screen-height (w)
+      (interactive "NHeight: ")
+      (set-frame-height (window-frame (get-buffer-window)) w)))
+
 (defun set-window-width (w)
   (interactive "NWidth: ")
   (set-screen-width w)
@@ -576,13 +587,13 @@ extern \"C\" {
   (split-window-horizontally 83)        ; includes '|' column
   (other-window 1)
   (split-window-vertically)
-  (and (> (screen-width) 166) (split-window-horizontally 83) (other-window 1))
+  (and (> (frame-width) 166) (split-window-horizontally 83) (other-window 1))
   (other-window 2)
   )
 
 (defun cool-split (s)
   (interactive "NScreens: ")
-  (set-screen-width (- (* s 83) 3))
+  (set-frame-width (window-frame (get-buffer-window)) (- (* s 83) 3))
   (cool-split-internal)
   )
 
