@@ -2,12 +2,14 @@
 declare paths="
 ~/bin
 ~/bin/*/
-/usr/bin /usr/sbin
-/bin /sbin
+/usr/local/sbin
+/usr/local/bin
+/opt/local/sbin
+/opt/local/bin 
+/usr/sbin /usr/bin 
+/sbin /bin 
 /etc
 /usr/bin/X11 /usr/X11/bin /usr/X11R6/bin /usr/openwin/bin
-/usr/local/bin
-/opt/local/bin /opt/local/sbin
 /usr/gnu/bin
 /usr/ucb /usr/bsd /usr/games /usr/ccs/bin /usr/local/java/bin
 /usr/contrib/bin /usr/contrib/bin/X11
@@ -27,10 +29,10 @@ done
 
 declare manpaths="
 ~/man
+/usr/local/man
+/usr/local/share/man
 /usr/man
 /usr/share/man
-/usr/local/man
-/usr/local/shareman
 /usr/openwin/man
 /usr/contrib/man
 /usr/lib/scohelp/man
@@ -40,7 +42,6 @@ scohelp
 /usr/lib/SoftWindows/man
 /usr/bin/man
 /usr/dt/man
-/usr/share/man
 "
 for i in ${manpaths}
 do
