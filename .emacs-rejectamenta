@@ -1,3 +1,0 @@
-(setq ps-printer-name "\\\\rejectamenta\\ax620l-printer")
-(setq printer-name "\\\\rejectamenta\\ax620l-printer")
-(setq rcirc-server-alist `(("webtech-git.qualcomm.com" :channels ("#webkit"))))

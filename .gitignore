@@ -3,29 +3,5 @@
 # For a project mostly in C, the following would be a good set of
 # exclude patterns (uncomment them if you want to use them):
 # *.[oa]
-*
-!.emacs
-!.emacs-*
-!.bashrc*
-!.bash_profile
-!.bash_alias
-!.bash_logout
-!.ccacherc
-!.p4rc
-!.screenrc
-!.gitconfig
-!.gitignore
-!.gitexcludes
-!.p4config
-!.Xdefaults
-!/scripts
-!/scripts/*
-!/.emacs.d
-!/.emacs.d/*
-/.emacs.d/server*
-/.emacs.d/session*
-/.emacs.d/auto-save-list/
-!/.ssh
-!/.ssh/config
 *~
 

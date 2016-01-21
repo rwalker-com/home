@@ -20,7 +20,6 @@
           (string-to-int (substring emacs-version
                                     (match-beginning 1) (match-end 1)))))
 
-
 (setq running-xemacs (string-match "Lucid" emacs-version))
 (setq running-ntemacs (string-match "nt[45].[01]" (emacs-version)))
 (setq running-emacs-19 (>= emacs-major-version 19))
@@ -57,22 +56,22 @@
        (defun set-facep-background (face color)
          (and (facep face)
               (set-face-background face color)))
-       
-       (set-facep-foreground 'font-lock-comment-face              "darkseagreen") 
+
+       (set-facep-foreground 'font-lock-comment-face              "darkseagreen")
        (set-facep-foreground 'font-lock-comment-delimiter-face    "darkseagreen")
        (set-facep-foreground 'font-lock-doc-face                  "aquamarine")
-       (set-facep-foreground 'font-lock-constant-face             "aquamarine") 
-       (set-facep-foreground 'font-lock-keyword-face              "darkseagreen2") 
-       (set-facep-foreground 'font-lock-string-face               "aquamarine") 
-       (set-facep-foreground 'font-lock-type-face                 "goldenrod") 
-       (set-facep-foreground 'font-lock-variable-name-face        "darkseagreen2") 
+       (set-facep-foreground 'font-lock-constant-face             "aquamarine")
+       (set-facep-foreground 'font-lock-keyword-face              "darkseagreen2")
+       (set-facep-foreground 'font-lock-string-face               "aquamarine")
+       (set-facep-foreground 'font-lock-type-face                 "goldenrod")
+       (set-facep-foreground 'font-lock-variable-name-face        "darkseagreen2")
        (set-facep-foreground 'font-lock-function-name-face        "lightgoldenrod")
        (set-facep-foreground 'font-lock-builtin-face              "lightsteelblue")
-       (set-facep-foreground 'font-lock-preprocessor-face         "lightsteelblue") 
+       (set-facep-foreground 'font-lock-preprocessor-face         "lightsteelblue")
          ;      I like the way these are by default
          ;       (set-facep-foreground 'font-lock-negation-char-face        "blue")
-         ;       (set-facep-foreground 'font-lock-regexp-grouping-backslash "red") 
-         ;       (set-facep-foreground 'font-lock-regexp-grouping-construct "pink") 
+         ;       (set-facep-foreground 'font-lock-regexp-grouping-backslash "red")
+         ;       (set-facep-foreground 'font-lock-regexp-grouping-construct "pink")
 
        (set-facep-foreground 'font-lock-warning-face              "yellow")
 
@@ -88,25 +87,52 @@
        )
       )
 
+(defun byte-compile-directory (dir)
+  "compiles all .el files in a directory (or tries)"
+  (interactive "DByte compile directory: ")
+  (if (file-directory-p dir)
+      (let ((destdir (concat dir "/" emacs-version system-configuration ".elc.d")))
+        (make-directory destdir t)
+        (mapcar (lambda (file)
+                  (let ((src  (concat dir "/" file))
+                        (dest (concat destdir "/" file)))
+                    (if (file-newer-than-file-p src (concat dest "c"))
+                        (progn
+                          (copy-file src dest t)
+                          (byte-compile-file dest)))))
+                  (directory-files dir nil "^.*\.el$"))
+        destdir)))
 
-(defvar host (downcase (substring (system-name) 0 
-                        (string-match "\\." (system-name)))))
+(push (byte-compile-directory "~/.emacs.d") load-path)
 
-(add-to-list `auto-mode-alist `("\\.gyp\\'" . python-mode) t)
-(add-to-list `auto-mode-alist `("\\.log\\'" . auto-revert-tail-mode) t)
-(add-to-list `auto-mode-alist `("\\.lua\\'" . lua-mode) t)
-(add-to-list `auto-mode-alist `("\\.cif\\'" . lua-mode) t)
-(add-to-list `auto-mode-alist `("pak\\'" . lua-mode) t)
-(add-to-list `auto-mode-alist `("\\.pak\\'" . lua-mode) t)
-(add-to-list `auto-mode-alist `("\\.\\(min\\|ma?k\\)\\'" . makefile-mode) t)
-(add-to-list `auto-mode-alist `("make\\.dfile\\'" . makefile-mode) t)
-(add-to-list `auto-mode-alist `("\\.bid\\'" . c++-mode) t)
-(add-to-list `auto-mode-alist `("\\.comp\\'" . compilation-mode) t)
-(add-to-list `auto-mode-alist `("\\.rbsh\\'" . shell-script-mode) t)
-(add-to-list `auto-mode-alist `("\\.sh\\'" . shell-script-mode) t)
-(add-to-list `auto-mode-alist `("\\.cgi\\'" . shell-script-mode) t)
-;(add-to-list `auto-mode-alist `("\\.json\\'" . json-mode) t)
-;(add-to-list `auto-mode-alist `("\\.js\\'" . js2-mode) t)
+(require 'tree)
+(require 'p4)
+
+(nconc auto-mode-alist
+       `(
+         ("\\.gyp\\'" . python-mode)
+         ("\\.log\\'" . auto-revert-tail-mode)
+         ("\\.\\(min\\|ma?k\\)\\'" . makefile-mode)
+         ("make\\.dfile\\'" . makefile-mode)
+         ("\\.bid\\'" . c++-mode)
+         ("\\.comp\\'" . compilation-mode)
+         ("\\.sh\\'" . shell-script-mode)
+         ("\\.bash_alias\\'" . shell-script-mode)
+         ("\\.cgi\\'" . shell-script-mode)
+         ))
+
+;(require 'json)
+(cond ((featurep 'json)
+       (nconc auto-mode-alist `(("\\.json\\'" . json-mode)))))
+
+;(require 'js2-mode)
+(cond ((featurep 'js2)
+       (nconc auto-mode-alist `(("\\.js\\'" . js2-mode)))))
+
+;(require 'go-mode)
+(cond ((featurep 'go-mode)
+       (nconc auto-mode-alist `(("\\.js\\'" . go-mode)))))
+
 
 
 (defun c-mode-hook-indent (indent)
@@ -124,25 +150,37 @@
   (c-set-offset 'statement-case-open 0)
   (c-set-offset 'brace-list-open 0)
   (c-set-offset 'case-label '+)
-  (setq show-trailing-whitespace t)
   )
 
+;; Delete trailing whitespace from lines before a file is saved.
+;; (unless we're editing a makefile)
+;;
+(defun clean-whitespace ()
+  (unless (string-match "^make" (symbol-name major-mode))
+    (delete-trailing-whitespace)))
+
+(add-hook 'before-save-hook 'clean-whitespace)
+
 ;; TODO: per-project c-offset alist
-(defun my-c-mode-hook ()
-  (c-mode-hook-indent 4))
+(add-hook 'c++-mode-hook (lambda () (c-mode-hook-indent 4)))
+(add-hook 'c-mode-hook   (lambda () (c-mode-hook-indent 4)))
 
-(add-hook 'c++-mode-hook 'my-c-mode-hook)
-(add-hook 'c-mode-hook   'my-c-mode-hook)
+(and (featurep 'google-c-style)
+     (add-hook 'c-common-mode-hook 'google-set-c-style))
 
-(add-hook 'c-common-mode-hook 'google-set-c-style)
 
-(defun my-change-log-mode-hook ()
-  (setq indent-tabs-mode nil))
-(add-hook 'change-log-mode-hook 'my-change-log-mode-hook)
-
-(defun my-lua-mode-hook ()
-  (setq indent-tabs-mode nil))
-(add-hook 'lua-mode-hook 'my-lua-mode-hook)
+(require 'lua-mode)
+(cond ((featurep 'lua-mode)
+       (nconc auto-mode-alist
+              `(
+                ("\\.lua\\'" . lua-mode)
+                ("\\.cif\\'" . lua-mode)
+                ("pak\\'" . lua-mode)
+                ("\\.pak\\'" . lua-mode)
+                ))
+       (add-hook 'lua-mode-hook (lambda () (setq indent-tabs-mode nil)))
+       )
+      )
 
 (defun my-java-mode-hook ()
   (and (fboundp 'indent-c-exp) (local-set-key  "\M-q" 'indent-c-exp))
@@ -173,47 +211,8 @@
 
 (add-hook 'sgml-mode-hook (lambda () (setq indent-tabs-mode nil)))
 
-
-;;; OLD "window-system"
-;;(cond (running-ntemacs
-;;       (defun set-font (f) (set-default-font (create-fontset-from-ascii-font f)))
-;;       (set-font "-*-6x13-normal-r-*-*-13-97-*-*-c-*-*-*")
-;;       (create-fontset-from-fontset-spec "-*-6x13-normal-r-*-*-13-97-*-*-c-*-*-*")
-;;       
-;;                                        ;       (set-default-font "-*-6x13-normal-r-*-*-13-97-96-96-c-*-*-#33")
-;;                                        ;       (set-default-font "-*-6x13-normal-r-*-*-13-97-*-*-c-*-*-ansi-")
-;;                                        ;       (set-default-font "-*-vt100-normal-r-*-*-11-82-*-*-c-*-*-ansi-")
-;;                                        ;       (set-screen-width 240)
-;;                                        ;       (set-screen-height 110)
-;;
-;;       (setq file-name-buffer-file-type-alist
-;;                                        ;        `(("\\.bat$" . nil) 
-;;                                        ;          ("\\.dsp$" . nil) 
-;;                                        ;          ("\\.mak$" . nil) 
-;;                                        ;          ("\\.ini$" . nil) 
-;;                                        ;          (".*" . t))
-;;
-;;             `(("[:/].*config.sys$")
-;;               ("\\.elc$" . t)
-;;               ("\\.\\(obj\\|exe\\|com\\|lib\\|sym\\|sys\\|chk\\|out\\|bin\\|ico\\|pif\\|class\\)$" . t)
-;;               ("\\.\\(dll\\|drv\\|cpl\\|scr\\vbx\\|386\\|vxd\\|fon\\|fnt\\|fot\\|ttf\\|grp\\)$" . t)
-;;               ("\\.\\(hlp\\|bmp\\|wav\\|avi\\|mpg\\|jpg\\|tif\\mov\\au\\)" . t)
-;;               ("\\.\\(arc\\|zip\\|lzh\\|zoo\\)$" . t)
-;;               ("\\.\\(a\\|o\\|tar\\|z\\|gz\\|taz\\|jar\\)$" . t)
-;;               ("\\.tp[ulpw]$" . t)
-;;               ("[:/]tags$"))
-;;             )
-;;
-;;       (defun choose-font ()
-;;         (interactive)
-;;         (let ((font (w32-select-font)))
-;;           (set-font font)
-;;           (message (concat "Font set to:  " font))))
-;;       )
-;;      )
-
 (when window-system
-  
+
   (set-background-color
    (or (and (equal (user-login-name) "root")
             "grey20")
@@ -245,13 +244,13 @@
   ;;  ("deja13"  "-unknown-DejaVu Sans Mono-normal-normal-normal-*-13-*-*-*-m-0-isox10646-1")
   ;;  ("deja11"  "-unknown-DejaVu Sans Mono-normal-normal-normal-*-11-*-*-*-m-0-iso10646-1")
   ;;  ("and12"   "-*-Andale Mono-*"))
-  
+
   (defun create-fontset (name)
     (condition-case nil ; suppress error
         (create-fontset-from-ascii-font name)
       (error nil)))
 
-  ;; various names for my old friend "fixed" 
+  ;; various names for my old friend "fixed"
   ;; best one so far: http://www.hassings.dk/lars/fonts.html
   (catch `break
     (dolist (name '("-raster-fixed613-normal-normal-normal-mono-13-*-*-*-c-*-iso8859-1"
@@ -260,8 +259,8 @@
                     "-*-6x13-normal-r-*-*-13-97-*-*-c-*-*-ansi-"
                     ))
       (let ((font (create-fontset name)))
-        (if font 
-            (progn 
+        (if font
+            (progn
               (set-default-font font)
               (throw `break nil))
           )
@@ -273,10 +272,6 @@
 
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
-
-(and (fboundp 'menu-bar-mode) (menu-bar-mode 0))
-(and (fboundp 'tool-bar-mode) (tool-bar-mode 0))
-(and (fboundp 'toggle-scroll-bar) (toggle-scroll-bar 0))
 
 (defun insert-time ()
   "inserts date time string"
@@ -386,7 +381,7 @@ See Also:
           (split-string prototypes "[\r\n]+")))
 
 (defun extern-c-region (&optional beg &optional end)
-  "insert's extern \"C\" stuff around a region"  
+  "insert's extern \"C\" stuff around a region"
   (and beg end (kill-region (region-beginning) (region-end)))
   (insert "#ifdef __cplusplus
 extern \"C\" {
@@ -405,14 +400,14 @@ extern \"C\" {
   "insert's extern \"C\" stuff"
   (interactive)
   (extern-c-region
-   (and mark-active (region-beginning)) 
+   (and mark-active (region-beginning))
    (and mark-active (region-end)))
   )
 
 (defun if-0-region (&optional beg &optional end)
   "if 0's a region"
   (and beg end (kill-region beg end))
-  (insert "#if 0 
+  (insert "#if 0
 ")
   (and beg end (yank))
   (insert "
@@ -424,7 +419,7 @@ extern \"C\" {
   "if 0's a region"
   (interactive)
   (if-0-region
-   (and mark-active (region-beginning)) 
+   (and mark-active (region-beginning))
    (and mark-active (region-end)))
   )
 
@@ -443,8 +438,8 @@ extern \"C\" {
   "Inserts ifndef SYMBOL around a region"
   (interactive "sSymbol: \n")
   (ifndef-region
-   symbol 
-   (and mark-active (region-beginning)) 
+   symbol
+   (and mark-active (region-beginning))
    (and mark-active (region-end)))
   )
 
@@ -462,9 +457,9 @@ extern \"C\" {
 (defun ifdef (symbol)
   "Inserts ifdef SYMBOL around a region"
   (interactive "sSymbol: \n")
-  (ifdef-region 
-   symbol 
-   (and mark-active (region-beginning)) 
+  (ifdef-region
+   symbol
+   (and mark-active (region-beginning))
    (and mark-active (region-end)))
   )
 
@@ -483,7 +478,7 @@ extern \"C\" {
 (defun buffer-inclusion-guard ()
   "Inserts inclusion guard for current buffer"
   (interactive)
-  (let (symbol) 
+  (let (symbol)
     (setq symbol (upcase (replace-in-string "\\." "_" (buffer-name))))
     (beginning-of-buffer)
     (insert "#define " symbol "
@@ -507,7 +502,7 @@ extern \"C\" {
     /* public data, methods */
 
     /**
-     *  main entry point 
+     *  main entry point
      */
     public static void main(String args[])
     {
@@ -517,7 +512,7 @@ extern \"C\" {
     /* protected data, methods */
 
     /* private data, methods */
-    
+
 }
 ")
   )
@@ -567,9 +562,9 @@ extern \"C\" {
       (set-frame-width (window-frame (get-buffer-window)) w)))
 
 (or (fboundp `set-screen-height)
-    (defun set-screen-height (w)
+    (defun set-screen-height (h)
       (interactive "NHeight: ")
-      (set-frame-height (window-frame (get-buffer-window)) w)))
+      (set-frame-height (window-frame (get-buffer-window)) h)))
 
 (defun set-window-width (w)
   (interactive "NWidth: ")
@@ -594,13 +589,13 @@ extern \"C\" {
   (other-window 2)
   )
 
-(defun cool-split-test ()
-  (interactive)
-  (dotimes (width 300)
-    (set-frame-width (window-frame (get-buffer-window)) (+ width 3))
-    (sleep-for 0.1) ;; some delay in set-frame-width?
-    (cool-split-internal)
-    (redraw-display)))
+;(defun cool-split-test ()
+;  (interactive)
+;  (dotimes (width 300)
+;    (set-frame-width (window-frame (get-buffer-window)) (+ width 3))
+;    (sleep-for 0.1) ;; some delay in set-frame-width?
+;    (cool-split-internal)
+;    (redraw-display)))
 
 
 (defun cool-split (s)
@@ -613,100 +608,20 @@ extern \"C\" {
 
 (display-time)
 
-(defun whoami ()
-  "does a whoami"
-  (interactive)
-  (message (user-login-name))
-  )
+;(require 'fontsize)
+(cond ((featurep 'fontsize)
+       (global-set-key [?\C-+] 'fontsize-up)
+       (global-set-key [?\C--] 'fontsize-down)
+       (global-set-key [?\C-=] 'fontsize-toggle))
+      )
 
-(defun smark ()
-  "smarks the current buffer"
-  (interactive)
-  (let ((out (concat (make-temp-file (buffer-name)) ".html"))
-        (in  (or (and (fboundp `w32-short-file-name) 
-                      (w32-short-file-name buffer-file-name))
-                 buffer-file-name)))
-    (shell-command (concat "smark -o " out " " in))
-    (shell-command (or (and running-ntemacs
-                            (concat "cmd /c " (replace-regexp-in-string "/" "\\" out t t)))
-                       (concat "open " out)))))
-
-
-;; Perforce (version control) commands
-;;
-;;(defun p4-edit ()
-;;  (interactive)
-;;  (shell-command (concat "p4 edit " buffer-file-name))
-;;  (toggle-read-only 0))
-;;
-;;(defun p4-revert ()
-;;  (interactive)
-;;  (shell-command (concat "p4 revert " buffer-file-name))
-;;  (find-alternate-file buffer-file-name))
-;;
-;;(defun p4-add ()
-;;  (interactive)
-;;  (shell-command (concat "p4 add " buffer-file-name)))
-;;
-;;(defun p4-delete ()
-;;  (interactive)
-;;  (shell-command (concat "p4 delete " buffer-file-name))
-;;  (kill-buffer (current-buffer)))
-;;
-;;(defun p4-diff ()
-;;  (interactive)
-;;  (shell-command (concat "p4 diff " buffer-file-name))
-;;  (toggle-read-only 0))
-;;
-
-(defun byte-compile-directory (dir)
-  "compiles all .el files in a directory (or tries)"
-  (interactive "DByte compile directory: ")
-  (if (file-directory-p dir)
-      (let ((destdir (concat dir "/" emacs-version system-configuration ".elc.d")))
-        (make-directory destdir t)
-        (mapcar (lambda (file)
-                  (let ((src  (concat dir "/" file))
-                        (dest (concat destdir "/" file)))
-                    (if (file-newer-than-file-p src (concat dest "c"))
-                        (progn
-                          (copy-file src dest t)
-                          (byte-compile-file dest)))))
-                  (directory-files dir nil "^.*\.el$"))
-        destdir)))
-
-(push
- (byte-compile-directory "~/.emacs.d") 
- load-path)
-
-(require 'lua-mode)
-(require 'go-mode)
-(add-hook 'go-mode-hook (lambda () (setq indent-tabs-mode nil)))
-
-
-;(require 'package)
-;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-;(require 'js2-mode)
-;(require 'json)
-(require 'tree)
-(require 'p4)
-;;(require 'fontsize)
-;;
-;;(global-set-key [?\C-+] 'fontsize-up)
-;;(global-set-key [?\C--] 'fontsize-down)
-;;(global-set-key [?\C-=] 'fontsize-toggle)
 
 (mapcar (lambda (file)
           (and (file-exists-p (expand-file-name file))
                (load-file (expand-file-name file))))
-        (list (concat "~/.emacs-" host)))
-
-(defun parenthesize-word ()
-  (interactive)
-  (kill-word 1)
-  (insert "(")
-  (yank)
-  (insert ")"))
+        (list (concat "~/.emacs-"
+                      (downcase (substring (system-name) 0
+                        (string-match "\\." (system-name)))))))
 
 (defun msdev-compile-compile-command ()
   "does this: compiles with current buffer as makefile"
@@ -723,7 +638,7 @@ extern \"C\" {
     </title>
   </head>
   <body>
-    
+
   </body>
 </html>"))
 
@@ -732,8 +647,8 @@ extern \"C\" {
 
 If no region is set, return the current cursor pos and the maximum cursor pos."
   (interactive)
-  (or 
-   (and 
+  (or
+   (and
     mark-active (list (region-beginning) (region-end)))
    (list (point) (point-max))))
 
@@ -742,7 +657,7 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
   (let ((region (get-region)))
     (query-replace-regexp " +\\(\\*+)\\)" "\\1"
                           nil (nth 0 region) (nth 1 region))
-    (query-replace-regexp "\\([0-9a-zA-Z_]\\)\\( +\\)\\(\\*+\\)\\([^/]\\)" 
+    (query-replace-regexp "\\([0-9a-zA-Z_]\\)\\( +\\)\\(\\*+\\)\\([^/]\\)"
                           "\\1\\3\\2\\4"
                           nil (nth 0 region) (nth 1 region))
     )
@@ -750,7 +665,7 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
 
 (defun ps-print-code-buffer-with-faces (&optional FILENAME)
   (interactive)
-  (let ((ps-n-up-printing 2) 
+  (let ((ps-n-up-printing 2)
         (ps-line-number t))
     (ps-print-buffer-with-faces FILENAME))
   )
@@ -763,151 +678,12 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
     )
   )
 
-;;;;;;;;;;;;;;;;
-;; webkit stuff
-;;;;;;;;;;;;;;;;
-
-;; internal stuff
-(defvar webkit-dir nil 
-  "Currently active WebKit development tree root.")
-
-(defvar webkit-type nil 
-  "Currently active WebKit development tree type (Mac, Qt, Chromium, etc.).")
-
-(defun webkit-get-dir (arg &optional prompt)
-  "Get currently-active webkit directory.  If ARG is non-nil or the current
-webkit dir is unset, the user will be queried for webkit's location."
-  (let* ((prstr (or prompt "WebKit directory: "))
-	 (dir (or (and (null arg) webkit-dir)
-		  (setq webkit-dir 
-                        (expand-file-name 
-                         (directory-file-name
-                          (read-directory-name prstr webkit-dir nil t)))))))
-    dir))
-
-(defun webkit-get-type (arg &optional prompt)
-  "Get currently-active webkit directory type.  If ARG is non-nil or the current
-webkit type is unset, the user will be queried for the desired webkit type."
-  (let* ((prstr (or prompt "WebKit type: "))
-	 (type (or (and (null arg) webkit-type)
-                   (setq webkit-type
-                         (completing-read prstr `("Qt" "Mac"))))))
-    type))
-
-(defun webkit-webkit-error-message (m)
-  (message (concat "Error: " m ))
-  nil)
-
-(defun webkit-build-internal (d &optional args)
-  (let* ((dir (webkit-get-dir d)))
-    (compile 
-     (concat dir "/Tools/Scripts/build-webkit" webkit-type
-             (let ((argstring ""))
-               (dolist (arg args argstring)
-                 (setq argstring (concat " " arg)))))))
-  )
-
-(defun webkit-test-internal (d &optional args)
-  (let* ((dir (webkit-get-dir d)))
-    (compile 
-     (concat dir "/Tools/Scripts/run-webkit-tests" webkit-type
-             (let ((argstring ""))
-               (dolist (arg args argstring)
-                 (setq argstring (concat " " arg)))))))
-  )
-
-;; public interface
-
-(defun webkit-debug-safari (&optional arg)
-  "Starts gdb of Safari on a debug WebKit Build."
-  (interactive "P")
-  (let* ((dir (webkit-get-dir arg))
-         (dyld-framework-path (concat dir "/WebKitBuild/Debug")))
-    (and
-     (or (file-directory-p dyld-framework-path)
-         (webkit-error-message (concat "can't find " dyld-framework-path)))
-     (progn
-       (setenv "WEBKIT_UNSET_DYLD_FRAMEWORK_PATH" "YES")
-       (setenv "DYLD_FRAMEWORK_PATH" dyld-framework-path)
-       (message (concat "DYLD_FRAMEWORK_PATH=" (getenv "DYLD_FRAMEWORK_PATH")))
-       (gdb "gdb --annotate=3 -arch x86_64 /Applications/Safari.app/Contents/MacOS/Safari"))))
-  )
-
-(defun webkit-debug-qtbrowser (&optional arg)
-  "Starts gdb of QtBrowser on a debug WebKit Build."
-  (interactive "P")
-  (let* ((dir (webkit-get-dir arg))
-         (product-dir (concat dir "/WebKitBuild/Debug"))
-         (lib-dir (concat product-dir "/lib"))
-         (plugin-dir (concat lib-dir "/plugins"))
-         (launcher (concat product-dir "/bin/QtTestBrowser")))
-    (and
-     (or (file-directory-p product-dir)
-         (webkit-error-message (concat "can't find " product-dir)))
-     (or (file-directory-p lib-dir)
-         (webkit-error-message (concat "can't find " lib-dir)))
-     (or (file-exists-p launcher)
-         (webkit-error-message (concat "can't find " launcher)))
-     (progn
-       (setenv "QTWEBKIT_PLUGIN_PATH" (concat lib-dir "/plugins"))
-       (setenv "LD_LIBRARY_PATH" (concat lib-dir ":" (getenv "LD_LIBRARY_PATH")))
-       (gdb (concat "gdb --annotate=3 " launcher)))))
-  )
-
-(defun webkit-build-debug (&optional arg)
-  (interactive)
-  (webkit-build-internal arg `("--debug")))
-
-(defun webkit-build (&optional arg)
-  (interactive)
-  (webkit-build-internal arg))
-
-(defun webkit-test-debug (&optional arg)
-  (interactive)
-  (webkit-test-internal arg `("--debug")))
-
-(defun webkit-test (&optional arg)
-  (interactive)
-  (webkit-test-internal arg))
-
-(defun webkit-select ()
-  "Select top directory for webkit operations.  See also `webkit-dir'."
-  (interactive)
-  (webkit-get-dir 1))
-
-(defun webkit-check-style (&optional arg)
-  (interactive)
-  (let* ((dir (webkit-get-dir arg))
-         (save-default-dir default-directory))
-    (setq default-directory dir)
-    (compile (concat "cd " dir " && " dir "/Tools/Scripts/check-webkit-style"))
-    (setq default-directory save-default-dir))
-  )
-
-;; Set keymap. We use the C-x p Keymap for all perforce commands
-(defvar webkit-prefix-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map "c" 'webkit-build-debug)
-    (define-key map "C" 'webkit-build)
-    (define-key map "t" 'webkit-test-debug)
-    (define-key map "T" 'webkit-test)
-    (define-key map "w" 'webkit-select)
-    (define-key map "d" 'webkit-debug-safari)
-    (define-key map "s" 'webkit-check-style)
-    map)
-  "The prefix for webkit dev commands.")
-
-(if (not (keymapp (lookup-key global-map "\C-xw")))
-    (define-key global-map "\C-xw" webkit-prefix-map))
-
-; for Carbon to map command to meta
-; '(ns-command-modifier (quote meta))
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ `(show-trailing-whitespace t)
  '(auto-revert-interval 0.2)
  '(delete-selection-mode t)
  '(display-time-24hr-format t)
@@ -923,12 +699,3 @@ webkit type is unset, the user will be queried for the desired webkit type."
  '(tool-bar-mode nil)
  '(truncate-partial-width-windows nil)
  '(visible-bell nil))
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
-(setenv "P4CONFIG" ".p4config")

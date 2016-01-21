@@ -71,9 +71,6 @@ esac
 
 [[ -f ~/.bash_alias ]] && . ~/.bash_alias
 
-
-[[ -f ~/.bash_local ]] && . ~/.bash_local
-
 shopt -s extglob
 for f in ~/.bashrc.d/!(*~)
 do

@@ -3,65 +3,28 @@ unalias -a
 
 alias "f"="finger"
 alias "x"="xinit -- -ar1 200 -ar2 10 >& ~/.xinitout"
-alias "vt100"="set term = vt100; tset"
-alias "termx"="set term = xterm; tset"
 alias "rm"="rm -i"
 alias "rmf"="/bin/rm -f"
-alias "cleanup"="/bin/rm -rf *~ 2>&1 > /dev/null;/bin/rm -rf  .*~ 2>&1 > /dev/null;/bin/rm -rf   *.BAK 2>&1 > /dev/null ;/bin/rm -rf .*.BAK 2>&1 > /dev/null ;/bin/rm -rf *.CKP 2>&1 > /dev/null ;/bin/rm -rf .*.CKP 2>&1 > /dev/null;/bin/rm -rf  \#*\# 2>&1 > /dev/null ;/bin/rm -rf core 2>&1 > /dev/null ;/bin/rm -rf dead.letter 2>&1 > /dev/null"
-alias "eprint"="enscript -r2 -f Times-Roman10 -F Times-Bold14"
 alias "sl"="ls"
 alias "l"="ls"
 alias "s"="ls"
-alias "moe"="more"
-alias "mroe"="more"
-alias "xlock"="xlock -nolock -mode swarm"
 alias "cd"="pushd > /dev/null"
 alias "back"="popd "
-alias "quakenews"="finger quake@scec.gps.caltech.edu"
-alias "gamke"="gmake"
-alias "gmkae"="gmake"
-alias "gkae"="gmake"
-alias "gake"="gmake"
-alias "lelm"="elm -f ~/Mail/spool"
-alias "more"="less"
 alias "mkae"="make"
-alias "xpine"="xterm -T Pine -n Pine -e pine"
-alias "xcons"="xterm -T Console -n Console -geometry =80x12+0+0 -C -ls"
 alias "rootx"="xterm -T root@$(hostname) -n root@$(hostname) -bg grey20 -cr white -e su -"
 
-function amake()
+function cleanup()
 {
-   if [[ -z ${ANDROID_BUILD_TOP} ]]
-   then
-       echo run envsetup.sh and choosecombo first
-       return 1
-   fi
-   make -C"${ANDROID_BUILD_TOP}" "${@}"
-}
-
-function arepo()
-{
-    local out=0
-    if [[ -z ${ANDROID_BUILD_TOP} ]]
-    then
-        echo run envsetup.sh and choosecombo first
-        return 1
-    fi
-
-    (cd ${ANDROID_BUILD_TOP}
-        if [[ -d out ]]
-        then
-            mv out .repo/out.$$
-            out=1
-        fi
-
-        repo "$@"
-
-        if (( ${out} ))
-        then
-            mv .repo/out.$$ out
-        fi
-    )
+    /bin/rm -rf *~ \
+    .*~ \
+    *.BAK \
+    .*.BAK \
+    *.CKP \
+    .*.CKP \
+     \#*\# \
+    core \
+    dead.letter \
+        2>&1 > /dev/null
 }
 
 function xto()
@@ -163,17 +126,6 @@ function cds() {
             if [[ ${a} != ${d} ]] ; then echo "${a}" ; fi
         done < ~/.cds >> ~/.cds.new
         mv ~/.cds.new ~/.cds
-    elif [[ -z ${1//[0-9]/} ]] ; then
-    # numeric arg: retrieve & cd
-        local n=${1}
-        local a=
-        while (( n > 0 )) ; do (( --n )) ; read a ; done < ~/.cds
-        if [[ -z ${a} ]] ; then
-            echo "cds: not an available cds index: ${1};  try 'cds -h' for help, or one of these:"
-            cds
-        else
-            cd "${a}"
-        fi
     elif [[ ${1} == -e ]] ; then
         "${EDITOR}" ~/.cds
     elif [[ ${1} == -h ]] ; then
@@ -198,8 +150,22 @@ function cds() {
             done < ~/.cds
         fi
         if [[ -z ${a} ]] ; then
-            echo "cds: not a directory: ${1};  try 'cds -h' for help, or one of these:"
-            cds
+            # if no match, see if it's numeric
+            if [[ -z ${1//[0-9]/} ]] ; then
+                # numeric arg: retrieve & cd
+                local n=${1}
+                local a=
+                while (( n > 0 )) ; do (( --n )) ; read a ; done < ~/.cds
+                if [[ -z ${a} ]] ; then
+                    echo "cds: not an available cds index: ${1};  try 'cds -h' for help, or one of these:"
+                    cds
+                else
+                    cd "${a}"
+                fi
+            else
+                echo "cds: not a directory: ${1};  try 'cds -h' for help, or one of these:"
+                cds
+            fi
         else
             cd "${a%${1}*}/${1}"
         fi
@@ -257,7 +223,7 @@ all: ; @#
 ')
 }
 
-function teelog()
+function tee_log()
 {
     declare out=${*}
     out=${out//\//%}
@@ -269,7 +235,7 @@ function teelog()
     "$@" 2>&1 | tee -- "${out// /_}.log"
 }
 
-function find_x0_grep()
+function find_grep()
 {
     declare findargs=( )
 
