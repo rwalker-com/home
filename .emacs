@@ -584,16 +584,29 @@ extern \"C\" {
   "does a multi-split kinda window...my favorite"
   (interactive)
   (delete-other-windows)
-  (split-window-horizontally 83)        ; includes '|' column
+  (and (> (window-body-width) 83) (split-window-horizontally 83))
+                                        ; includes '|' column
   (other-window 1)
   (split-window-vertically)
-  (and (> (frame-width) 166) (split-window-horizontally 83) (other-window 1))
+  (while (> (window-body-width) 83) (split-window-horizontally 83)
+         (other-window 1))
   (other-window 2)
   )
+
+(defun cool-split-test ()
+  (interactive)
+  (dotimes (width 300)
+    (set-frame-width (window-frame (get-buffer-window)) (+ width 3))
+    (sleep-for 0.1) ;; some delay in set-frame-width?
+    (cool-split-internal)
+    (redraw-display)))
+
 
 (defun cool-split (s)
   (interactive "NScreens: ")
   (set-frame-width (window-frame (get-buffer-window)) (- (* s 83) 3))
+  (while (/= (frame-width) (- (* s 83) 3))
+             (sleep-for 0.1)) ;; some delay in set-frame-width?
   (cool-split-internal)
   )
 
