@@ -124,14 +124,15 @@
   (c-set-offset 'statement-case-open 0)
   (c-set-offset 'brace-list-open 0)
   (c-set-offset 'case-label '+)
+  (setq show-trailing-whitespace t)
   )
 
 ;; TODO: per-project c-offset alist
 (defun my-c-mode-hook ()
   (c-mode-hook-indent 4))
 
-;(add-hook 'c++-mode-hook 'my-c-mode-hook)
-;(add-hook 'c-mode-hook   'my-c-mode-hook)
+(add-hook 'c++-mode-hook 'my-c-mode-hook)
+(add-hook 'c-mode-hook   'my-c-mode-hook)
 
 (add-hook 'c-common-mode-hook 'google-set-c-style)
 
@@ -890,18 +891,19 @@ webkit type is unset, the user will be queried for the desired webkit type."
 ; '(ns-command-modifier (quote meta))
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(auto-revert-interval 0.2)
  '(delete-selection-mode t)
  '(display-time-24hr-format t)
  '(display-time-day-and-date t)
  '(display-time-mode t)
  '(fill-column 80)
  '(indent-tabs-mode nil)
- '(scroll-bar-mode nil)
  '(inhibit-splash-screen t)
+ '(scroll-bar-mode nil)
  '(inhibit-startup-screen t)
  '(menu-bar-mode nil)
  '(search-highlight t)
@@ -910,10 +912,10 @@ webkit type is unset, the user will be queried for the desired webkit type."
  '(visible-bell nil))
 
 (custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  )
 
 (setenv "P4CONFIG" ".p4config")
