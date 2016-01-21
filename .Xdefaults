@@ -21,15 +21,13 @@ emacs*verticalScrollBars:   off
 emacs*toolBar:     0
 
 *font:	6x13
-#*foreground:   white
-#*background:   black
+!*foreground:   white
+!*background:   black
 
 *basicLocale:   C
 *displayLang:   C
 *inputLang:    	C
 *numeric:      	C
 *timeFormat:   	C
-
-purify*geometry:         +0+0
 
 
