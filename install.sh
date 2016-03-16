@@ -5,7 +5,7 @@ function __t_d()
 {
     if (( ${trace:-0} || ${dryrun:-0} ))
     then
-        echo "${@}"
+        echo "${@}" >&2
     fi
 
     if (( ! ${dryrun:-0} ))
@@ -67,9 +67,14 @@ for dirlink in "${dirlinks[@]}"
 do
     declare target=${top}/${dirlink}
 
-    excludes+=('-a' '-!' '-wholename' ${target}'/*')
+    excludes+=('-a' '!' '-wholename' ${target}'/*')
     targets+=( ${target} )
 done
+
+if (( ${trace:-0} ))
+then
+   echo find "${top}" -type f "${excludes[@]}" -print0 >&2
+fi
 
 while read -d $'\0' target
 do
@@ -94,6 +99,6 @@ do
         fi
         __t_d rm -rf "${linkname}"
     fi
-    __t_d mkdir -p "$(dirname "${target}")"
+    __t_d mkdir -p "$(dirname "${linkname}")"
     __t_d ln -s "${target}" "${linkname}"
 done
