@@ -90,6 +90,7 @@
 (defun byte-compile-directory (dir)
   "compiles all .el files in a directory (or tries)"
   (interactive "DByte compile directory: ")
+  (push dir load-path)
   (if (file-directory-p dir)
       (let ((destdir (concat dir "/" emacs-version system-configuration ".elc.d")))
         (make-directory destdir t)
@@ -103,7 +104,7 @@
                   (directory-files dir nil "^.*\.el$"))
         destdir)))
 
-(push (byte-compile-directory "~/.emacs.d") load-path)
+(byte-compile-directory "~/.emacs.d")
 
 (require 'tree)
 (require 'p4)
