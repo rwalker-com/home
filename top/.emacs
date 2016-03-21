@@ -107,7 +107,6 @@
 (byte-compile-directory "~/.emacs.d")
 
 (require 'tree)
-(require 'p4)
 
 (nconc auto-mode-alist
        `(
