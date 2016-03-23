@@ -155,11 +155,17 @@
 ;; Delete trailing whitespace from lines before a file is saved.
 ;; (unless we're editing a makefile)
 ;;
-(defun clean-whitespace ()
-  (unless (string-match "^make" (symbol-name major-mode))
-    (delete-trailing-whitespace)))
+(add-hook 'before-save-hook
+          (lambda ()
+            (unless (string-match "^make" (symbol-name major-mode))
+              (delete-trailing-whitespace))))
 
-(add-hook 'before-save-hook 'clean-whitespace)
+;; Don't show whitespace in command, shell, *Messages*, etc...
+;;
+(add-hook 'hack-local-variables-hook
+          (lambda ()
+            (if (string-match "^\\*" (buffer-name))
+                (setq show-trailing-whitespace nil))))
 
 ;; TODO: per-project c-offset alist
 (add-hook 'c++-mode-hook (lambda () (c-mode-hook-indent 4)))
