@@ -5,9 +5,9 @@ declare paths="
 /usr/local/sbin
 /usr/local/bin
 /opt/local/sbin
-/opt/local/bin 
-/usr/sbin /usr/bin 
-/sbin /bin 
+/opt/local/bin
+/usr/sbin /usr/bin
+/sbin /bin
 /etc
 /usr/bin/X11 /usr/X11/bin /usr/X11R6/bin /usr/openwin/bin
 /usr/gnu/bin
@@ -89,3 +89,5 @@ HISTFILESIZE=1000000000
 
 # Android defense
 export STAY_OFF_MY_LAWN=1
+# I really do manage my own depot_tools
+export DEPOT_TOOLS_UPDATE=0
