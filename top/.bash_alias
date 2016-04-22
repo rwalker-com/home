@@ -31,7 +31,7 @@ function xto()
 {
     if [[ -z $1 ]]
     then
-    	    cat<<EOF
+    	cat<<EOF
 usage: xto <WHERE>
    sets DISPLAY to WHERE, where WHERE is:
       "back" for REMOTEHOST, if set
@@ -39,7 +39,7 @@ usage: xto <WHERE>
       "off"  for no X
       a hostname or IP for arbitrary location
 EOF
-    return 1;
+        return 1;
     fi
 
     if [[ -z $2 ]]
@@ -172,6 +172,39 @@ function cds() {
     fi
 }
 
+function deathto()
+{
+    declare sigspec=
+
+    if [[ ${1} =~ -.* ]]
+    then
+        sigspec=${1}
+        shift
+    fi
+    if (( ! ${#} ))
+    then
+        printf 'deathto: usage: deathto [-sigspec] regex...\n'
+        return 1
+    fi
+    #          UID   PID  PPID  C STIME TTY          TIME CMD
+    #          root    1     0  0 Apr05 ?        00:01:47 /sbin/init
+    #          root    2     0  0 Apr05 ?        00:00:00 [kthreadd]
+    #          root    3     2  0 Apr05 ?        00:00:04 [ksoftirqd/0]
+    #          root    5     2  0 Apr05 ?        00:00:00 [kworker/0:0H]
+    declare -a regex=( "${@}" )
+    declare uid pid cmd _
+    while read uid   pid     _  _ _     _         _       cmd
+    do
+        declare i=
+        for ((i=0; i < ${#regex[*]}; i++))
+        do
+            if [[ ${cmd} =~ ${regex[i]} ]]
+            then
+                kill ${sigspec} "${pid}"
+            fi
+        done
+    done < <(ps -wwef)
+}
 
 function path_gc()
 {

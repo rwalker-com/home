@@ -91,3 +91,5 @@ HISTFILESIZE=1000000000
 export STAY_OFF_MY_LAWN=1
 # I really do manage my own depot_tools
 export DEPOT_TOOLS_UPDATE=0
+# don't gimme a prompt for licenses
+export CHROME_HEADLESS=1
