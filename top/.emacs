@@ -684,6 +684,8 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
     )
   )
 
+(require 'package)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -704,4 +706,8 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
  '(search-highlight t)
  '(tool-bar-mode nil)
  '(truncate-partial-width-windows nil)
- '(visible-bell nil))
+ '(visible-bell nil)
+ '(package-archives
+   (quote
+    (("gnu" . "http://elpa.gnu.org/packages/")
+     ("melpa-stable" . "http://stable.melpa.org/packages/")))))
