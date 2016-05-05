@@ -109,7 +109,7 @@
 (require 'tree)
 
 (mapcar (lambda (l) (add-to-list 'auto-mode-alist l))
-       `(
+       '(
          ("\\.gyp\\'" . python-mode)
          ("\\.log\\'" . auto-revert-tail-mode)
          ("\\.\\(min\\|ma?k\\)\\'" . makefile-mode)
@@ -123,15 +123,15 @@
 
 ;(require 'json)
 (cond ((featurep 'json)
-       (add-to-list 'auto-mode-alist `("\\.json\\'" . json-mode))))
+       (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))))
 
 ;(require 'js2-mode)
 (cond ((featurep 'js2)
-       (add-to-list 'auto-mode-alist `("\\.js\\'" . js2-mode))))
+       (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))))
 
 ;(require 'go-mode)
 (cond ((featurep 'go-mode)
-       (add-to-list 'auto-mode-alist `("\\.js\\'" . go-mode))))
+       (add-to-list 'auto-mode-alist '("\\.js\\'" . go-mode))))
 
 
 
@@ -178,7 +178,7 @@
 (require 'lua-mode)
 (cond ((featurep 'lua-mode)
        (mapcar (lambda (l) (add-to-list 'auto-mode-alist l))
-              `(
+              '(
                 ("\\.lua\\'" . lua-mode)
                 ("\\.cif\\'" . lua-mode)
                 ("pak\\'" . lua-mode)
@@ -204,8 +204,8 @@
 
 (add-hook 'idl-mode-hook 'my-idl-mode-hook)
 
-(add-to-list 'auto-coding-regexp-alist `("^\377\376" . utf-16-le) t)
-(add-to-list 'auto-coding-regexp-alist `("^\376\377" . utf-16-be) t)
+(add-to-list 'auto-coding-regexp-alist '("^\377\376" . utf-16-le) t)
+(add-to-list 'auto-coding-regexp-alist '("^\376\377" . utf-16-be) t)
 
 (defun my-perl-mode-hook ()
   (and (fboundp 'indent-c-exp) (local-set-key  "\M-q" 'indent-c-exp))
@@ -233,7 +233,7 @@
 	(message "Sorry, no set-font functions found."))))
 
   ;;;; interesting list from bkelley, TODO: make this work?
-  ;;`(("6x13"    "-*-6x13-normal-r-*-*-13-97-*-*-c-*-*-ansi-")
+  ;;'(("6x13"    "-*-6x13-normal-r-*-*-13-97-*-*-c-*-*-ansi-")
   ;;  ("6x11"    "-*-6x11-normal-r-*-*-11-97-*-*-c-*-*-ansi-")
   ;;  ("vt100"   "-*-vt100-normal-r-*-*-11-82-*-*-c-*-*-ansi-")
   ;;  ("term8"   "-*-Terminal-normal-r-*-*-11-100-*-*-c-*-*-*-")
@@ -259,7 +259,7 @@
   ;; various names for my old friend "fixed"
   ;; best one so far: http://www.hassings.dk/lars/fonts.html
   (catch 'break
-    (dolist (name `("-raster-fixed613-normal-normal-normal-mono-13-*-*-*-c-*-iso8859-1"
+    (dolist (name '("-raster-fixed613-normal-normal-normal-mono-13-*-*-*-c-*-iso8859-1"
                     "-*-6x13-normal-r-*-*-13-97-*-*-c-*-*-*"
                     "-*-6x13-normal-r-*-*-13-97-96-96-c-*-*-#33"
                     "-*-6x13-normal-r-*-*-13-97-*-*-c-*-*-ansi-"
@@ -691,23 +691,23 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- `(show-trailing-whitespace t)
- `(auto-revert-interval 0.2)
- `(delete-selection-mode t)
- `(display-time-24hr-format t)
- `(display-time-day-and-date t)
- `(display-time-mode t)
- `(fill-column 80)
- `(indent-tabs-mode nil)
- `(inhibit-splash-screen t)
- `(scroll-bar-mode nil)
- `(inhibit-startup-screen t)
- `(menu-bar-mode nil)
- `(search-highlight t)
- `(tool-bar-mode nil)
- `(truncate-partial-width-windows nil)
- `(visible-bell nil)
- `(package-archives
+ '(show-trailing-whitespace t)
+ '(auto-revert-interval 0.2)
+ '(delete-selection-mode t)
+ '(display-time-24hr-format t)
+ '(display-time-day-and-date t)
+ '(display-time-mode t)
+ '(fill-column 80)
+ '(indent-tabs-mode nil)
+ '(inhibit-splash-screen t)
+ '(scroll-bar-mode nil)
+ '(inhibit-startup-screen t)
+ '(menu-bar-mode nil)
+ '(search-highlight t)
+ '(tool-bar-mode nil)
+ '(truncate-partial-width-windows nil)
+ '(visible-bell nil)
+ '(package-archives
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
      ("melpa-stable" . "http://stable.melpa.org/packages/")))))
