@@ -104,12 +104,12 @@
                   (directory-files dir nil "^.*\.el$"))
         destdir)))
 
-(byte-compile-directory "~/.emacs.d")
+(byte-compile-directory "~/.emacs.d/elisp")
 
 (require 'tree)
 
-(nconc auto-mode-alist
-       `(
+(add-to-list 'auto-mode-alist
+       '(
          ("\\.gyp\\'" . python-mode)
          ("\\.log\\'" . auto-revert-tail-mode)
          ("\\.\\(min\\|ma?k\\)\\'" . makefile-mode)
@@ -123,15 +123,15 @@
 
 ;(require 'json)
 (cond ((featurep 'json)
-       (nconc auto-mode-alist `(("\\.json\\'" . json-mode)))))
+       (add-to-list 'auto-mode-alist '(("\\.json\\'" . json-mode)))))
 
 ;(require 'js2-mode)
 (cond ((featurep 'js2)
-       (nconc auto-mode-alist `(("\\.js\\'" . js2-mode)))))
+       (add-to-list 'auto-mode-alist '(("\\.js\\'" . js2-mode)))))
 
 ;(require 'go-mode)
 (cond ((featurep 'go-mode)
-       (nconc auto-mode-alist `(("\\.js\\'" . go-mode)))))
+       (add-to-list 'auto-mode-alist '(("\\.js\\'" . go-mode)))))
 
 
 
@@ -177,8 +177,8 @@
 
 (require 'lua-mode)
 (cond ((featurep 'lua-mode)
-       (nconc auto-mode-alist
-              `(
+       (add-to-list 'auto-mode-alist
+              '(
                 ("\\.lua\\'" . lua-mode)
                 ("\\.cif\\'" . lua-mode)
                 ("pak\\'" . lua-mode)
@@ -228,12 +228,12 @@
 
   (defun select-font ()
     (interactive)
-    (if (fboundp `w32-select-font) (set-default-font (w32-select-font))
-      (if (fboundp `menu-set-font) (menu-set-font)
+    (if (fboundp 'w32-select-font) (set-default-font (w32-select-font))
+      (if (fboundp 'menu-set-font) (menu-set-font)
 	(message "Sorry, no set-font functions found."))))
 
   ;;;; interesting list from bkelley, TODO: make this work?
-  ;;`(("6x13"    "-*-6x13-normal-r-*-*-13-97-*-*-c-*-*-ansi-")
+  ;;'(("6x13"    "-*-6x13-normal-r-*-*-13-97-*-*-c-*-*-ansi-")
   ;;  ("6x11"    "-*-6x11-normal-r-*-*-11-97-*-*-c-*-*-ansi-")
   ;;  ("vt100"   "-*-vt100-normal-r-*-*-11-82-*-*-c-*-*-ansi-")
   ;;  ("term8"   "-*-Terminal-normal-r-*-*-11-100-*-*-c-*-*-*-")
@@ -258,7 +258,7 @@
 
   ;; various names for my old friend "fixed"
   ;; best one so far: http://www.hassings.dk/lars/fonts.html
-  (catch `break
+  (catch 'break
     (dolist (name '("-raster-fixed613-normal-normal-normal-mono-13-*-*-*-c-*-iso8859-1"
                     "-*-6x13-normal-r-*-*-13-97-*-*-c-*-*-*"
                     "-*-6x13-normal-r-*-*-13-97-96-96-c-*-*-#33"
@@ -268,7 +268,7 @@
         (if font
             (progn
               (set-default-font font)
-              (throw `break nil))
+              (throw 'break nil))
           )
         )
       )
@@ -290,7 +290,7 @@
   (interactive "p")
   (other-window (- n)))
 
-;; Make the sequence "C-x C-j" execute the `goto-line' command,
+;; Make the sequence "C-x C-j" execute the 'goto-line' command,
 ;; which prompts for a line number to jump to.
 (global-set-key "\C-x\C-j" 'goto-line)
 (global-set-key "\M-o" 'prev-window)
@@ -562,12 +562,12 @@ extern \"C\" {
 (global-set-key "\C-h" 'backward-delete-char)
 
 
-(or (fboundp `set-screen-width)
+(or (fboundp 'set-screen-width)
     (defun set-screen-width (w)
       (interactive "NWidth: ")
       (set-frame-width (window-frame (get-buffer-window)) w)))
 
-(or (fboundp `set-screen-height)
+(or (fboundp 'set-screen-height)
     (defun set-screen-height (h)
       (interactive "NHeight: ")
       (set-frame-height (window-frame (get-buffer-window)) h)))
@@ -691,7 +691,7 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- `(show-trailing-whitespace t)
+ '(show-trailing-whitespace t)
  '(auto-revert-interval 0.2)
  '(delete-selection-mode t)
  '(display-time-24hr-format t)
