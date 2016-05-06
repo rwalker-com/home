@@ -133,7 +133,7 @@
 (cond ((featurep 'go-mode)
        (add-to-list 'auto-mode-alist '("\\.js\\'" . go-mode))))
 
-
+(require 'haskell)
 
 (defun c-mode-hook-indent (indent)
   (interactive "NIndent: ")
