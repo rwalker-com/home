@@ -106,6 +106,31 @@
 
 (byte-compile-directory "~/.emacs.d/elisp")
 
+(defun updirs (file &optional dir)
+  "look for file in dir and dir's parents, returns readable file name or nil"
+  (let ((dir  (replace-regexp-in-string "/+$" "" (or dir default-directory))))
+    (let ((test (concat dir "/" file))
+          (up   (file-name-directory dir)))
+      (if (file-readable-p test)
+          test
+        (if up (updirs file up) nil)))))
+
+(defun updirs-load-file (file &optional dir)
+  "find and load file using updirs from dir"
+  (interactive "sFilename: ")
+  (let ((file (updirs file dir)))
+    (if file (load-file file))))
+
+(defun load-dotemacs-local (&optional dir)
+  "find and load the .emacs-local for the specified dir (or cwd if nil)"
+  (let ((file (updirs ".emacs-local")))
+    (and file
+         (and (or (eq (user-uid) (nth 2 (file-attributes file 'integer)))
+                  (y-or-n-p (concat "Ok to load " file ", owned by " (nth 2 (file-attributes file 'string)) "?")))
+              (updirs-load-file file)))))
+
+(add-hook 'find-file-hook 'load-dotemacs-local)
+
 (require 'tree)
 
 (mapcar (lambda (l) (add-to-list 'auto-mode-alist l))
@@ -133,9 +158,13 @@
 (cond ((featurep 'go-mode)
        (add-to-list 'auto-mode-alist '("\\.js\\'" . go-mode))))
 
-(require 'haskell)
+;; can be put in a .emacs-local, won't work until after-init, and is *slow*
+;(require 'haskell)
 
-(defun c-mode-hook-indent (indent)
+; BREW hangover ;)
+(setq-default my-c-indent 3)
+
+(defun my-c-style (indent)
   (interactive "NIndent: ")
   (and (fboundp 'indent-c-exp) (local-set-key  "\M-q" 'indent-c-exp))
   (and (fboundp 'c-indent-exp) (local-set-key  "\M-q" 'c-indent-exp))
@@ -149,8 +178,18 @@
   (c-set-offset 'substatement-open 0)
   (c-set-offset 'statement-case-open 0)
   (c-set-offset 'brace-list-open 0)
-  (c-set-offset 'case-label '+)
-  )
+  (c-set-offset 'case-label '+))
+
+(defun my-c-mode-hook ()
+  (my-c-style my-c-indent))
+
+(add-hook 'c++-mode-hook 'my-c-mode-hook)
+(add-hook 'c-mode-hook   'my-c-mode-hook)
+
+; for a .emacs-local
+;(require 'google-c-style)
+;(and (featurep 'google-c-style)
+;     (add-hook 'c-common-mode-hook 'google-set-c-style))
 
 ;; Delete trailing whitespace from lines before a file is saved.
 ;; (unless we're editing a makefile)
@@ -166,13 +205,6 @@
           (lambda ()
             (if (string-match "^ *\*" (buffer-name))
                 (setq show-trailing-whitespace nil))))
-
-;; TODO: per-project c-offset alist
-(add-hook 'c++-mode-hook (lambda () (c-mode-hook-indent 4)))
-(add-hook 'c-mode-hook   (lambda () (c-mode-hook-indent 4)))
-
-(and (featurep 'google-c-style)
-     (add-hook 'c-common-mode-hook 'google-set-c-style))
 
 
 (require 'lua-mode)
@@ -192,14 +224,14 @@
   (and (fboundp 'indent-c-exp) (local-set-key  "\M-q" 'indent-c-exp))
   (and (fboundp 'c-indent-exp) (local-set-key  "\M-q" 'c-indent-exp))
   (setq indent-tabs-mode nil)
-  (c-mode-hook-indent 3)
+  (my-c-mode-hook)
   )
 
 (add-hook 'java-mode-hook 'my-java-mode-hook)
 
 (defun my-idl-mode-hook ()
   (setq indent-tabs-mode nil)
-  (c-mode-hook-indent 3)
+  (my-c-mode-hook)
   )
 
 (add-hook 'idl-mode-hook 'my-idl-mode-hook)
@@ -621,7 +653,6 @@ extern \"C\" {
        (global-set-key [?\C-=] 'fontsize-toggle))
       )
 
-
 (mapcar (lambda (file)
           (and (file-exists-p (expand-file-name file))
                (load-file (expand-file-name file))))
@@ -691,7 +722,6 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(show-trailing-whitespace t)
  '(auto-revert-interval 0.2)
  '(delete-selection-mode t)
  '(display-time-24hr-format t)
@@ -699,15 +729,18 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
  '(display-time-mode t)
  '(fill-column 80)
  '(indent-tabs-mode nil)
- '(inhibit-splash-screen t)
- '(scroll-bar-mode nil)
  '(inhibit-startup-screen t)
  '(menu-bar-mode nil)
+ '(package-archives (quote (("gnu" . "http://elpa.gnu.org/packages/") ("melpa-stable" . "http://stable.melpa.org/packages/"))))
+ '(scroll-bar-mode nil)
  '(search-highlight t)
+ '(show-trailing-whitespace t)
  '(tool-bar-mode nil)
  '(truncate-partial-width-windows nil)
- '(visible-bell nil)
- '(package-archives
-   (quote
-    (("gnu" . "http://elpa.gnu.org/packages/")
-     ("melpa-stable" . "http://stable.melpa.org/packages/")))))
+ '(visible-bell nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
