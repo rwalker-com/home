@@ -1,5 +1,5 @@
 # bunch of random paths..
-declare paths="
+declare -a paths=(
 ~/bin
 ~/bin/*/
 /usr/local/sbin
@@ -13,12 +13,12 @@ declare paths="
 /usr/gnu/bin
 /usr/ucb /usr/bsd /usr/games /usr/ccs/bin /usr/local/java/bin
 /usr/contrib/bin /usr/contrib/bin/X11
-"
-for i in ${paths}
+)
+for i in "${paths[@]}"
 do
    if [[ :${PATH}: =~ :${i}: ]]
    then
-       # echo $i already in PATH
+       #echo $i already in PATH
        :
    elif [[ -d ${i} ]]
    then
@@ -27,7 +27,7 @@ do
    fi
 done
 
-declare manpaths="
+declare -a manpaths=(
 ~/man
 /usr/local/man
 /usr/local/share/man
@@ -42,8 +42,8 @@ scohelp
 /usr/lib/SoftWindows/man
 /usr/bin/man
 /usr/dt/man
-"
-for i in ${manpaths}
+)
+for i in "${manpaths[@]}"
 do
    if [[ :${MANPATH}: =~ :${i}: ]]
    then
