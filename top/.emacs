@@ -104,12 +104,37 @@
                   (directory-files dir nil "^.*\.el$"))
         destdir)))
 
-(byte-compile-directory "~/.emacs.d")
+(byte-compile-directory "~/.emacs.d/elisp")
+
+(defun updirs (file &optional dir)
+  "look for file in dir and dir's parents, returns readable file name or nil"
+  (let ((dir  (replace-regexp-in-string "/+$" "" (or dir default-directory))))
+    (let ((test (concat dir "/" file))
+          (up   (file-name-directory dir)))
+      (if (file-readable-p test)
+          test
+        (if up (updirs file up) nil)))))
+
+(defun updirs-load-file (file &optional dir)
+  "find and load file using updirs from dir"
+  (interactive "sFilename: ")
+  (let ((file (updirs file dir)))
+    (if file (load-file file))))
+
+(defun load-dotemacs-local (&optional dir)
+  "find and load the .emacs-local for the specified dir (or cwd if nil)"
+  (let ((file (updirs ".emacs-local")))
+    (and file
+         (and (or (eq (user-uid) (nth 2 (file-attributes file 'integer)))
+                  (y-or-n-p (concat "Ok to load " file ", owned by " (nth 2 (file-attributes file 'string)) "?")))
+              (updirs-load-file file)))))
+
+(add-hook 'find-file-hook 'load-dotemacs-local)
 
 (require 'tree)
 
-(nconc auto-mode-alist
-       `(
+(mapcar (lambda (l) (add-to-list 'auto-mode-alist l))
+       '(
          ("\\.gyp\\'" . python-mode)
          ("\\.log\\'" . auto-revert-tail-mode)
          ("\\.\\(min\\|ma?k\\)\\'" . makefile-mode)
@@ -123,19 +148,23 @@
 
 ;(require 'json)
 (cond ((featurep 'json)
-       (nconc auto-mode-alist `(("\\.json\\'" . json-mode)))))
+       (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))))
 
 ;(require 'js2-mode)
 (cond ((featurep 'js2)
-       (nconc auto-mode-alist `(("\\.js\\'" . js2-mode)))))
+       (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))))
 
 ;(require 'go-mode)
 (cond ((featurep 'go-mode)
-       (nconc auto-mode-alist `(("\\.js\\'" . go-mode)))))
+       (add-to-list 'auto-mode-alist '("\\.js\\'" . go-mode))))
 
+;; can be put in a .emacs-local, won't work until after-init, and is *slow*
+;(require 'haskell)
 
+; BREW hangover ;)
+(setq-default my-c-indent 3)
 
-(defun c-mode-hook-indent (indent)
+(defun my-c-style (indent)
   (interactive "NIndent: ")
   (and (fboundp 'indent-c-exp) (local-set-key  "\M-q" 'indent-c-exp))
   (and (fboundp 'c-indent-exp) (local-set-key  "\M-q" 'c-indent-exp))
@@ -149,8 +178,18 @@
   (c-set-offset 'substatement-open 0)
   (c-set-offset 'statement-case-open 0)
   (c-set-offset 'brace-list-open 0)
-  (c-set-offset 'case-label '+)
-  )
+  (c-set-offset 'case-label '+))
+
+(defun my-c-mode-hook ()
+  (my-c-style my-c-indent))
+
+(add-hook 'c++-mode-hook 'my-c-mode-hook)
+(add-hook 'c-mode-hook   'my-c-mode-hook)
+
+; for a .emacs-local
+;(require 'google-c-style)
+;(and (featurep 'google-c-style)
+;     (add-hook 'c-common-mode-hook 'google-set-c-style))
 
 ;; Delete trailing whitespace from lines before a file is saved.
 ;; (unless we're editing a makefile)
@@ -167,18 +206,11 @@
             (if (string-match "^ *\*" (buffer-name))
                 (setq show-trailing-whitespace nil))))
 
-;; TODO: per-project c-offset alist
-(add-hook 'c++-mode-hook (lambda () (c-mode-hook-indent 4)))
-(add-hook 'c-mode-hook   (lambda () (c-mode-hook-indent 4)))
-
-(and (featurep 'google-c-style)
-     (add-hook 'c-common-mode-hook 'google-set-c-style))
-
 
 (require 'lua-mode)
 (cond ((featurep 'lua-mode)
-       (nconc auto-mode-alist
-              `(
+       (mapcar (lambda (l) (add-to-list 'auto-mode-alist l))
+              '(
                 ("\\.lua\\'" . lua-mode)
                 ("\\.cif\\'" . lua-mode)
                 ("pak\\'" . lua-mode)
@@ -192,14 +224,14 @@
   (and (fboundp 'indent-c-exp) (local-set-key  "\M-q" 'indent-c-exp))
   (and (fboundp 'c-indent-exp) (local-set-key  "\M-q" 'c-indent-exp))
   (setq indent-tabs-mode nil)
-  (c-mode-hook-indent 3)
+  (my-c-mode-hook)
   )
 
 (add-hook 'java-mode-hook 'my-java-mode-hook)
 
 (defun my-idl-mode-hook ()
   (setq indent-tabs-mode nil)
-  (c-mode-hook-indent 3)
+  (my-c-mode-hook)
   )
 
 (add-hook 'idl-mode-hook 'my-idl-mode-hook)
@@ -228,12 +260,12 @@
 
   (defun select-font ()
     (interactive)
-    (if (fboundp `w32-select-font) (set-default-font (w32-select-font))
-      (if (fboundp `menu-set-font) (menu-set-font)
+    (if (fboundp 'w32-select-font) (set-default-font (w32-select-font))
+      (if (fboundp 'menu-set-font) (menu-set-font)
 	(message "Sorry, no set-font functions found."))))
 
   ;;;; interesting list from bkelley, TODO: make this work?
-  ;;`(("6x13"    "-*-6x13-normal-r-*-*-13-97-*-*-c-*-*-ansi-")
+  ;;'(("6x13"    "-*-6x13-normal-r-*-*-13-97-*-*-c-*-*-ansi-")
   ;;  ("6x11"    "-*-6x11-normal-r-*-*-11-97-*-*-c-*-*-ansi-")
   ;;  ("vt100"   "-*-vt100-normal-r-*-*-11-82-*-*-c-*-*-ansi-")
   ;;  ("term8"   "-*-Terminal-normal-r-*-*-11-100-*-*-c-*-*-*-")
@@ -258,7 +290,7 @@
 
   ;; various names for my old friend "fixed"
   ;; best one so far: http://www.hassings.dk/lars/fonts.html
-  (catch `break
+  (catch 'break
     (dolist (name '("-raster-fixed613-normal-normal-normal-mono-13-*-*-*-c-*-iso8859-1"
                     "-*-6x13-normal-r-*-*-13-97-*-*-c-*-*-*"
                     "-*-6x13-normal-r-*-*-13-97-96-96-c-*-*-#33"
@@ -268,7 +300,7 @@
         (if font
             (progn
               (set-default-font font)
-              (throw `break nil))
+              (throw 'break nil))
           )
         )
       )
@@ -290,7 +322,7 @@
   (interactive "p")
   (other-window (- n)))
 
-;; Make the sequence "C-x C-j" execute the `goto-line' command,
+;; Make the sequence "C-x C-j" execute the 'goto-line' command,
 ;; which prompts for a line number to jump to.
 (global-set-key "\C-x\C-j" 'goto-line)
 (global-set-key "\M-o" 'prev-window)
@@ -562,12 +594,12 @@ extern \"C\" {
 (global-set-key "\C-h" 'backward-delete-char)
 
 
-(or (fboundp `set-screen-width)
+(or (fboundp 'set-screen-width)
     (defun set-screen-width (w)
       (interactive "NWidth: ")
       (set-frame-width (window-frame (get-buffer-window)) w)))
 
-(or (fboundp `set-screen-height)
+(or (fboundp 'set-screen-height)
     (defun set-screen-height (h)
       (interactive "NHeight: ")
       (set-frame-height (window-frame (get-buffer-window)) h)))
@@ -620,7 +652,6 @@ extern \"C\" {
        (global-set-key [?\C--] 'fontsize-down)
        (global-set-key [?\C-=] 'fontsize-toggle))
       )
-
 
 (mapcar (lambda (file)
           (and (file-exists-p (expand-file-name file))
@@ -684,12 +715,13 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
     )
   )
 
+(require 'package)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- `(show-trailing-whitespace t)
  '(auto-revert-interval 0.2)
  '(delete-selection-mode t)
  '(display-time-24hr-format t)
@@ -697,11 +729,18 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
  '(display-time-mode t)
  '(fill-column 80)
  '(indent-tabs-mode nil)
- '(inhibit-splash-screen t)
- '(scroll-bar-mode nil)
  '(inhibit-startup-screen t)
  '(menu-bar-mode nil)
+ '(package-archives (quote (("gnu" . "http://elpa.gnu.org/packages/") ("melpa-stable" . "http://stable.melpa.org/packages/"))))
+ '(scroll-bar-mode nil)
  '(search-highlight t)
+ '(show-trailing-whitespace t)
  '(tool-bar-mode nil)
  '(truncate-partial-width-windows nil)
  '(visible-bell nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
