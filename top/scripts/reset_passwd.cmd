@@ -1,25 +1,22 @@
 set /a i=0
 
 set "orig=%1%"
-
 set "oldpass=%orig%"
+
+:iloop
 
 set "newpass=%orig%%i%"
 
-ntpasswd -p %oldpass% %newpass%
+echo ntpasswd -p %oldpass% %newpass%
+
+timeout 10
 
 set "oldpass=%newpass%"
-
-:loop
 
 set /a i+=1
 
-set "newpass=%orig%%i%"
+if %i% equ 20 timeout 90000
 
-ntpasswd -p %oldpass% %newpass%
+if %i% lss 40 goto:iloop
 
-set "oldpass=%newpass%"
-
-if %i% lss 30 goto:loop
-
-ntpasswd -p %oldpass% %orig%
+echo ntpasswd -p %oldpass% %orig%
