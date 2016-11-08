@@ -156,7 +156,7 @@
 
 ;(require 'go-mode)
 (cond ((featurep 'go-mode)
-       (add-to-list 'auto-mode-alist '("\\.js\\'" . go-mode))))
+       (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))))
 
 ;; can be put in a .emacs-local, won't work until after-init, and is *slow*
 ;(require 'haskell)
