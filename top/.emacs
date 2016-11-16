@@ -717,7 +717,7 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
 
 (cond ((>= emacs-major-version 24)
        (require 'package)
-       (custom-set-variable
+       (custom-set-variables
         '(package-archives (quote (("gnu" . "http://elpa.gnu.org/packages/")
                                    ("melpa-stable" . "http://stable.melpa.org/packages/"))))))
       )

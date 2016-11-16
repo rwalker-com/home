@@ -1,25 +1,14 @@
 #!/bin/bash
 
-wdcleanup()
+function wdcleanup()
 {
-  kill ${wdpid}
-  exit ${1}
+    kill ${1} 2>/dev/null 1>/dev/null
+    exit ${2}
 }
 
-# catch control-C, etc., cleanup subshell below
-trap wdcleanup INT
-
-(sleep ${1} && kill $$) &
-wdpid=$!
+(sleep ${1} && wdcleanup $$ 2) &
+# catch control-C, etc., cleanup subshell
+trap "wdcleanup $! 1" INT
 
 shift
-
-echo doing "$@"  ...
-
-"$@"
-
-echo done.
-
-# don't race my wd signal
-sleep 1
-wdcleanup 0
+exec "$@"
