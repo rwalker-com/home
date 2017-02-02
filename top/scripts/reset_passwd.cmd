@@ -7,7 +7,7 @@ set "oldpass=%orig%"
 
 set "newpass=%orig%%i%"
 
-echo ntpasswd -p %oldpass% %newpass%
+ntpasswd -p %oldpass% %newpass%
 
 timeout 10
 
@@ -19,4 +19,4 @@ if %i% equ 20 timeout 90000
 
 if %i% lss 40 goto:iloop
 
-echo ntpasswd -p %oldpass% %orig%
+ntpasswd -p %oldpass% %orig%
