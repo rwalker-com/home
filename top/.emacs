@@ -715,7 +715,12 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
     )
   )
 
-;(require 'package)
+(cond ((>= emacs-major-version 24)
+       (require 'package)
+       (custom-set-variables
+        '(package-archives (quote (("gnu" . "http://elpa.gnu.org/packages/")
+                                   ("melpa-stable" . "http://stable.melpa.org/packages/"))))))
+      )
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -731,7 +736,6 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(menu-bar-mode nil)
- '(package-archives (quote (("gnu" . "http://elpa.gnu.org/packages/") ("melpa-stable" . "http://stable.melpa.org/packages/"))))
  '(scroll-bar-mode nil)
  '(search-highlight t)
  '(show-trailing-whitespace t)
