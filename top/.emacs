@@ -715,7 +715,7 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
     )
   )
 
-(require 'package)
+;(require 'package)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
