@@ -78,7 +78,7 @@ fi
 
 while read -d $'\0' target
 do
-    targets+=( ${target} )
+    targets+=( "${target}" )
 done < <(find "${top}" -type f "${excludes[@]}" -print0)
 
 # do it...
@@ -86,7 +86,7 @@ for target in "${targets[@]}"
 do
     declare linkname=${dest}/${target#${top}/}
 
-    if [[ -e ${linkname} ]]
+    if [[ -e ${linkname} || -h ${linkname} ]]
     then
         if [[ ${a} != '!' ]]
         then
