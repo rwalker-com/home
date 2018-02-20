@@ -59,7 +59,7 @@
 
        (set-facep-foreground 'font-lock-comment-face              "darkseagreen")
        (set-facep-foreground 'font-lock-comment-delimiter-face    "darkseagreen")
-       (set-facep-foreground 'font-lock-doc-face                  "aquamarine")
+       (set-facep-foreground 'font-lock-doc-face                  "darkseagreen")
        (set-facep-foreground 'font-lock-constant-face             "aquamarine")
        (set-facep-foreground 'font-lock-keyword-face              "darkseagreen2")
        (set-facep-foreground 'font-lock-string-face               "aquamarine")
