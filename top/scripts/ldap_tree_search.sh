@@ -1,23 +1,22 @@
 #!/bin/bash
 
+
 # $1 is the uid of the manager
 # $2 is a qualifying search string
 # $* is a list of attributes to return for each person in the manager's tree
 #
-# for example, ldap_tree.sh rwalker employeetype=employeee uid
-# return uids
 
 function ldap_tree_uids()
 {
-    [[ -z $1 ]] && return
+    [[ -z ${1} ]] && return
 
-    declare srch=''
+    declare srch=
     declare -a uids=()
 
-    for uid in "$@"
+    for uid in "${@}"
     do
         printf '%s\n' "${uid}"
-        srch+='(manager=uid='"$uid"',ou=people,o=qualcomm)'
+        srch+='(manager=uid='"${uid}"',ou=people,o=qualcomm)'
     done
 
     uids=( $(ldapsearch -x -h directory -b o=qualcomm '(|'"${srch}"')' uid | awk '/^uid:/ {print $2}') )
@@ -27,9 +26,9 @@ function ldap_tree_uids()
 
 function ldap_tree_search()
 {
-    declare uid=$1
+    declare uid=${1}
     shift
-    declare filter=$1
+    declare filter=${1}
     shift
 
     declare -a uids=( $(ldap_tree_uids ${uid}) )
@@ -48,7 +47,7 @@ function ldap_tree_search()
     done
     filter+='))'
 
-    ldapsearch -x -h directory -b o=qualcomm "${filter}" "$@"
+    ldapsearch -x -h directory -b o=qualcomm "${filter}" "${@}"
 
     # search per line of stdin, for some reason this is slower than
     #  a huge search string
@@ -56,9 +55,12 @@ function ldap_tree_search()
     # for uid in ${uids[*]}
     # do
     #     printf '%s\n' '&'"${filter}"'(uid='"${uid}"')'
-    # done | ldapsearch -x -h directory -b o=qualcomm -c -f - '(%s)' "$@"
+    # done | ldapsearch -x -h directory -b o=qualcomm -c -f - '(%s)' "${@}"
     #
 
 }
 
-ldap_tree_search "$@"
+if [[ ${0} == ${BASH_SOURCE[0]} ]]
+then
+    ldap_tree_search "${@}"
+fi

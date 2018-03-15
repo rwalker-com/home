@@ -135,6 +135,7 @@
 
 (mapcar (lambda (l) (add-to-list 'auto-mode-alist l))
        '(
+         ("\\.ino\\'" . c++-mode)
          ("\\.gyp\\'" . python-mode)
          ("\\.log\\'" . auto-revert-tail-mode)
          ("\\.\\(min\\|ma?k\\)\\'" . makefile-mode)
