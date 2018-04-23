@@ -98,3 +98,5 @@ export GYP_CHROMIUM_NO_ACTION=1
 
 # disable accessibility bus when on ssh
 [[ -n ${SSH_CLIENT} ]] && export NO_AT_BRIDGE=1
+
+shopt -s checkwinsize
