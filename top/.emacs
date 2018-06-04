@@ -193,11 +193,12 @@
 ;     (add-hook 'c-common-mode-hook 'google-set-c-style))
 
 ;; Delete trailing whitespace from lines before a file is saved.
-;; (unless we're editing a makefile)
+;; (unless we're editing a makefile or a tsv (tab-separated-fields) file)
 ;;
 (add-hook 'before-save-hook
           (lambda ()
-            (unless (string-match "^make" (symbol-name major-mode))
+            (unless (or (string-match ".tsv$" (buffer-name))
+                         (string-match "^make" (symbol-name major-mode)))
               (delete-trailing-whitespace))))
 
 ;; Don't show whitespace in command, shell, *Messages*, *Minibuf-.., etc...
