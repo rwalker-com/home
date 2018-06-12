@@ -133,6 +133,8 @@
 
 (require 'tree)
 
+(require 'rust-mode)
+
 (mapcar (lambda (l) (add-to-list 'auto-mode-alist l))
        '(
          ("\\.ino\\'" . c++-mode)
