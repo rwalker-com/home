@@ -61,6 +61,8 @@ export EDITOR=emacs
 export VISUAL=${EDITOR}
 export PS1='[\u@\h${STY:+(${STY#*.})} \W]\\$ '
 
+[[ -z ${DISPLAY+x} ]] && export DISPLAY=:0.0
+
 case "$TERM" in
 xterm*|rxvt*)
     PS1='\[\e]0;\u@\h \W\a\]'${PS1}
@@ -86,15 +88,6 @@ done
 
 HISTSIZE=10000
 HISTFILESIZE=1000000000
-
-# Android defense
-export STAY_OFF_MY_LAWN=1
-# I really do manage my own depot_tools
-export DEPOT_TOOLS_UPDATE=0
-# don't gimme a prompt for licenses
-export CHROME_HEADLESS=1
-# disable gyp
-export GYP_CHROMIUM_NO_ACTION=1
 
 # disable accessibility bus when on ssh
 [[ -n ${SSH_CLIENT} ]] && export NO_AT_BRIDGE=1
