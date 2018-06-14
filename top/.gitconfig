@@ -32,8 +32,6 @@
         excludesfile = ~/.gitexcludes
         deltaBaseCacheLimit = 1G
 
-[init]
-	templatedir = ~/.git_template
 [push]
 	default = simple
 [merge]

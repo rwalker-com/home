@@ -2,6 +2,7 @@
 declare -a paths=(
 ~/bin
 ~/bin/*/
+~/.cargo/bin
 /usr/local/sbin
 /usr/local/bin
 /opt/local/sbin

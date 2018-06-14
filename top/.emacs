@@ -150,10 +150,10 @@
          ))
 
 ;(require 'json)
-(cond ((featurep 'json)
-       (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))))
+;(cond ((featurep 'json)
+;       (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))))
 
-;(require 'js2-mode)
+(require 'js2-mode)
 (cond ((featurep 'js2)
        (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))))
 
@@ -740,8 +740,13 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(menu-bar-mode nil)
+ '(package-archives
+   (quote
+    (("gnu" . "http://elpa.gnu.org/packages/")
+     ("melpa-stable" . "http://stable.melpa.org/packages/"))))
  '(scroll-bar-mode nil)
  '(search-highlight t)
+ '(sh-basic-offset 2)
  '(show-trailing-whitespace t)
  '(tool-bar-mode nil)
  '(truncate-partial-width-windows nil)
