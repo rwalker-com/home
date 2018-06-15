@@ -62,7 +62,7 @@ export EDITOR=emacs
 export VISUAL=${EDITOR}
 export PS1='[\u@\h${STY:+(${STY#*.})} \W]\\$ '
 
-[[ -z ${DISPLAY+x} ]] && export DISPLAY=:0.0
+[[ -z ${DISPLAY+x} ]] && export DISPLAY=localhost:0.0
 
 case "$TERM" in
 xterm*|rxvt*)
