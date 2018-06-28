@@ -94,3 +94,5 @@ HISTFILESIZE=1000000000
 [[ -n ${SSH_CLIENT} ]] && export NO_AT_BRIDGE=1
 
 shopt -s checkwinsize
+
+[[ -f ~/.bashrc.local ]] && . ~/.bashrc.local

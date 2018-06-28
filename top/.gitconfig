@@ -27,6 +27,7 @@
         smoosh = ! git commit --amend -C "$(git log -1 --pretty=format:%H)"
         gerrit-update = ! git push origin HEAD:refs/changes/$(git rev-parse --abbrev-ref HEAD)
         quick-fetch = ! git rev-parse "refs/remotes/${1:-origin}/${2:-master}" 2>/dev/null 1>/dev/null && git fetch "${1:-origin}" "refs/heads/${2:-master}" || git fetch --depth=1 "${1:-origin}" "refs/heads/${2:-master}"
+        resync = ! git checkout master && git pull upstream master:master && git push origin master
 
 [core]
         excludesfile = ~/.gitexcludes
