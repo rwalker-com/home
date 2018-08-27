@@ -85,6 +85,14 @@ function xssh()
    xterm -T ssh.$1 -n ssh.$1 -e ssh -Y $* > /dev/null
 }
 
+function xterme()
+{
+   declare title=$@
+   xterm  -T "$title" -n "$title" -e "$@"
+}
+
+
+
 function xtitle()
 {
     case $TERM in
