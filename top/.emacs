@@ -731,6 +731,7 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
                   ("melpa-stable" . "http://stable.melpa.org/packages/"))))))
       )
 
+(savehist-mode t)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

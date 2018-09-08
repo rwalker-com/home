@@ -1,20 +1,20 @@
-# bunch of random paths..
+# bunch of random paths ordered in reverse order of precedence
 declare -a paths=(
-~/bin
-~/bin/*/
-~/.cargo/bin
-/usr/local/sbin
-/usr/local/bin
-/opt/local/sbin
-/opt/local/bin
-/usr/sbin /usr/bin
-/sbin /bin
-/etc
-/usr/bin/X11 /usr/X11/bin /usr/X11R6/bin /usr/openwin/bin
-/usr/gnu/bin
-/usr/ucb /usr/bsd /usr/games /usr/ccs/bin /usr/local/java/bin
 /usr/contrib/bin /usr/contrib/bin/X11
+/usr/ucb /usr/bsd /usr/games /usr/ccs/bin /usr/local/java/bin
+/usr/gnu/bin
+/usr/bin/X11 /usr/X11/bin /usr/X11R6/bin /usr/openwin/bin
+/sbin /bin
+/usr/sbin /usr/bin
+/opt/local/bin
+/opt/local/sbin
+/usr/local/bin
+/usr/local/sbin
+~/.cargo/bin
+~/bin/*/
+~/bin
 )
+
 for i in "${paths[@]}"
 do
    if [[ :${PATH}: =~ :${i}: ]]
@@ -24,7 +24,7 @@ do
    elif [[ -d ${i} ]]
    then
        # echo adding $i
-       PATH=${PATH}:${i}
+       PATH=${i}:${PATH}
    fi
 done
 
