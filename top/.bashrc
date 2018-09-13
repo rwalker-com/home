@@ -96,3 +96,5 @@ HISTFILESIZE=1000000000
 shopt -s checkwinsize
 
 [[ -f ~/.bashrc.local ]] && . ~/.bashrc.local
+
+echo bash-$BASH_VERSION
