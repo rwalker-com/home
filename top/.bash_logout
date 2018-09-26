@@ -1,3 +1,5 @@
 # ~/.bash_logout
 
-# clear
+ps | while read -r pid tty time cmd; do
+  [[ $cmd == dbus-launch ]] && kill -9 $pid
+done
