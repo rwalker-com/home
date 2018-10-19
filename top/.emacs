@@ -137,6 +137,28 @@
 
 (add-hook 'rust-mode-hook (lambda () (setq rust-format-on-save t)))
 
+(defun cargo-project ()
+  (interactive)
+  (let ((dir (file-name-directory (updirs "Cargo.toml"))))
+    (message dir)
+    (message (file-name-nondirectory (substring dir 0 -1)))
+    (list dir (file-name-nondirectory (substring dir 0 -1)))))
+
+
+(defun cargo-debug ()
+  (interactive)
+  (let ((project (cargo-project)))
+    (gdb
+     (concat "rust-gdb --cd "
+             (nth 0 project)
+             " -i=mi target/debug/"
+             (nth 1 project)))))
+
+(defun cargo (command)
+  (interactive "scargo command: ")
+  (message (concat "cd " (nth 0 (cargo-project)) " && cargo " command))
+  (compile
+   (concat "cd " (nth 0 (cargo-project)) " && cargo " command)))
 
 
 (mapcar (lambda (l) (add-to-list 'auto-mode-alist l))
@@ -707,6 +729,8 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
                           nil (nth 0 region) (nth 1 region))
     )
   )
+
+
 
 (defun ps-print-code-buffer-with-faces (&optional FILENAME)
   (interactive)
