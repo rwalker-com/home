@@ -61,6 +61,16 @@ HISTFILESIZE=1000000000
 
 shopt -s checkwinsize
 
-[[ -f ~/.bashrc.local ]] && . ~/.bashrc.local
+PROMPT_COMMAND_LAST_PWD=
+function prompt_command() {
+  [[ $PWD != $PROMPT_COMMAND_LAST_PWD ]]  || return 0
+  PROMPT_COMMAND_LAST_PWD=$PWD
+
+  BASHRC_LOCAL=$(updirs .bashrc.local 2>/dev/null)
+
+  [[ -f $BASHRC_LOCAL ]] && . "$BASHRC_LOCAL"
+
+}
+PROMPT_COMMAND=prompt_command
 
 echo bash-$BASH_VERSION
