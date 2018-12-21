@@ -33,7 +33,7 @@
         branch-D = ! [ ${1}x != x ] && git rebase master $1 && (! git show REBASE_HEAD 2>/dev/null 1>/dev/null) && git diff master --exit-code && git checkout master && git branch -D $1 && exit $?
 
 [core]
-        excludesfile = ~/.gitexcludes
+	excludesfile = /home/rwalker/.gitignore
         deltaBaseCacheLimit = 1G
 
 [push]
