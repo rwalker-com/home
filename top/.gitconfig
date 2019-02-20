@@ -30,7 +30,7 @@
         hub-resync = ! current=$(git rev-parse --abbrev-ref HEAD) && git checkout master && git pull -f upstream master:master && git push -f origin master && git fetch -fp origin && git checkout "$current"
         hub-pr = ! branch=$(git rev-parse --abbrev-ref HEAD) && [ "$branch" != master ] || (echo 'no PRs from master' && false) && git push --set-upstream origin "$branch" && hub pull-request $1 && exit $?
         hub-clone = ! [ ${1}x != x ] && [ ${2}x != x ] || (echo usage: 'git hub-clone <origin> <upstream-user>' && false) && basename="${1##*/}" && dir="${basename%.git}" && git clone "$1" && (cd "$dir" && git remote add upstream "${1%:*}:${2}/$basename" ) && exit $?
-        branch-D = ! [ ${1}x != x ] && git rebase master $1 && (! git show REBASE_HEAD 2>/dev/null 1>/dev/null) && git diff master --exit-code && git checkout master && git branch -D $1 && exit $?
+
 
 [core]
 	excludesfile = /home/rwalker/.gitignore
