@@ -26,29 +26,35 @@
         vheads = ! eval $(git rev-list --all --children | awk '{ if (NF==1) print \"git --no-pager log -1 --decorate \" $1 \" && \" }END{print \"true\"}') && exit $?
         recur = ! git "${@}" && git submodule foreach --recursive git "${@}" && exit $?
         smoosh = ! git commit --amend -C "$(git log -1 --pretty=format:%H)"
+        # outputs all branches with an upstream attribute
         hub-branches = ! "for name in $(git config --name-only --get-regexp ^branch.*.upstream$) ;\
                           do\
                             name=${name%.upstream};\
                             echo ${name#branch.};\
                           done" && \
                           exit $?
+        # outputs a branch's upstream attribute
         hub-upstream = ! git config branch.${1}.upstream && exit $?
+        # sync a single branch, assumes branch.$1.upstream and branch.$1.origin are set
         hub-sync-branch = ! git checkout ${1} && \
                             git pull -f $(git hub-upstream ${1}) ${1}:${1} && \
                             git push -f $(git config branch.${1}.remote) ${1} && \
                             exit $?
+        # resync all branches with an "upstream" config attribute
         hub-sync = ! "for branch in $(git hub-branches); \
                       do \
                          git hub-sync-branch $branch; \
                      done" && \
                      git fetch -fp origin && \
                      exit $?
+        # push current branch and create a PR, takes all the args that hub pull-request takes
         hub-pr = ! branch=$(git rev-parse --abbrev-ref HEAD) && \
                    [ "$branch" != master ] || (echo 'no PRs from master' && false) && \
                    git push --set-upstream origin "$branch" && \
-                   hub pull-request $1 && \
-                   exit $?
+                   hub pull-request
         # clone a fork $1 is the repository $2 is the upstream org/user
+        #  e.g. if you've forked this "home" repository and want to do PRs, you'd run
+        #  git hub-clone github.com:you/home cornholington
         hub-clone = ! [ ${1}x != x ] && [ ${2}x != x ] || (echo usage: 'git hub-clone <origin> <upstream-user>' && false) &&\
                       basename="${1##*/}" && \
                       dir="${basename%.git}" && \
