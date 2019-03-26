@@ -144,7 +144,6 @@
     (message (file-name-nondirectory (substring dir 0 -1)))
     (list dir (file-name-nondirectory (substring dir 0 -1)))))
 
-
 (defun cargo-debug ()
   (interactive)
   (let ((project (cargo-project)))
@@ -166,6 +165,7 @@
          ("\\.ino\\'" . c++-mode)
          ("\\.gyp\\'" . python-mode)
          ("\\.log\\'" . auto-revert-tail-mode)
+         ("log\\.txt\\'" . auto-revert-tail-mode)
          ("\\.\\(min\\|ma?k\\)\\'" . makefile-mode)
          ("make\\.dfile\\'" . makefile-mode)
          ("\\.bid\\'" . c++-mode)
