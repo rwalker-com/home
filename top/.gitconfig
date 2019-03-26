@@ -21,15 +21,42 @@
         gerrit-cherry-pick = ! git gerrit-fetch ${1} && git cherry-pick FETCH_HEAD || git status | grep \"working directory clean\" && exit $?
         gerrit-checkout = ! git gerrit-fetch ${1} && git checkout FETCH_HEAD && exit $?
         gerrit-patch = ! git gerrit-fetch ${1} && git format-patch -1 --stdout FETCH_HEAD && exit $?
+        gerrit-update = ! git push origin HEAD:refs/changes/$(git rev-parse --abbrev-ref HEAD)
         heads = ! eval $(git rev-list --all --children | awk '{ if (NF==1) print \"git --no-pager log -1 --decorate --oneline \" $1 \" && \" }END{print \"true\"}') && exit $?
         vheads = ! eval $(git rev-list --all --children | awk '{ if (NF==1) print \"git --no-pager log -1 --decorate \" $1 \" && \" }END{print \"true\"}') && exit $?
         recur = ! git "${@}" && git submodule foreach --recursive git "${@}" && exit $?
         smoosh = ! git commit --amend -C "$(git log -1 --pretty=format:%H)"
-        gerrit-update = ! git push origin HEAD:refs/changes/$(git rev-parse --abbrev-ref HEAD)
-        quick-fetch = ! git rev-parse "refs/remotes/${1:-origin}/${2:-master}" 2>/dev/null 1>/dev/null && git fetch "${1:-origin}" "refs/heads/${2:-master}" || git fetch --depth=1 "${1:-origin}" "refs/heads/${2:-master}" && exit $?
-        hub-resync = ! current=$(git rev-parse --abbrev-ref HEAD) && git checkout master && git pull -f upstream master:master && git push -f origin master && git fetch -fp origin && git checkout "$current"
-        hub-pr = ! branch=$(git rev-parse --abbrev-ref HEAD) && [ "$branch" != master ] || (echo 'no PRs from master' && false) && git push --set-upstream origin "$branch" && hub pull-request $1 && exit $?
-        hub-clone = ! [ ${1}x != x ] && [ ${2}x != x ] || (echo usage: 'git hub-clone <origin> <upstream-user>' && false) && basename="${1##*/}" && dir="${basename%.git}" && git clone "$1" && (cd "$dir" && git remote add upstream "${1%:*}:${2}/$basename" ) && exit $?
+        hub-branches = ! "for name in $(git config --name-only --get-regexp ^branch.*.upstream$) ;\
+                          do\
+                            name=${name%.upstream};\
+                            echo ${name#branch.};\
+                          done" && \
+                          exit $?
+        hub-upstream = ! git config branch.${1}.upstream && exit $?
+        hub-sync-branch = ! git checkout ${1} && \
+                            git pull -f $(git hub-upstream ${1}) ${1}:${1} && \
+                            git push -f $(git config branch.${1}.remote) ${1} && \
+                            exit $?
+        hub-sync = ! "for branch in $(git hub-branches); \
+                      do \
+                         git hub-sync-branch $branch; \
+                     done" && \
+                     git fetch -fp origin && \
+                     exit $?
+        hub-pr = ! branch=$(git rev-parse --abbrev-ref HEAD) && \
+                   [ "$branch" != master ] || (echo 'no PRs from master' && false) && \
+                   git push --set-upstream origin "$branch" && \
+                   hub pull-request $1 && \
+                   exit $?
+        # clone a fork $1 is the repository $2 is the upstream org/user
+        hub-clone = ! [ ${1}x != x ] && [ ${2}x != x ] || (echo usage: 'git hub-clone <origin> <upstream-user>' && false) &&\
+                      basename="${1##*/}" && \
+                      dir="${basename%.git}" && \
+                      git clone "$1" && \
+                      (cd "$dir" && \
+                       git remote add upstream "${1%:*}:${2}/$basename" &&\
+                       git config branch.master.upstream upstream) \
+                      && exit $?
 
 
 [core]
