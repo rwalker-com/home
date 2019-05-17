@@ -10,18 +10,15 @@
         lolm = log --oneline --decorate --graph --no-merges
         lola = log --oneline --decorate --graph --all
         lolam = log --oneline --decorate --graph --all --no-merges
-        ls = ls-tree master --name-only
-        lsr = ls-tree -r master --name-only
+        ls = ls-tree HEAD --name-only
+        lsR = ls-tree -r HEAD --name-only
         ours = ! git diff :1:$1 :2:$1 && exit $? && :
         theirs = ! git diff :1:$1 :3:$1 && exit $? && :
-        gerrit-refs = ! git ls-remote $(git remote) refs/changes/*/${1}/* refs/changes/*/${1} && exit $? && :
-        gerrit-ref = ! bash -c \"[[ ${1} =~ / ]]\" || echo \"taking latest patchset for ${1}\" >&2 && git gerrit-refs ${1} | awk 'BEGIN{ref=\"no-such-ref\"}{}/[0-9a-fA-F]+/ {{n=split($2,elems,\"/\")}if(patchset<elems[n]){{patchset=elems[n]}{ref=$2}}}END{print ref}' && exit $? && :
-        gerrit-pull = ! git pull $(git remote) $(git gerrit-ref ${1}) && exit $? && :
-        gerrit-fetch = ! git fetch $(git remote) $(git gerrit-ref ${1}) && exit $? && :
-        gerrit-cherry-pick = ! git gerrit-fetch ${1} && git cherry-pick FETCH_HEAD || git status | grep \"working directory clean\" && exit $? && :
-        gerrit-checkout = ! git gerrit-fetch ${1} && git checkout FETCH_HEAD && exit $? && :
-        gerrit-patch = ! git gerrit-fetch ${1} && git format-patch -1 --stdout FETCH_HEAD && exit $? && :
-        gerrit-update = ! git push origin HEAD:refs/changes/$(git rev-parse --abbrev-ref HEAD)
+        slow-heads = ! git rev-list --topo-order --all --children | "while read -r commit children;\
+                   do\
+                      [ -z \"$children\" ] && git --no-pager log -1 --decorate --oneline $commit;\
+                   done" &&\
+                   exit $? && :
         heads = ! eval $(git rev-list --all --children | awk '{ if (NF==1) print \"git --no-pager log -1 --decorate --oneline \" $1 \" && \" }END{print \"true\"}') && exit $? && :
         vheads = ! eval $(git rev-list --all --children | awk '{ if (NF==1) print \"git --no-pager log -1 --decorate \" $1 \" && \" }END{print \"true\"}') && exit $? && :
         recur = ! git "${@}" && git submodule foreach --recursive git "${@}" && exit $? && :
