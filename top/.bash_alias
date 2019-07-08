@@ -15,14 +15,13 @@ alias "rootx"="xterm -T root@$(hostname) -n root@$(hostname) -bg grey20 -cr whit
 
 function cleanup()
 {
-    /bin/rm -rf *~ \
+    /bin/rm -f *~ \
     .*~ \
     *.BAK \
     .*.BAK \
     *.CKP \
     .*.CKP \
      \#*\# \
-    core \
     dead.letter \
         2>&1 > /dev/null
 }
