@@ -43,7 +43,8 @@
                             git checkout ${branch} && \
                             exit $? && :
         # resync all branches with an "upstream" config attribute
-        hub-sync = ! "for branch in $(git hub-branches); \
+        hub-sync = ! git diff --quiet || (echo 'error: diffs exist' && false) && \
+                     "for branch in $(git hub-branches); \
                       do \
                          git hub-sync-branch $branch; \
                      done" && \
@@ -51,7 +52,7 @@
                      exit $? && :
         # push current branch and create a PR, takes all the args that hub pull-request takes
         hub-pr = ! branch=$(git rev-parse --abbrev-ref HEAD) && \
-                   [ "$branch" != master ] || (echo 'no PRs from master' && false) && \
+                   [ "$branch" != master ] || (echo 'error: no PRs from master' && false) && \
                    git push --set-upstream origin "$branch" && \
                    hub pull-request
         # clone a fork $1 is the repository $2 is the upstream org/user
