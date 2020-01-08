@@ -1,5 +1,5 @@
 
-Scrollbar.JumpCursor:   True 
+Scrollbar.JumpCursor:   True
 
 xterm*scrollBar:    True
 xterm*scrollLines:  9999
@@ -18,7 +18,7 @@ xload*background:   black
 
 emacs*menuBar:             off
 emacs*verticalScrollBars:   off
-emacs*toolBar:     0
+emacs*toolBar:     off
 
 *font:	6x13
 !*foreground:   white
@@ -29,5 +29,3 @@ emacs*toolBar:     0
 *inputLang:    	C
 *numeric:      	C
 *timeFormat:   	C
-
-
