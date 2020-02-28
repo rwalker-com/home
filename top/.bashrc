@@ -40,6 +40,8 @@ esac
 
 [[ -f ~/.bash_alias ]] && . ~/.bash_alias
 
+[[ -f /usr/local/etc/bash_completion ]] && . /usr/local/etc/bash_completion ]]
+
 shopt -s extglob
 for f in ~/.bashrc.d/!(*~)
 do
