@@ -3,6 +3,7 @@ declare -a paths=(
 ~/.cargo/bin
 ~/bin/*/
 ~/bin
+/usr/local/opt/llvm/bin
 /usr/local/sbin
 /usr/local/bin
 /usr/sbin

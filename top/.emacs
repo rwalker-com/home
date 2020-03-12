@@ -9,6 +9,13 @@
 ;;; Let's define them if they're not around, since they make
 ;;; it much easier to conditionalize on the emacs version.
 
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 (if (and (not (boundp 'emacs-major-version))
          (string-match "^[0-9]+" emacs-version))
     (setq emacs-major-version
@@ -133,7 +140,11 @@
 
 (require 'tree)
 
+(require 'cmake-mode)
+
 (require 'rust-mode)
+
+(require 'clang-format)
 
 (add-hook 'rust-mode-hook (lambda () (setq rust-format-on-save t)))
 
@@ -210,7 +221,14 @@
   (c-set-offset 'case-label '+))
 
 (defun my-c-mode-hook ()
-  (my-c-style my-c-indent))
+  (progn (my-c-style my-c-indent)
+         (if (updirs ".clang-format")
+             (progn
+               (updirs ".clang-format")
+               (add-hook 'before-save-hook 'clang-format-buffer nil t))
+           )
+         )
+  )
 
 (add-hook 'c++-mode-hook 'my-c-mode-hook)
 (add-hook 'c-mode-hook   'my-c-mode-hook)
@@ -770,6 +788,10 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(menu-bar-mode nil)
+ '(package-archives
+   (quote
+    (("gnu" . "http://elpa.gnu.org/packages/")
+     ("melpa-stable" . "http://stable.melpa.org/packages/"))))
  '(scroll-bar-mode nil)
  '(search-highlight t)
  '(sh-basic-offset 2)
@@ -782,4 +804,6 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(diff-added ((t (:inherit diff-changed :background "#001100"))))
+ '(diff-header ((t (:background "grey40"))))
+ '(diff-removed ((t (:inherit diff-changed :background "#220000")))))
