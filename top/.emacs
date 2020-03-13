@@ -806,4 +806,7 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
  ;; If there is more than one, they won't work right.
  '(diff-added ((t (:inherit diff-changed :background "#001100"))))
  '(diff-header ((t (:background "grey40"))))
- '(diff-removed ((t (:inherit diff-changed :background "#220000")))))
+ '(diff-removed ((t (:inherit diff-changed :background "#220000"))))
+ '(smerge-lower ((t (:background "#668866"))))
+ '(smerge-markers ((t (:background "grey40"))))
+ '(smerge-refined-added ((t (:inherit smerge-refined-change :background "#558855")))))
