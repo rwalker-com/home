@@ -13,6 +13,13 @@ declare -a paths=(
 /sbin
 )
 
+# sigh, homebrew bash doesn't find these..
+for i in /usr/local/etc/profile.d/*
+do
+  [[ ${i##*/} != @($_backup_glob|Makefile*|$_blacklist_glob) \
+       && -f $i && -r $i ]] && . "$i"
+done
+
 for i in "${paths[@]}"
 do
    if [[ :${PATH}: =~ :${i}: ]]
@@ -41,8 +48,6 @@ xterm*|rxvt*)
 esac
 
 [[ -f ~/.bash_alias ]] && . ~/.bash_alias
-
-[[ -f /usr/local/etc/bash_completion ]] && . /usr/local/etc/bash_completion ]]
 
 shopt -s extglob
 for f in ~/.bashrc.d/!(*~)
