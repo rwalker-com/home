@@ -202,7 +202,7 @@
 ;(require 'haskell)
 
 ; BREW hangover ;)
-(setq-default my-c-indent 3)
+(setq-default my-c-indent 4)
 
 (defun my-c-style (indent)
   (interactive "NIndent: ")
@@ -641,6 +641,7 @@ extern \"C\" {
 (global-set-key "\M-n" 'single-down-center)
 (global-set-key "\C-h" 'backward-delete-char)
 
+(global-set-key "\C-xvS" 'vc-git-grep)
 
 (or (fboundp 'set-screen-width)
     (defun set-screen-width (w)
@@ -785,6 +786,7 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
  '(display-time-day-and-date t)
  '(display-time-mode t)
  '(fill-column 80)
+ '(grep-command "grep  -nH -e ")
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(menu-bar-mode nil)
@@ -809,4 +811,8 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
  '(diff-removed ((t (:inherit diff-changed :background "#220000"))))
  '(smerge-lower ((t (:background "#668866"))))
  '(smerge-markers ((t (:background "grey40"))))
- '(smerge-refined-added ((t (:inherit smerge-refined-change :background "#558855")))))
+ '(smerge-refined-added ((t (:inherit smerge-refined-change :background "#558855"))))
+ '(vc-annotate-face-CCCCFF ((t (:background "#444455"))) t)
+ '(vc-annotate-face-CCF0FF ((t (:background "#445055"))) t)
+ '(vc-annotate-face-FFCCCC ((t (:background "#554444"))) t)
+ '(vc-annotate-face-FFD8CC ((t (:background "#553244"))) t))
