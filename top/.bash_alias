@@ -234,3 +234,10 @@ function updirs()
     fi
     printf '%s\n' "${dir}/${lookinfer}"
 }
+
+function docker_reset() {
+  while ! ([[ -z $(docker ps -q) ]] || docker kill $(docker ps -q)) && ([[ -z $(docker images -q) ]] || docker rmi -f $(docker images)) && docker container prune -f
+  do
+    :
+  done
+}
