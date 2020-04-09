@@ -1,5 +1,11 @@
 ;;; -*- Mode: Emacs-Lisp -*-
 
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                      Basic Customization                         ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -8,13 +14,6 @@
 ;;; (emacs-major-version and emacs-minor-version.)
 ;;; Let's define them if they're not around, since they make
 ;;; it much easier to conditionalize on the emacs version.
-
-
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-(package-initialize)
 
 (if (and (not (boundp 'emacs-major-version))
          (string-match "^[0-9]+" emacs-version))
@@ -31,19 +30,7 @@
 (setq running-ntemacs (string-match "nt[45].[01]" (emacs-version)))
 (setq running-emacs-19 (>= emacs-major-version 19))
 (setq running-fsf-emacs-19 (and running-emacs-19 (not running-xemacs)))
-
-
-(cond (running-xemacs
-       ;;
-       ;; Code for any version of Lucid Emacs goes here
-       ;;
-       ))
-
-(cond (running-emacs-19
-       ;;
-       ;; Code for any vintage-19 emacs goes here
-       ;;
-       ))
+(setq running-macos-emacs (and window-system (string-match ".*-apple-darwin.*" system-configuration)))
 
 (cond (running-fsf-emacs-19
        ;;
@@ -75,11 +62,6 @@
        (set-facep-foreground 'font-lock-function-name-face        "lightgoldenrod")
        (set-facep-foreground 'font-lock-builtin-face              "lightsteelblue")
        (set-facep-foreground 'font-lock-preprocessor-face         "lightsteelblue")
-         ;      I like the way these are by default
-         ;       (set-facep-foreground 'font-lock-negation-char-face        "blue")
-         ;       (set-facep-foreground 'font-lock-regexp-grouping-backslash "red")
-         ;       (set-facep-foreground 'font-lock-regexp-grouping-construct "pink")
-
        (set-facep-foreground 'font-lock-warning-face              "yellow")
 
        (set-facep-background 'region              "grey25")
@@ -297,7 +279,23 @@
 
 (add-hook 'sgml-mode-hook (lambda () (setq indent-tabs-mode nil)))
 
+(defun close-frame-or-kill-emacs ()
+  "Delete frame or kill Emacs if there are only one frame."
+  (interactive)
+  (if (> (length (frame-list)) 1)
+      (delete-frame)
+    (save-buffers-kill-terminal)))
+
 (when window-system
+  (when running-macos-emacs
+    (custom-set-faces
+     '(default ((t (:height 130 :width normal :family "Fixed")))))
+    (global-set-key "\C-x\C-c" 'close-frame-or-kill-emacs))
+
+  (mapcar (lambda (l) (add-to-list 'default-frame-alist l))
+          '((background-color . "black")
+            (foreground-color . "white")
+            (cursor-color . "yellow")))
 
   (set-background-color
    (or (and (equal (user-login-name) "root")
@@ -311,25 +309,6 @@
     (if (fboundp 'w32-select-font) (set-default-font (w32-select-font))
       (if (fboundp 'menu-set-font) (menu-set-font)
 	(message "Sorry, no set-font functions found."))))
-
-  ;;;; interesting list from bkelley, TODO: make this work?
-  ;;'(("6x13"    "-*-6x13-normal-r-*-*-13-97-*-*-c-*-*-ansi-")
-  ;;  ("6x11"    "-*-6x11-normal-r-*-*-11-97-*-*-c-*-*-ansi-")
-  ;;  ("vt100"   "-*-vt100-normal-r-*-*-11-82-*-*-c-*-*-ansi-")
-  ;;  ("term8"   "-*-Terminal-normal-r-*-*-11-100-*-*-c-*-*-*-")
-  ;;  ("term9"   "-*-Terminal-normal-r-*-*-12-90-*-*-c-*-*-*-")
-  ;;  ("luc8"    "-*-Lucida Console-normal-r-*-*-11-82-*-*-c-*-*-ansi-")
-  ;;  ("luc9"    "-*-Lucida Console-normal-r-*-*-12-90-*-*-c-*-*-ansi-")
-  ;;  ("luc6n"   "-*-Lucida Console-medium-r-*-*-9-*-*-*-C-65-IS08859-")
-  ;;  ("luc7n"   "-*-Lucida Console-medium-r-*-*-10-*-*-*-C-65-IS08859-")
-  ;;  ("luc8n"   "-*-Lucida Console-medium-r-*-*-11-82-*-*-C-60-ISO8859-")
-  ;;  ("luc10"   "-*-Lucida Console-normal-r-*-*-13-97-*-*-c-*-*-ansi-")
-  ;;  ("luc12"   "-*-Lucida Console-normal-r-*-*-15-97-*-*-c-*-*-ansi-")
-  ;;  ("deja18"  "-unknown-DejaVu Sans Mono-normal-normal-normal-*-18-*-*-*-m-0-iso10646-1")
-  ;;  ("deja15"  "-unknown-DejaVu Sans Mono-normal-normal-normal-*-15-*-*-*-m-0-iso10646-1")
-  ;;  ("deja13"  "-unknown-DejaVu Sans Mono-normal-normal-normal-*-13-*-*-*-m-0-isox10646-1")
-  ;;  ("deja11"  "-unknown-DejaVu Sans Mono-normal-normal-normal-*-11-*-*-*-m-0-iso10646-1")
-  ;;  ("and12"   "-*-Andale Mono-*"))
 
   (defun create-fontset (name)
     (condition-case nil ; suppress error
@@ -788,7 +767,7 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
  '(fill-column 80)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
- '(menu-bar-mode nil)
+ '(menu-bar-mode running-macos-emacs)
  '(package-archives
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
@@ -800,6 +779,7 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
  '(tool-bar-mode nil)
  '(truncate-partial-width-windows nil)
  '(visible-bell nil))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
