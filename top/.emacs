@@ -290,19 +290,22 @@
   (when running-macos-emacs
     (custom-set-faces
      '(default ((t (:height 130 :width normal :family "Fixed")))))
-    (global-set-key "\C-x\C-c" 'close-frame-or-kill-emacs))
+    (global-set-key "\C-x\C-c" 'close-frame-or-kill-emacs)
+    (server-start))
 
-  (mapcar (lambda (l) (add-to-list 'default-frame-alist l))
-          '((background-color . "black")
+  (mapcar (lambda (l) (add-to-list 'initial-frame-alist l))
+	  '((top . 0) (left . 0) (width . 80)
+	    (background-color . "black")
             (foreground-color . "white")
             (cursor-color . "yellow")))
 
-  (set-background-color
-   (or (and (equal (user-login-name) "root")
-            "grey20")
-       "black"))
-  (set-foreground-color "white")
-  (set-cursor-color "yellow")
+  (mapcar (lambda (l) (add-to-list 'default-frame-alist l))
+          '((top . (+ 100))
+	    (left . (+ 100))
+            (width . 80)
+            (background-color . "black")
+            (foreground-color . "white")
+            (cursor-color . "yellow")))
 
   (defun select-font ()
     (interactive)

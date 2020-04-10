@@ -33,7 +33,7 @@ do
    fi
 done
 
-export EDITOR=emacs
+export EDITOR="emacsclient -c -a emacs"
 export VISUAL=${EDITOR}
 export PS1='[\u@\h${STY:+(${STY#*.})} \W]\\$ '
 
