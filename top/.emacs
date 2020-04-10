@@ -286,13 +286,16 @@
       (delete-frame)
     (save-buffers-kill-terminal)))
 
-(when window-system
-  (when running-macos-emacs
-    (custom-set-faces
-     '(default ((t (:height 130 :width normal :family "Fixed")))))
-    (global-set-key "\C-x\C-c" 'close-frame-or-kill-emacs)
-    (server-start))
+(when running-macos-emacs
+  (and (member "Fixed" (font-family-list))
+       (custom-set-faces
+        '(default ((t (:height 130 :width normal :family "Fixed"))))))
+  (global-set-key "\C-x\C-c" 'close-frame-or-kill-emacs)
+  (server-start)
+  (require 'exec-path-from-shell)
+  (exec-path-from-shell-initialize))
 
+(when window-system
   (mapcar (lambda (l) (add-to-list 'initial-frame-alist l))
 	  '((top . 0) (left . 0) (width . 80)
 	    (background-color . "black")
