@@ -71,8 +71,7 @@
        (set-facep-foreground 'italic              "light goldenrod")
        (set-facep-foreground 'bold                "goldenrod")
        (set-facep-foreground 'bold-italic         "green")
-       (set-facep-foreground 'minibuffer-prompt   "yellow")
-
+       (set-facep-foreground 'minibuffer-prompt   "#AAAAAA")
        )
       )
 
