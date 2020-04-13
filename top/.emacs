@@ -286,6 +286,15 @@
       (delete-frame)
     (save-buffers-kill-terminal)))
 
+(when running-macos-emacs
+  (and (member "Fixed" (font-family-list))
+       (custom-set-faces
+        '(default ((t (:height 130 :width normal :family "Fixed"))))))
+  (global-set-key "\C-x\C-c" 'close-frame-or-kill-emacs)
+  (server-start)
+  (require 'exec-path-from-shell)
+  (exec-path-from-shell-initialize))
+
 (when window-system
   (when running-macos-emacs
     (custom-set-faces
@@ -794,6 +803,7 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
  '(smerge-lower ((t (:background "#668866"))))
  '(smerge-markers ((t (:background "grey40"))))
  '(smerge-refined-added ((t (:inherit smerge-refined-change :background "#558855"))))
+ '(smerge-upper ((t (:background "#886666"))))
  '(vc-annotate-face-CCCCFF ((t (:background "#444455"))) t)
  '(vc-annotate-face-CCF0FF ((t (:background "#445055"))) t)
  '(vc-annotate-face-CCFCFF ((t (:background "#668688"))) t)
