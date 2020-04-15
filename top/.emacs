@@ -160,6 +160,7 @@
          ("log\\.txt\\'" . auto-revert-tail-mode)
          ("\\.\\(min\\|ma?k\\)\\'" . makefile-mode)
          ("make\\.dfile\\'" . makefile-mode)
+         ("\\.emacs" . emacs-lisp-mode)
          ("\\.bid\\'" . c++-mode)
          ("\\.comp\\'" . compilation-mode)
          ("\\.sh\\'" . shell-script-mode)
@@ -248,6 +249,11 @@
        (add-hook 'lua-mode-hook (lambda () (setq indent-tabs-mode nil)))
        )
       )
+
+(defun my-make-mode-hook ()
+  (setq indent-tabs-mode t))
+
+(add-hook 'makefile-mode-hook 'my-make-mode-hook)
 
 (defun my-java-mode-hook ()
   (and (fboundp 'indent-c-exp) (local-set-key  "\M-q" 'indent-c-exp))
