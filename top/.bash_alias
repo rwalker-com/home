@@ -236,8 +236,12 @@ function updirs()
 }
 
 function docker_reset() {
-  while ! ([[ -z $(docker ps -q) ]] || docker kill $(docker ps -q)) && ([[ -z $(docker images -q) ]] || docker rmi -f $(docker images)) && docker container prune -f
-  do
-    :
+  declare images=( $(docker images -q) )
+  declare jobs=( $(docker ps -q) )
+  while [[ -n $images || -n $jobs ]] || !docker container prune -f ; do
+    [[ -z $jobs ]] || docker kill "${jobs[@]}"
+    [[ -z $images ]] || docker rmi -f "${images[@]}"
+    images=( $(docker images -q) )
+    jobs=( $(docker ps -q) )
   done
 }
