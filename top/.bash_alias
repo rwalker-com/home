@@ -2,7 +2,6 @@
 unalias -a
 
 alias "f"="finger"
-alias "x"="xinit -- -ar1 200 -ar2 10 >& ~/.xinitout"
 alias "rm"="rm -i"
 alias "rmf"="/bin/rm -f"
 alias "sl"="ls"
@@ -11,26 +10,33 @@ alias "s"="ls"
 alias "cd"="pushd > /dev/null"
 alias "back"="popd "
 alias "mkae"="make"
-alias "rootx"="xterm -T root@$(hostname) -n root@$(hostname) -bg grey20 -cr white -e su -"
 
-function cleanup()
-{
-    /bin/rm -f *~ \
-    .*~ \
-    *.BAK \
-    .*.BAK \
-    *.CKP \
-    .*.CKP \
-     \#*\# \
-    dead.letter \
-        2>&1 > /dev/null
+rootx() {
+  xterm -T root@"$(hostname)" -n root@"$(hostname)" -bg grey20 -cr white -e su -
 }
 
-function xto()
+emacs() {
+ emacsclient -c -a emacs "$@"
+}
+
+cleanup()
 {
-    if [[ -z $1 ]]
-    then
-    	cat<<EOF
+  /bin/rm -f *~ \
+          .*~ \
+          *.BAK \
+          .*.BAK \
+          *.CKP \
+          .*.CKP \
+          \#*\# \
+          dead.letter \
+          2>&1 > /dev/null
+}
+
+xto()
+{
+  if [[ -z $1 ]]
+  then
+    cat<<EOF
 usage: xto <WHERE>
    sets DISPLAY to WHERE, where WHERE is:
       "back" for REMOTEHOST, if set
@@ -73,26 +79,24 @@ EOF
     return 0;
 }
 
-function xrsh()
+xrsh()
 {
    xhost $1 > /dev/null
    xterm -T rsh.$1 -n rsh.$1 -e rsh $* > /dev/null
 }
 
-function xssh()
+xssh()
 {
    xterm -T ssh.$1 -n ssh.$1 -e ssh -Y $* > /dev/null
 }
 
-function xterme()
+xterme()
 {
    declare title=$@
    xterm  -T "$title" -n "$title" -e "$@"
 }
 
-
-
-function xtitle()
+xtitle()
 {
     case $TERM in
         [xk]term*|cygwin)
@@ -104,41 +108,7 @@ function xtitle()
     esac
 }
 
-function deathto()
-{
-    declare sigspec=
-
-    if [[ ${1} =~ -.* ]]
-    then
-        sigspec=${1}
-        shift
-    fi
-    if (( ! ${#} ))
-    then
-        printf 'deathto: usage: deathto [-sigspec] regex...\n'
-        return 1
-    fi
-    #          UID   PID  PPID  C STIME TTY          TIME CMD
-    #          root    1     0  0 Apr05 ?        00:01:47 /sbin/init
-    #          root    2     0  0 Apr05 ?        00:00:00 [kthreadd]
-    #          root    3     2  0 Apr05 ?        00:00:04 [ksoftirqd/0]
-    #          root    5     2  0 Apr05 ?        00:00:00 [kworker/0:0H]
-    declare -a regex=( "${@}" )
-    declare uid pid cmd _
-    while read uid   pid     _  _ _     _         _       cmd
-    do
-        declare i=
-        for ((i=0; i < ${#regex[*]}; i++))
-        do
-            if [[ ${cmd} =~ ${regex[i]} ]]
-            then
-                kill ${sigspec} "${pid}"
-            fi
-        done
-    done < <(ps -wwef)
-}
-
-function path_gc()
+path_gc()
 {
     local IFS=:
     local -a paths=(${PATH})
@@ -157,7 +127,7 @@ function path_gc()
     PATH=${PATH:1}
 }
 
-function make_exec()
+make_exec()
 {
     declare cmd=
 
@@ -174,8 +144,8 @@ all:; @#
 EOF
 }
 
-function make_repl()
-{
+make_repl() {
+
     make "${@}" -s -f <(printf %s '
 _getline=$(shell printf "\# " >&0 && head -1 | sed -e "s/!/!1/g;s/$$/!n/")
 _eatline=$(if $1,$(eval $(subst !1,!,$(subst !n,,$1)))1)
@@ -188,7 +158,7 @@ all: ; @#
 ')
 }
 
-function tee_log()
+tee_log()
 {
     declare out=${*}
     out=${out//\//%}
@@ -200,7 +170,7 @@ function tee_log()
     "$@" 2>&1 | tee -- "${out// /_}.log"
 }
 
-function find_grep()
+find_grep()
 {
     declare findargs=( )
 
@@ -217,7 +187,7 @@ function find_grep()
 
 }
 
-function updirs()
+updirs()
 {
     declare lookinfer=${1}
     declare dir=${2:-$(pwd)}
@@ -235,7 +205,7 @@ function updirs()
     printf '%s\n' "${dir}/${lookinfer}"
 }
 
-function docker_reset() {
+docker-reset() {
   declare images=( $(docker images -q) )
   declare jobs=( $(docker ps -q) )
   while [[ -n $images || -n $jobs ]] || !docker container prune -f ; do
