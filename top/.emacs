@@ -783,6 +783,7 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
      ("melpa-stable" . "http://stable.melpa.org/packages/"))))
+ '(safe-local-variable-values (quote ((indent-tabs-mode t))))
  '(scroll-bar-mode nil)
  '(search-highlight t)
  '(sh-basic-offset 2)
