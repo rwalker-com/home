@@ -208,7 +208,7 @@ updirs()
 docker-reset() {
   declare images=( $(docker images -q) )
   declare jobs=( $(docker ps -q) )
-  while [[ -n $images || -n $jobs ]] || !docker container prune -f ; do
+  while [[ -n $images || -n $jobs ]] || ! docker container prune -f ; do
     [[ -z $jobs ]] || docker kill "${jobs[@]}"
     [[ -z $images ]] || docker rmi -f "${images[@]}"
     images=( $(docker images -q) )
