@@ -296,6 +296,7 @@
        (custom-set-faces
         '(default ((t (:height 130 :width normal :family "Fixed"))))))
   (global-set-key "\C-x\C-c" 'close-frame-or-kill-emacs)
+  (global-unset-key (kbd "s-w")) ; disable close window
   (server-start)
   (require 'exec-path-from-shell)
   (exec-path-from-shell-initialize))
