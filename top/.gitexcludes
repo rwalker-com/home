@@ -9,3 +9,5 @@ TAGS
 .\#*
 .bashrc-local
 .emacs-local
+.treespec
+.DS_Store

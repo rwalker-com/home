@@ -159,6 +159,8 @@
          ("\\.log\\'" . auto-revert-tail-mode)
          ("log\\.txt\\'" . auto-revert-tail-mode)
          ("\\.\\(min\\|ma?k\\)\\'" . makefile-mode)
+         ("Makefile-" . makefile-mode)
+         ("Makefile\\." . makefile-mode)
          ("make\\.dfile\\'" . makefile-mode)
          ("\\.emacs" . emacs-lisp-mode)
          ("\\.bid\\'" . c++-mode)
@@ -166,6 +168,7 @@
          ("\\.sh\\'" . shell-script-mode)
          ("\\.bash_alias\\'" . shell-script-mode)
          ("\\.cgi\\'" . shell-script-mode)
+         ("\\.mm\\'" . objc-mode)
          ))
 
 ;(require 'json)
@@ -205,15 +208,20 @@
 (defun my-c-mode-hook ()
   (progn (my-c-style my-c-indent)
          (if (updirs ".clang-format")
-             (progn
-               (updirs ".clang-format")
-               (add-hook 'before-save-hook 'clang-format-buffer nil t))
+             (add-hook 'before-save-hook 'clang-format-buffer nil t)
            )
          )
   )
 
+(defun my-objc-mode-hook ()
+  (if (updirs ".clang-format")
+      (add-hook 'before-save-hook 'clang-format-buffer nil t))
+  )
+
+
 (add-hook 'c++-mode-hook 'my-c-mode-hook)
 (add-hook 'c-mode-hook   'my-c-mode-hook)
+(add-hook 'objc-mode-hook  'my-objc-mode-hook)
 
 ; for a .emacs-local
 ;(require 'google-c-style)
@@ -459,6 +467,7 @@ See Also:
 
 (defun extern-c-region (&optional beg &optional end)
   "insert's extern \"C\" stuff around a region"
+  (interactive)
   (and beg end (kill-region (region-beginning) (region-end)))
   (insert "#ifdef __cplusplus
 extern \"C\" {
@@ -632,7 +641,6 @@ extern \"C\" {
 (global-set-key "\M-n" 'single-down-center)
 (global-set-key "\C-h" 'backward-delete-char)
 
-(global-set-key "\C-xvS" 'vc-git-grep)
 
 (or (fboundp 'set-screen-width)
     (defun set-screen-width (w)
@@ -705,7 +713,7 @@ extern \"C\" {
   (interactive)
   (compile (concat "msdev " buffer-file-name " /make")))
 
-(global-set-key [f7] 'msdev-compile-compile-command)
+(global-set-key "\M-," 'tags-loop-continue)
 
 (defun new-html ()
   (interactive)
@@ -784,6 +792,7 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
      ("melpa-stable" . "http://stable.melpa.org/packages/"))))
+ '(package-selected-packages (quote (realgud-lldb)))
  '(safe-local-variable-values (quote ((indent-tabs-mode t))))
  '(scroll-bar-mode nil)
  '(search-highlight t)
@@ -798,9 +807,9 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(diff-added ((t (:inherit diff-changed :background "#001100"))))
+ '(diff-added ((t (:inherit diff-changed :foreground "green"))))
  '(diff-header ((t (:background "grey40"))))
- '(diff-removed ((t (:inherit diff-changed :background "#220000"))))
+ '(diff-removed ((t (:inherit diff-changed :foreground "red"))))
  '(smerge-lower ((t (:background "#668866"))))
  '(smerge-markers ((t (:background "grey40"))))
  '(smerge-refined-added ((t (:inherit smerge-refined-change :background "#558855"))))
