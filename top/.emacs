@@ -163,12 +163,12 @@
          ("Makefile\\." . makefile-mode)
          ("make\\.dfile\\'" . makefile-mode)
          ("\\.emacs" . emacs-lisp-mode)
-         ("\\.bid\\'" . c++-mode)
          ("\\.comp\\'" . compilation-mode)
          ("\\.sh\\'" . shell-script-mode)
          ("\\.bash_alias\\'" . shell-script-mode)
          ("\\.cgi\\'" . shell-script-mode)
          ("\\.mm\\'" . objc-mode)
+         ("\\.ipp\\'" . c++-mode)
          ))
 
 ;(require 'json)
@@ -465,9 +465,8 @@ See Also:
             (insert-method-comment-block prototype))
           (split-string prototypes "[\r\n]+")))
 
-(defun extern-c-region (&optional beg &optional end)
+(defun extern-c-region (&optional beg end)
   "insert's extern \"C\" stuff around a region"
-  (interactive)
   (and beg end (kill-region (region-beginning) (region-end)))
   (insert "#ifdef __cplusplus
 extern \"C\" {
@@ -713,8 +712,6 @@ extern \"C\" {
   (interactive)
   (compile (concat "msdev " buffer-file-name " /make")))
 
-(global-set-key "\M-," 'tags-loop-continue)
-
 (defun new-html ()
   (interactive)
   (insert "<html>
@@ -802,6 +799,8 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
  '(truncate-partial-width-windows nil)
  '(visible-bell nil))
 
+(require 'realgud)
+(require 'realgud-lldb)
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
