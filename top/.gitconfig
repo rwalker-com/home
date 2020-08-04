@@ -48,7 +48,7 @@
                       do \
                          git hub-sync-branch $branch; \
                      done" && \
-                     git fetch -fp origin && \
+                     git fetch -fp --recurse-submodules=no origin && \
                      exit $? && :
         # push current branch and create a PR, takes all the args that hub pull-request takes
         hub-pr = ! branch=$(git rev-parse --abbrev-ref HEAD) && \
@@ -66,7 +66,10 @@
                        git remote add upstream "${1%:*}:${2}/$basename" &&\
                        git config branch.master.upstream upstream) && \
                        exit $? && :
-
+        grep-sed = ! git --no-pager grep -l "$1" | "while read -r file ; do \
+                                                      sed -i~ \"$2\" \"$file\"; \
+                                                    done" && \
+                       exit $? && :
 
 [core]
 	excludesfile = ~/.gitexcludes
