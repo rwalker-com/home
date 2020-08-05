@@ -36,10 +36,10 @@
         hub-upstream = ! git config branch.${1}.upstream && exit $? && :
         # sync a single branch, assumes branch.$1.upstream and branch.$1.origin are set
         hub-sync-branch = ! branch=$(git rev-parse --abbrev-ref HEAD) && \
-                            git fetch -f $(git hub-upstream ${1}) ${1} && \
+                            git fetch -f --recurse-submodules=no $(git hub-upstream ${1}) ${1} && \
                             git checkout ${1} && \
                             git reset --hard FETCH_HEAD && \
-                            git push -f $(git config branch.${1}.remote) ${1} && \
+                            git push -f --recurse-submodules=no $(git config branch.${1}.remote) ${1} && \
                             git checkout ${branch} && \
                             exit $? && :
         # resync all branches with an "upstream" config attribute
