@@ -66,9 +66,10 @@
                        git remote add upstream "${1%:*}:${2}/$basename" &&\
                        git config branch.master.upstream upstream) && \
                        exit $? && :
-        grep-sed = ! git --no-pager grep -l "$1" | "while read -r file ; do \
-                                                      sed -i~ \"$2\" \"$file\"; \
-                                                    done" && \
+        grep-sed = ! git --no-pager grep -I -l "$1" | "while read -r file ; do \
+                                                         echo fixing $file; \
+                                                         sed -i~ \"$2\" \"$file\"; \
+                                                       done" && \
                        exit $? && :
 
 [core]

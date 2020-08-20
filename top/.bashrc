@@ -16,7 +16,7 @@ declare -a paths=(
 # sigh, homebrew bash doesn't find these..
 for i in /usr/local/etc/profile.d/*
 do
-  [[ ${i##*/} != @($_backup_glob|Makefile*|$_blacklist_glob) \
+  [[ ${i##*/} != @($_backup_glob|Makefile*|$_blacklist_glob|*.csh) \
        && -f $i && -r $i ]] && . "$i"
 done
 

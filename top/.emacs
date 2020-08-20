@@ -127,6 +127,8 @@
 
 (require 'clang-format)
 
+(require 'gn-mode)
+
 (add-hook 'rust-mode-hook (lambda () (setq rust-format-on-save t)))
 
 (defun cargo-project ()
@@ -169,6 +171,8 @@
          ("\\.cgi\\'" . shell-script-mode)
          ("\\.mm\\'" . objc-mode)
          ("\\.ipp\\'" . c++-mode)
+         ("\\.gn\\'" . gn-mode)
+         ("\\.gni\\'" . gn-mode)
          ))
 
 ;(require 'json)
@@ -222,6 +226,12 @@
 (add-hook 'c++-mode-hook 'my-c-mode-hook)
 (add-hook 'c-mode-hook   'my-c-mode-hook)
 (add-hook 'objc-mode-hook  'my-objc-mode-hook)
+
+(defun my-gn-mode-hook ()
+  (add-hook 'before-save-hook 'gn-cleanup)
+  )
+(add-hook 'gn-mode-hook 'my-gn-mode-hook)
+
 
 ; for a .emacs-local
 ;(require 'google-c-style)
@@ -793,7 +803,7 @@ If no region is set, return the current cursor pos and the maximum cursor pos."
  '(safe-local-variable-values (quote ((indent-tabs-mode t))))
  '(scroll-bar-mode nil)
  '(search-highlight t)
- '(sh-basic-offset 2)
+ '(sh-basic-offset 4)
  '(show-trailing-whitespace t)
  '(tool-bar-mode nil)
  '(truncate-partial-width-windows nil)
