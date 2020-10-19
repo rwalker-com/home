@@ -13,11 +13,19 @@ declare -a paths=(
 /sbin
 )
 
+echo BASH_VERSION=$BASH_VERSION
+
 # sigh, homebrew bash doesn't find these..
 for i in /usr/local/etc/profile.d/*
 do
-  [[ ${i##*/} != @($_backup_glob|Makefile*|$_blacklist_glob|*.csh) \
-       && -f $i && -r $i ]] && . "$i"
+    case ${i##*/} in
+    $_backup_glob|$_blacklist_glob|*.csh|Makefile)
+        ;;
+
+    *)
+        [[ -f $i && -r $i ]] && . "$i"
+        ;;
+    esac
 done
 
 for i in "${paths[@]}"

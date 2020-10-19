@@ -1,6 +1,7 @@
 # keep repository-specific stuff out of here (e.g. email addresses)
 [user]
         name  = Rob Walker
+	email = robert_g_walker@apple.com
 
 [color]
         ui = auto
@@ -66,7 +67,7 @@
                        git remote add upstream "${1%:*}:${2}/$basename" &&\
                        git config branch.master.upstream upstream) && \
                        exit $? && :
-        grep-sed = ! git --no-pager grep -I -l "$1" | "while read -r file ; do \
+        grep-sed = ! GIT_TRACE=1 git --no-pager grep -I -l \"$1\" | "while read -r file ; do \
                                                          echo fixing $file; \
                                                          sed -i~ \"$2\" \"$file\"; \
                                                        done" && \
