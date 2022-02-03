@@ -81,6 +81,7 @@ shopt -s checkwinsize
 
 PROMPT_COMMAND_LAST_PWD=
 function prompt_command() {
+  history -a
   [[ $PWD != $PROMPT_COMMAND_LAST_PWD ]]  || return 0
   PROMPT_COMMAND_LAST_PWD=$PWD
 
