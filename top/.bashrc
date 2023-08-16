@@ -13,8 +13,6 @@ declare -a paths=(
 /sbin
 )
 
-echo BASH_VERSION=$BASH_VERSION
-
 # sigh, homebrew bash doesn't find these..
 for i in /usr/local/etc/profile.d/*
 do
