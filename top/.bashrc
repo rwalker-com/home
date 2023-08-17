@@ -1,5 +1,6 @@
 # bunch of random paths ordered in reverse order of precedence
 declare -a paths=(
+~/.local/share/solana/install/active_release/bin
 ~/.cargo/bin
 ~/bin/*/
 ~/bin
@@ -78,6 +79,7 @@ shopt -s checkwinsize
 
 PROMPT_COMMAND_LAST_PWD=
 function prompt_command() {
+  history -a
   [[ $PWD != $PROMPT_COMMAND_LAST_PWD ]]  || return 0
   PROMPT_COMMAND_LAST_PWD=$PWD
 

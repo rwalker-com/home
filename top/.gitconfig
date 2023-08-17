@@ -1,7 +1,6 @@
 # keep repository-specific stuff out of here (e.g. email addresses)
 [user]
         name  = Rob Walker
-	email = robert_g_walker@apple.com
 
 [color]
         ui = auto
